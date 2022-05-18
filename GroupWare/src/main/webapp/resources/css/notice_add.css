@@ -1,0 +1,58 @@
+@charset "UTF-8";
+
+* {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.board_add {
+	width: 85%;
+	margin: auto;
+}
+
+textarea {
+	border: 1px solid black;
+	width: 665px;
+	font-size: 16px;
+	padding: 10px;
+	border: 2px solid rgb(232, 233, 242);
+	border-radius: 10px;
+	resize: none;
+}
+
+.title {
+	width: 665px;
+	height: 50px;
+	font-size: 16px;
+	padding: 0 10px;
+	border: 2px solid rgb(232, 233, 242);
+	border-radius: 10px;
+}
+
+.form-item {
+	vertical-align: top;
+}
+
+.board_add .button {
+	display: flex;
+	justify-content: end;
+}
+
+.board_add .button input {
+	margin: 0 5px;
+}
+
+.board_add .form-items {
+	margin-top: 10px;
+}
+
+.aaa {
+	display: flex;
+}

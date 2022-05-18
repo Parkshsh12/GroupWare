@@ -1,0 +1,116 @@
+li {
+    list-style: none;
+}
+body {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.login {
+    width: 30%;
+    background: white;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+h2 {
+    color: #247ffb;
+    font-size: 2em;
+    text-align: center;
+    line-height: 1.3;
+    margin-top: 10px;
+}
+
+h4{
+	margin-top:20px;
+}
+
+.login_sns {
+    padding: 20px;
+    display: flex;
+}
+
+.login_sns li {
+    padding: 0px 15px;
+}
+
+.login_sns a {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 50px;
+    background: white;
+    font-size: 20px;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.4), -3px -3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-signin {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.login_id input,
+.login_pw input {
+    width: 332px;
+    height: 50px;
+    border-radius: 30px;
+    margin-top: 10px;
+    padding: 0px 20px;
+    border: 1px solid lightgray;
+    outline: none;
+}
+
+.login_etc {
+    padding: 10px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+
+.forgot_id {
+	margin-right:50px;
+}
+
+.forgot_id > a,
+.forgot_pw > a {
+    text-decoration: none;
+    color: black !important;
+}
+
+.forgot_id > :hover,
+.forgot_pw > :hover {
+    text-decoration: none;
+    color: #222 !important;
+}
+
+.submit {
+    margin-top: 50px;
+    width: 100%;
+}
+
+.submit .btn-block {
+    width: 100%;
+    height: 50px;
+    border: 0;
+    outline: none;
+    border-radius: 40px;
+    background: linear-gradient(to left, rgb(3, 134, 245, 1), rgb(24, 207, 192, 1));
+    color: white;
+    font-size: 1.2em;
+    letter-spacing: 2px;
+    font-weight:bold;
+}

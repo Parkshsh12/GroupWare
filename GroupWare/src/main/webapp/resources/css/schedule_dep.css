@@ -1,0 +1,12 @@
+@charset "UTF-8";
+.submit {
+	position: absolute;
+	right: 322px;
+	top: 272px;
+}
+
+#calendar {
+	width: 1400px;
+	height: 700px;
+	margin-left: 380px;
+}

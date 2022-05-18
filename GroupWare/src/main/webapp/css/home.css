@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+*  {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.main_content {
+	background-color: white;
+	width: 78%;
+	padding: 60px;
+	border-radius: 20px;
+	box-shadow: 3px 3px 2px 2px rgb(0 0 0/ 15%);
+	margin-left:330px;
+}

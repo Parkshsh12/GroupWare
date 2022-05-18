@@ -1,0 +1,135 @@
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+h2 {
+    color: #247ffb;
+    font-size: 2em;
+    text-align: center;
+    line-height: 1.3;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+h3 {
+    font-size: 20px;
+    color: #ff5000;
+    text-align: center;
+    width: 50%;
+}
+
+h4	{
+	font-size: 16px;
+    text-align: left;
+    font-weight: bold;
+    margin-top:20px;
+}
+
+small {
+    margin: 0 10px;
+}
+
+.login_id input, 
+.login_name input,
+.login_mail input{
+    width: 100%;
+    height: 50px;
+    border-radius: 30px;
+    margin-top: 10px;
+    padding: 0px 20px;
+    border: 1px solid lightgray;
+    outline: none;
+}
+
+.pw_search {
+    text-align: center;
+    margin: 0 40px;
+    padding: 27px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pw_search>p {
+    padding-top: 13px;
+    line-height: 200%;
+}
+
+.email_text {
+    width: 300px;
+    display: flex;
+    padding: 1px 8px 1px 24px;
+    min-height: 48px;
+    padding-left: 24px;
+    padding-right: 8px;
+    font-weight: 700;
+    border: 0;
+    background-color: #fff;
+    border: 1px solid lightgray;
+    border-radius: 28px;
+    margin: 20px auto;
+    font-size:14px !important;
+}
+
+.pw_box,
+.pw_box {
+    width: 545px;
+    margin: 0 auto;
+}
+
+.pw_box>div>p {
+    margin: 0 40px;
+    border-bottom: 1px solid #d9d9d9;
+    padding-top: 36px;
+    padding-bottom: 15px;
+    font-size: 18px;
+}
+
+.loginsearch {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    padding: 15px 0;
+    border-top: 1px solid #d9d9d9;
+    width:100%;
+}
+
+.loginsearch>p {
+    color: #999999;
+}
+
+.button {
+    padding: 5px 5px;
+    line-height: 1;
+    color: #666;
+    background-color: #fff;
+    border: 1px solid #cecece;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.searchbutton {
+	font-size:20px;
+	color:white;
+    width: 332px;
+    min-height: 48px;
+    padding-left: 24px;
+    padding-right: 8px;
+    font-weight: 700;
+    border: 0;
+    background: linear-gradient(to left, rgb(3, 134, 245, 1), rgb(24, 207, 192, 1)) !important;
+    border-radius: 28px;
+    margin: 0 auto 20px auto;
+    margin-top:20px;
+    
+}
+
+.search_box>div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

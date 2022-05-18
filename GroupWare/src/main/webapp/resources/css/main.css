@@ -1,0 +1,91 @@
+@charset "UTF-8";
+
+html {
+	background-color: #fafafa;
+}
+
+body {
+	background-color: transparent;
+}
+
+* {
+	border-style: none;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+a:hover {
+	color: white !important;
+	opacity: 0.6;
+	text-decoration: none !important;
+}
+
+.menu {
+	float: left;
+	width: 260px;
+	background-color: #3c4b64;
+	height: 100vh;
+	margin-right: 60px;
+}
+
+.menu .menu_login {
+	width: 250px;
+	height: 150px;
+	margin: 5px;
+	background-color: white;
+	display: flex;
+	align-items: center;
+}
+
+.menu .menu_login .login_text {
+	margin: auto;
+}
+
+.menu .menu_login .login_text a {
+	display: block;
+}
+
+.menu .menu_login .login_text .login_button {
+	border: 1px solid black 0;
+	padding: 8px 25px;
+	border-radius: 50px;
+	font-weight: bold;
+	background-color: skyblue;
+}
+
+.menu .menu_login .login_text .login_button:hover {
+	color: white;
+	background-color: rgb(63, 175, 175);
+}
+
+.menu_list a, .home_menu {
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	color: rgba(255, 255, 255, 0.6);
+	padding-left: 10px;
+	font-size: 16px;
+	display: block;
+	margin: 0;
+}
+
+.menu_item a {
+	background-color: #303c50;
+	padding-left: 20px;
+}
+
+.menu_item a:hover {
+	background-color: #303c50;
+	color: rgba(255, 255, 255, 0.87);
+}
+
+.menu_list a:hover, .home_menu:hover {
+	background-color: #303c50;
+}

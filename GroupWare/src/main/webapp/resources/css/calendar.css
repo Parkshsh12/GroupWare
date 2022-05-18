@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+.calendar table {
+	border: 1px solid #dee2e6;
+	border-top: 3px solid #22499d;
+	width: 800px;
+}
+
+.calendar_title {
+	background-color: #f8fafc;
+}
+
+.calendar th {
+	font-size: 18px;
+	vertical-align: middle !important;
+	text-align: center;
+	border: 1px solid #dee2e6
+}
+
+.calendar {
+	width: 800px;
+}
+
+.calendar td {
+	text-align: left;
+	border: 1px solid #dee2e6;
+	height: 100px;
+}
+
+.calendar .title {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.calendar .daumdal a:first-child {
+	margin-right: 20px;
+}
