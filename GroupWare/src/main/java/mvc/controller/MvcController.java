@@ -48,6 +48,7 @@ public class MvcController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/login/login.jsp");
 			rd.forward(request, response);
 		} else if (command.equals("/LoginAction.do")) {
+			requestBoardList(request);
 			requestLoginMember(request);
 			HttpSession session = request.getSession(true);
 			String name = (String)request.getAttribute("name");
@@ -266,6 +267,7 @@ public class MvcController extends HttpServlet {
 		MemberDAO dao = MemberDAO.getInstance();
 		
 		String[] result = dao.loginMember(request.getParameter("number"), request.getParameter("pw"));
+		System.out.println("fasdfas");
 		request.setAttribute("number", result[0]);
 		request.setAttribute("name", result[1]);
 		request.setAttribute("type", result[2]);
