@@ -9,6 +9,7 @@
 	int total_page = ((Integer)request.getAttribute("total_page")).intValue();
 	int pageNum = ((Integer)request.getAttribute("pageNum")).intValue();
 	int total_record = ((Integer) request.getAttribute("total_record")).intValue();
+	
 	String search_item = (String)request.getAttribute("search_item");
 	String text = (String)request.getAttribute("text");
 %>
@@ -39,7 +40,7 @@
 			%>
 			<tr>
 				<td><%=board.getSeq() %></td>
-				<td><a href="./BoardViewAction.do?num=<%=board.getSeq()%>&pageNum=<%=pageNum %>"><%=board.getTitle() %></a></td>
+				<td><a href="./BoardViewAction.do?num=<%=board.getSeq()%>&pageNum=<%=pageNum %>&number=<%=sessionNumber%>"><%=board.getTitle() %></a></td>
 				<td><%=board.getName() %></td>
 				<td><%=board.getB_date() %></td>
 				<td><%=board.getHit() %></td>
@@ -52,7 +53,19 @@
 		<div align="center">
 			<c:set var="pageNum" value="<%=pageNum%>" />
 						<c:forEach var="i" begin="1" end="<%=total_page%>">
-							<a href="./board_main.do?pageNum=${i}">
+						<%
+							if(search_item != null && text != null){
+						%>
+							<a href="./board_main.do?pageNum=${i}&search_item=<%=search_item%>&text=<%=text%>"/>
+								<%
+						}
+							else{
+								
+								%>
+								<a href="./board_main.do?pageNum=${i}"/>
+								<%
+							}
+								%>
 								<c:choose>
 									<c:when test="${pageNum==i}">
 										<b> [${i}]</b>

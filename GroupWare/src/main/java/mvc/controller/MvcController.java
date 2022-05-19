@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
 import com.oreilly.servlet.MultipartRequest;
 
@@ -38,6 +39,7 @@ public class MvcController extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 
 		if (command.equals("/home.do")) {
+			requestBoardList(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./home.jsp?id=홈화면");
 			rd.forward(request, response);
 		}
@@ -136,6 +138,18 @@ public class MvcController extends HttpServlet {
 		} else if(command.equals("/BoardViewAction.do")) {
 			requestBoardView(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/board/board_boardNum.jsp?id=자유게시판");
+			rd.forward(request, response);
+		} else if(command.equals("/board_updateAction.do")) {
+			requestBoardView(request);
+			RequestDispatcher rd = request.getRequestDispatcher("/./list/board/board_update.jsp?id=자유게시판 수정");
+			rd.forward(request, response);
+		} else if(command.equals("/board_update.do")) {
+			requestBoardUpdate(request);
+			RequestDispatcher rd = request.getRequestDispatcher("/BoardViewAction.do");
+			rd.forward(request, response);
+		} else if(command.equals("/board_delete.do")) {
+			requestBoardDelete(request);
+			RequestDispatcher rd = request.getRequestDispatcher("/board_main.do");
 			rd.forward(request, response);
 		}
 		// board part end //
@@ -294,6 +308,8 @@ public class MvcController extends HttpServlet {
 		if(request.getParameter("pageNum") != null) {
 			pageNum = Integer.parseInt(request.getParameter("pageNum"));
 		}
+
+		
 		String search_item = request.getParameter("search_item");
 		String text = request.getParameter("text");
 		
@@ -309,9 +325,7 @@ public class MvcController extends HttpServlet {
 			total_page = total_record/limit;
 			total_page = total_page + 1;
 		}
-		System.out.println(boardList.get(1).getTitle());
-		System.out.println(search_item);
-		System.out.println(text);
+		
 		request.setAttribute("pageNum", pageNum);
 		request.setAttribute("total_page", total_page);
 		request.setAttribute("boardList", boardList);
@@ -356,12 +370,34 @@ public class MvcController extends HttpServlet {
 		int pageNum = Integer.parseInt(request.getParameter("pageNum"));
 		
 		BoardDTO board = new BoardDTO();
-		board = dao.getBoardByNum(num, pageNum);
-		
+		board = dao.getBoardByNum(num);
+
 		request.setAttribute("num",	num);
 		request.setAttribute("board", board);
 		request.setAttribute("pageNum",	pageNum);
 		
 	}
-	// shpark start end
+	public void requestBoardUpdate(HttpServletRequest request) {
+		BoardDAO dao = BoardDAO.getInstance();
+		BoardDTO dto = new BoardDTO();
+		int num = Integer.parseInt(request.getParameter("num"));
+		
+		dto.setSeq(num);
+		dto.setTitle(request.getParameter("subject"));
+		dto.setName(request.getParameter("name"));
+		dto.setContent(request.getParameter("content"));
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String board_date = formatter.format(new java.util.Date());
+		dto.setB_date(board_date);
+		dto.setHit(0);
+		dao.updateBoard(dto);
+	}
+	
+	public void requestBoardDelete(HttpServletRequest request) {
+		int num = Integer.parseInt(request.getParameter("num"));
+		BoardDAO dao = BoardDAO.getInstance();
+		dao.deleteBoard(num);
+	}
+	// shpark end
 }

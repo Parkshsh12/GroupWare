@@ -30,7 +30,7 @@ public class BoardDAO {
 		
 		String sql;
 		
-		if(search_item == null && text == null) {
+		if((search_item==null) && (text==null)) {
 			sql = "select count(*) from board";
 		} else {
 			sql = "select count(*) from board where " + search_item + " like '%" + text + "%'";
@@ -74,9 +74,10 @@ public class BoardDAO {
 		int index = start + 1;
 		
 		String sql;
-		
+
 		if(search_item == null && text == null) {
 			sql = "select * from board ORDER BY seq desc";
+
 		} else {
 			sql = "select * from board where " + search_item + " like '%" + text + "%' order by seq desc";
 		}
@@ -198,13 +199,14 @@ public class BoardDAO {
 		}
 	}
 	
-	public BoardDTO getBoardByNum(int num, int page) {
+	public BoardDTO getBoardByNum(int num) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		BoardDTO board = null;
 		
 		String sql = "select * from board where seq = ?";
+		updateBoardHit(num);
 		
 		try {
 			conn = DBConnection.getConnection();
@@ -242,5 +244,99 @@ public class BoardDAO {
 			
 		}
 		return null;
+	}
+	
+	public void updateBoardHit(int num) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = DBConnection.getConnection();
+			
+			String sql = "select hit from board where seq = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			rs = pstmt.executeQuery();
+			
+			int hit = 0;
+			
+			if(rs.next()) {
+				hit = rs.getInt("hit") + 1;
+			}
+			
+			sql = "update board set hit = ? where seq = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, hit);
+			pstmt.setInt(2, num);
+			pstmt.executeUpdate();
+		} catch(Exception e) {
+			System.out.println("updatehit()" + e);
+		}finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (Exception ex) {
+				throw new RuntimeException(ex.getMessage());
+			}
+		}
+	}
+	
+	public void updateBoard(BoardDTO board) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			String sql = "update board set title = ?, content = ? where seq = ?";
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, board.getTitle());
+			pstmt.setString(2, board.getContent());
+			pstmt.setInt(3, board.getSeq());
+			
+			pstmt.executeUpdate();
+		} catch(Exception ex) {
+			System.out.println("updateBoard()" + ex);
+		} finally {
+			try {										
+				if (pstmt != null) 
+					pstmt.close();				
+				if (conn != null) 
+					conn.close();
+			} catch (Exception ex) {
+				throw new RuntimeException(ex.getMessage());
+			}		
+		}
+	}
+	public void deleteBoard(int num) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			String sql = "delete from board where seq = ?";
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			pstmt.executeUpdate();
+		} catch(Exception ex) {
+			System.out.println("deleteBoard()" + ex);
+		}  finally {
+			try {										
+				if (pstmt != null) 
+					pstmt.close();				
+				if (conn != null) 
+					conn.close();
+			} catch (Exception ex) {
+				throw new RuntimeException(ex.getMessage());
+			}		
+		}
 	}
 }

@@ -4,8 +4,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	String sessionNumber = (String)session.getAttribute("number");
+	String pageNum = request.getParameter("pageNum");
 	BoardDTO board = (BoardDTO)request.getAttribute("board");
-	//System.out.println(sessionNumber);
+	System.out.println(sessionNumber);
 	System.out.println(board.getNumber());
 %>
 <!DOCTYPE html>
@@ -38,11 +39,11 @@
 			</div>
 		</div>
 		<div class="btn">
-			<a href="/board_main.do" class="btn btn-primary">되돌아가기</a>
+			<a href="/board_main.do?pageNum=<%=pageNum %>" class="btn btn-primary">되돌아가기</a>
 			<%
-				if(sessionNumber == board.getNumber()){
+				if(sessionNumber.equals(board.getNumber())){
 			%> 
-			<a href="#" class="admin btn btn-primary">수정</a>
+			<a href="/board_updateAction.do?num=<%=board.getSeq() %>&pageNum=<%=pageNum %>" class="admin btn btn-primary">수정</a>
 			<%
 				}
 			%>

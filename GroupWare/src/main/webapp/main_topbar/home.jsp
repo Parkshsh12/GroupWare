@@ -1,8 +1,11 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="mvc.model.BoardDTO"%>
 <%@page import="java.util.Calendar"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
+	ArrayList<BoardDTO> list = (ArrayList)request.getAttribute("boardList");
 	Calendar cal = Calendar.getInstance();
 	
 	int nowYear = cal.get(Calendar.YEAR);
@@ -80,34 +83,24 @@
 			</table>
 			<div class="title2">
 				<h3>자유게시판</h3>
-				<a href="#" class="btn btn-primary btn-sm">더 보기</a>
+				<a href="/board_main.do" class="btn btn-primary btn-sm">더 보기</a>
 			</div>
 			<table class="table1">
 				<tr class="table_header">
 					<th>제목</th>
 					<th>작성일</th>
 				</tr>
+				<%
+					for(int i = 0; i < 5; i++){
+						BoardDTO board = list.get(i);
+				%>
 				<tr>
-					<td><a href="#">안녕하세요 여러분</a></td>
-					<td>2022-05-10</td>
+					<td><a href="./BoardViewAction.do?num=<%=board.getSeq()%>&pageNum=1"><%=board.getTitle() %></a></td>
+					<td><%=board.getB_date() %></td>
 				</tr>
-				<tr>
-					<td><a href="#">안녕하세요 여러분</a></td>
-					<td>2022-05-10</td>
-				</tr>
-				<tr>
-					<td><a href="#">안녕하세요 여러분</a></td>
-					<td>2022-05-10</td>
-				</tr>
-				<tr>
-					<td><a href="#">안녕하세요 여러분</a></td>
-					<td>2022-05-10</td>
-				</tr>
-				<tr>
-					<td><a href="#">안녕하세요 여러분</a></td>
-					<td>2022-05-10</td>
-				</tr>
-
+				<%
+					}				
+				%>
 			</table>
 		</div>
 		<div class="calendar-box">

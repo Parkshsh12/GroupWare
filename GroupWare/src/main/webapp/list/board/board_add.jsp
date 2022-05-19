@@ -27,7 +27,7 @@
 			</div>
 			<div class="form-item">
 				<label class="form-item">이름</label> <input class="title"
-					name="name" type="text" placeholder="이름을 입력하세요." value="<%=name%>">
+					name="name" type="text" value="<%=name%>" disabled>
 			</div>
 			<div class="form-item">
 				<label class="form-item">내용</label>
