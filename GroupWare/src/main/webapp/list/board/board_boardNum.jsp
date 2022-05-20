@@ -39,7 +39,8 @@
 			</div>
 		</div>
 		<div class="btn">
-			<a href="/board_main.do?pageNum=<%=pageNum %>" class="btn btn-primary">되돌아가기</a>
+		<c:set var="pageNum" value="<%=pageNum %>"/>
+			<a href="<c:url value="/board_main.do?pageNum=${pageNum}"/>" class="btn btn-primary">되돌아가기</a>
 			<%
 				if(sessionNumber.equals(board.getNumber())){
 			%> 

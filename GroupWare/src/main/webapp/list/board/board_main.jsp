@@ -78,7 +78,8 @@
 						</c:forEach>
 		</div>
 		<div align="right">
-			<a href="/board_add.do?number=<%=sessionNumber %>" class="boardAdd btn btn-primary">글쓰기</a>
+		<c:set var="number" value="<%=sessionNumber %>" />
+			<a href="<c:url value="/board_add.do?number=${number}"/>" class="boardAdd btn btn-primary">글쓰기</a>
 		</div>
 
 		<div align="center" class="board_search">

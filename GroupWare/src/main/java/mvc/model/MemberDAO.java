@@ -88,4 +88,79 @@ public class MemberDAO {
 		}
 		return result;
 	}
+	//shpark start
+	public MemberDTO getMemberById(String number) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		MemberDTO member = null;
+		
+		String sql = "select * from employee where number = ?";
+		try {
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, number);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				member = new MemberDTO();
+				member.setPw(rs.getString("pw"));
+				member.setNumber(rs.getString("number"));
+				member.setName(rs.getString("name"));
+				member.setDepartment(rs.getString("department"));
+				member.setPosition(rs.getString("position"));
+				member.setAddress(rs.getString("address"));
+				member.setPhone(rs.getString("phone"));
+				member.setEmail(rs.getString("email"));
+				member.setJoin_date(rs.getString("join_date"));
+			}
+			return member;
+		} catch(Exception ex) {
+			System.out.println("getBoardByNum()" + ex);
+		} finally {
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			} catch(Exception ex) {
+				throw new RuntimeException(ex.getMessage());
+			}
+			
+		}
+		return null;
+	}
+	
+	public void updateInfo(MemberDTO dto) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		String sql = "update employee set pw = ?, address = ?, email = ?, phone = ? where number = ?";
+		
+		try {
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getPw());
+			pstmt.setString(2, dto.getAddress());
+			pstmt.setString(3, dto.getEmail());
+			pstmt.setString(4, dto.getPhone());
+			pstmt.setString(5, dto.getNumber());
+			pstmt.executeUpdate();
+		} catch(Exception ex) {
+			System.out.println("updateInfo()" + ex);
+		} finally {
+			try {
+				if (pstmt != null) 
+					pstmt.close();				
+				if (conn != null) 
+					conn.close();
+			} catch (Exception ex) {
+				throw new RuntimeException(ex.getMessage());
+			}
+		}
+	}
 }

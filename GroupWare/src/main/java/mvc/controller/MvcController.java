@@ -17,6 +17,7 @@ import com.oreilly.servlet.MultipartRequest;
 import mvc.model.BoardDAO;
 import mvc.model.BoardDTO;
 import mvc.model.MemberDAO;
+import mvc.model.MemberDTO;
 import mvc.model.NoticeDAO;
 import mvc.model.NoticeDTO;
 
@@ -40,14 +41,18 @@ public class MvcController extends HttpServlet {
 
 		if (command.equals("/home.do")) {
 			requestBoardList(request);
+			requestNoticeList(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./home.jsp?id=홈화면");
 			rd.forward(request, response);
 		}
 		//로그인
-		else if (command.equals("/login.do")) {
-			RequestDispatcher rd = request.getRequestDispatcher("./list/login/login.jsp");
+		else if (command.equals("/logout.do")) {
+			HttpSession session = request.getSession();
+			session.invalidate();
+			RequestDispatcher rd = request.getRequestDispatcher("./home_login.jsp");
 			rd.forward(request, response);
 		} else if (command.equals("/LoginAction.do")) {
+			requestNoticeList(request);
 			requestBoardList(request);
 			requestLoginMember(request);
 			HttpSession session = request.getSession(true);
@@ -64,6 +69,10 @@ public class MvcController extends HttpServlet {
 		} else if (command.equals("/searchId.do")) {
 			requestSearchId(request);
 			
+		} else if (command.equals("/id_search.do")) {
+			
+			RequestDispatcher rd = request.getRequestDispatcher("./list/management/member_list.jsp?id=임직원 관리");
+			rd.forward(request, response);
 		}
 		//인사관리
 		else if (command.equals("/member_list.do")) {
@@ -90,10 +99,10 @@ public class MvcController extends HttpServlet {
 		}
 		//영업 관리
 		else if (command.equals("/business_company.do")) {
-			RequestDispatcher rd = request.getRequestDispatcher("./list/business/business_company.jsp?id=월별 매출 조회");
+			RequestDispatcher rd = request.getRequestDispatcher("./list/business/business_company.jsp?id=거래처 조회");
 			rd.forward(request, response);
 		} else if (command.equals("/business_search.do")) {
-			RequestDispatcher rd = request.getRequestDispatcher("./list/business/business_search.jsp?id=거래처 조회");
+			RequestDispatcher rd = request.getRequestDispatcher("./list/business/business_search.jsp?id=월별 매출 조회");
 			rd.forward(request, response);
 		} else if (command.equals("/purchase_main.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/business/purchase_main.jsp?id=매입 관리");
@@ -102,35 +111,48 @@ public class MvcController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/business/sales_main.jsp?id=매출 관리");
 			rd.forward(request, response);
 		}
-		//게시판
+		//공지 게시판
 		else if (command.equals("/notice_main.do")) {
 			requestNoticeList(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/board/notice_main.jsp?id=공지사항");
 			rd.forward(request, response);
 		} else if (command.equals("/notice_add.do")) {
-			RequestDispatcher rd = request.getRequestDispatcher("./list/board/notice_add.jsp?id=글 등록");
+			RequestDispatcher rd = request.getRequestDispatcher("./list/board/notice_add.jsp?id=공지사항 등록");
 			rd.forward(request, response);
 		} else if (command.equals("/notice_add_submit.do")){
 			requestNoticeAdd(request);
-			RequestDispatcher rd = request.getRequestDispatcher("./list/board/notice_add.jsp?id=글 등록");
+			requestNoticeList(request);
+			RequestDispatcher rd = request.getRequestDispatcher("./list/board/notice_main.jsp?id=공지사항");
 			rd.forward(request, response);
 		} else if (command.equals("/noticeView.do")) {
-			requestNoticeView(request);
+			requestNoticeView(request);			
 			RequestDispatcher rd = request.getRequestDispatcher("./list/board/notice_noticeNum.jsp?id=공지사항");
 			rd.forward(request, response);
 		} else if (command.equals("/notice_update.do")) {
+			int seq = (Integer.parseInt(request.getParameter("seq")));
+			request.setAttribute("seq", seq);
 			requestNoticeView(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/board/notice_update.jsp?id=공지사항 수정");
 			rd.forward(request, response);
+		} else if (command.equals("/notice_update_submit.do")) {
+			requestSetUpdate(request);
+			requestNoticeView(request);
+			RequestDispatcher rd = request.getRequestDispatcher("./list/board/notice_noticeNum.jsp?id=공지사항");
+			rd.forward(request, response);
+		} else if (command.equals("/notice_delete.do")) {
+			noticeDelete(request);
+			requestNoticeList(request);
+			RequestDispatcher rd = request.getRequestDispatcher("./list/board/notice_main.jsp?id=공지사항");
+			rd.forward(request, response);
 		}
-		// 자유게시판
+		// 자유 게시판
 		else if (command.equals("/board_main.do")) {
 			requestBoardList(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/board/board_main.jsp?id=자유게시판");
 			rd.forward(request, response);
 		} else if(command.equals("/board_add.do")) {
 			requestLoginName(request);
-			RequestDispatcher rd = request.getRequestDispatcher("./list/board/board_add.jsp?id=자유게시판 글등록");
+			RequestDispatcher rd = request.getRequestDispatcher("./list/board/board_add.jsp?id=자유게시판 등록");
 			rd.forward(request, response);
 		} else if(command.equals("/boardAddAction.do")) {
 			requestBoardWrite(request);
@@ -153,7 +175,6 @@ public class MvcController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("/board_main.do");
 			rd.forward(request, response);
 		}
-		// board part end //
 		//캘린더
 		else if (command.equals("/schedule_all.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/schedule/schedule_all.jsp?id=전체 일정");
@@ -171,25 +192,30 @@ public class MvcController extends HttpServlet {
 		else if (command.equals("/attendance_user.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/attendance_user.jsp?id=근태 조회");
 			rd.forward(request, response);
+		//shpark start
 		} else if (command.equals("/my_information.do")) {
-			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/my_information.jsp?id=내 정보 관리");
+			requestInfoView(request);
+			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/my_information.jsp?id=내 정보 관리&msg=1");
+			rd.forward(request, response);
+		} else if (command.equals("/my_informationChk.do")) {
+			requestInfoView(request);
+			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/my_information.jsp?id=내 정보 관리&msg=0");
 			rd.forward(request, response);
 		} else if (command.equals("/manager_pay.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/manager_pay.jsp?id=급여 관리");
 			rd.forward(request, response);
 		} else if (command.equals("/update_information.do")) {
-			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/update_information.jsp");
+			requestInfoView(request);
+			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/update_information.jsp?id=내정보 수정");
 			rd.forward(request, response);
-
-
-		}
+		} else if (command.equals("/updateInfoAction.do")) {
+			requestInfoUpdate(request);
+			RequestDispatcher rd = request.getRequestDispatcher("/my_informationChk.do");
+			rd.forward(request, response);
+		} 
 		/* 로그인 영역*/
 		
 		/* 로그인 */
-
-		
-
-		
 
 	}
 
@@ -229,10 +255,16 @@ public class MvcController extends HttpServlet {
 		request.setAttribute("search_item", search_item);
 		request.setAttribute("text", text);
 	}
+
 	
 	public void requestNoticeView(HttpServletRequest request) {
 		NoticeDAO dao = NoticeDAO.getInstance();
+		
 		int seq = Integer.parseInt(request.getParameter("seq"));
+		request.setAttribute("seq", seq);
+		seq = ((Integer) request.getAttribute("seq")).intValue();
+		
+		
 		int pageNum = Integer.parseInt(request.getParameter("pageNum"));
 		NoticeDTO notice = dao.getNoticeNum(seq, pageNum);
 		
@@ -241,24 +273,46 @@ public class MvcController extends HttpServlet {
 		request.setAttribute("select_item", request.getParameter("select_item"));
 		request.setAttribute("text", request.getParameter("text"));
 		
-		System.out.println(notice.getTitle());
 	}
 	
 	public void requestNoticeAdd(HttpServletRequest request) {
 		NoticeDAO dao = NoticeDAO.getInstance();
+		NoticeDTO notice = new NoticeDTO();
 		
-		String number = request.getParameter("number");
-		String name = request.getParameter("name");
+		notice.setName(request.getParameter("name"));
+		notice.setNumber(request.getParameter("number"));
+		notice.setTitle(request.getParameter("title"));
+		notice.setContent(request.getParameter("content"));
+
+		dao.setNoticeAdd(notice);
+
+		int seq = noticeTotalList();
+		
+		request.setAttribute("pageNum", 1);
+		request.setAttribute("seq", seq);
+	}
+	
+	public int noticeTotalList() {		
+		NoticeDAO dao = NoticeDAO.getInstance();
+		return dao.getNoticeNext();
+	}
+	
+	public void requestSetUpdate(HttpServletRequest request) {
+		NoticeDAO dao = NoticeDAO.getInstance();
+		int seq = (Integer.parseInt(request.getParameter("seq")));
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
 		
-		int seq = dao.setNoticeAdd(number, name, title, content);
-		String pageNum = request.getParameter("pageNum");
-		
-		
-		
+		request.setAttribute("seq", seq);
+		dao.updateNoticeSubmit(seq, title, content);
 	}
 	
+	public void noticeDelete(HttpServletRequest request) {
+		NoticeDAO dao = NoticeDAO.getInstance();
+		int seq = Integer.parseInt(request.getParameter("seq"));
+		
+		dao.setNoticeDelete(seq);
+	}
 	
 	/* mskim end */
 	
@@ -267,7 +321,6 @@ public class MvcController extends HttpServlet {
 		MemberDAO dao = MemberDAO.getInstance();
 		
 		String[] result = dao.loginMember(request.getParameter("number"), request.getParameter("pw"));
-		System.out.println("fasdfas");
 		request.setAttribute("number", result[0]);
 		request.setAttribute("name", result[1]);
 		request.setAttribute("type", result[2]);
@@ -281,8 +334,6 @@ public class MvcController extends HttpServlet {
 		String email = request.getParameter("email");
 		String type = "SearchPw";
 		String pw = dao.SearchIdPw(number, name, email, type);
-		
-		
 		
 	}
 	
@@ -299,7 +350,9 @@ public class MvcController extends HttpServlet {
 		String email = request.getParameter("email");
 		int join_date = (int)request.getAttribute("join_date");
 	}
-	// shpark start
+	
+	//sh board start
+	
 	public void requestBoardList(HttpServletRequest request) {
 		BoardDAO dao = BoardDAO.getInstance();
 		ArrayList<BoardDTO> boardList = new ArrayList<BoardDTO>();
@@ -401,5 +454,25 @@ public class MvcController extends HttpServlet {
 		BoardDAO dao = BoardDAO.getInstance();
 		dao.deleteBoard(num);
 	}
-	// shpark end
+	
+	public void requestInfoView(HttpServletRequest request) {
+		MemberDAO dao = MemberDAO.getInstance();
+		String number = request.getParameter("number");
+		MemberDTO dto = new MemberDTO();
+		dto = dao.getMemberById(number);
+		request.setAttribute("member", dto);
+	}
+	
+	public void requestInfoUpdate(HttpServletRequest request) {
+		MemberDAO dao = MemberDAO.getInstance();
+		MemberDTO dto = new MemberDTO();
+		dto.setNumber(request.getParameter("number"));
+		dto.setPw(request.getParameter("password"));
+		dto.setAddress(request.getParameter("address"));
+		dto.setEmail(request.getParameter("email"));
+		String phone = request.getParameter("phone1") + "-" + request.getParameter("phone2")  + "-" + request.getParameter("phone3");
+		dto.setPhone(phone);
+		dao.updateInfo(dto);
+	}
+	//sh board end
 }
