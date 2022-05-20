@@ -115,9 +115,9 @@
 					</div>
 					<div class="daumdal">
 						<a class="btn btn-primary"
-							href="home.jsp?year=<%=year%>&amp;month=<%=month - 1%>">이전달</a>
+							href="home.do?year=<%=year%>&amp;month=<%=month - 1%>">이전달</a>
 						<a class="btn btn-primary"
-							href="home.jsp?year=<%=year%>&amp;month=<%=month + 1%>">다음달</a>
+							href="home.do?year=<%=year%>&amp;month=<%=month + 1%>">다음달</a>
 					</div>
 				</div>
 				<div class="table">
