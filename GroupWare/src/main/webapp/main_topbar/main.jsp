@@ -15,6 +15,7 @@ $(document).ready(function() {
 });
 </script>
 <%
+	String number = (String)session.getAttribute("number");
 	String name = (String) session.getAttribute("name");
 %>
     <nav class="menu">
@@ -22,9 +23,20 @@ $(document).ready(function() {
             <div>
                 <img src="./resources/images/logo.png" alt="" width="100px">
             </div>
+            <%
+            	if(((String)session.getAttribute("name")) != null){
+            %>
+            <div style="margin:auto">
             <div class="login_text">
                 <b style="color:#247ffb"><%= name %></b>님<p>환영합니다.
             </div>
+            <div class="logout">
+            	<a href="<c:url value="/logout.do"/>" class="btn btn-primary">로그아웃</a>
+            </div>
+            </div>
+            <%
+	            }
+            %>
         </div>
         <a class="home_menu" href="<c:url value="/home.do"/>">홈 화면</a>
         <ul class="menu_main" id="menu">
@@ -36,8 +48,8 @@ $(document).ready(function() {
             </li>
             <li class="menu_list"><a href="#">영업 관리</a>
            		<ul>
-               		<li class="menu_item"><a href="<c:url value="/business_company.do"/>">월별 매출 조회</a></li>
-               		<li class="menu_item"><a href="<c:url value="/business_search.do"/>">거래처 조회</a></li>
+               		<li class="menu_item"><a href="<c:url value="/business_search.do"/>">월별 매출 조회</a></li>
+               		<li class="menu_item"><a href="<c:url value="/business_company.do"/>">거래처 조회</a></li>
                		<li class="menu_item"><a href="<c:url value="/purchase_main.do"/>">매입 관리</a></li>
                		<li class="menu_item"><a href="<c:url value="/sales_main.do"/>">매출 관리</a></li>
             	</ul>
@@ -64,7 +76,8 @@ $(document).ready(function() {
             	<ul class="menu_drop drop6">
                 	<li class="menu_item"><a href="<c:url value="/manager_pay.do"/>">급여 관리</a></li>
                 	<li class="menu_item"><a class="link" href="<c:url value="/attendance_user.do"/>">근태 조회</a></li>
-                	<li class="menu_item"><a href="<c:url value="/my_information.do"/>">내 정보 관리</a></li>
+                	<c:set var="number" value="<%=number %>"/>
+                	<li class="menu_item"><a href="<c:url value="/my_information.do?number=${number}"/>">내 정보 관리</a></li>
             	</ul>
           	</li>
         </ul>

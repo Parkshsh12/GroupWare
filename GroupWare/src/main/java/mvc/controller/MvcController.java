@@ -458,6 +458,7 @@ public class MvcController extends HttpServlet {
 	public void requestInfoView(HttpServletRequest request) {
 		MemberDAO dao = MemberDAO.getInstance();
 		String number = request.getParameter("number");
+		System.out.println(number);
 		MemberDTO dto = new MemberDTO();
 		dto = dao.getMemberById(number);
 		request.setAttribute("member", dto);

@@ -9,7 +9,6 @@
 	int total_page = ((Integer)request.getAttribute("total_page")).intValue();
 	int pageNum = ((Integer)request.getAttribute("pageNum")).intValue();
 	int total_record = ((Integer) request.getAttribute("total_record")).intValue();
-	
 	String search_item = (String)request.getAttribute("search_item");
 	String text = (String)request.getAttribute("text");
 %>
@@ -37,12 +36,13 @@
 			<%
 				for(int i = 0; i < boardList.size(); i++){
 					BoardDTO board = (BoardDTO)boardList.get(i);
+					String date = board.getB_date().substring(0, 19);
 			%>
 			<tr>
 				<td><%=board.getSeq() %></td>
 				<td><a href="./BoardViewAction.do?num=<%=board.getSeq()%>&pageNum=<%=pageNum %>&number=<%=sessionNumber%>"><%=board.getTitle() %></a></td>
 				<td><%=board.getName() %></td>
-				<td><%=board.getB_date() %></td>
+				<td><%=date%></td>
 				<td><%=board.getHit() %></td>
 			</tr>
 			<%

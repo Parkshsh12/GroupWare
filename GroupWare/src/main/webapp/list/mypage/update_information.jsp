@@ -20,7 +20,8 @@
 	<jsp:include page="../../main_topbar/topbar.jsp"/>
 	<jsp:include page="../../main_topbar/contents.jsp"/>
     <div class="update_info">
-        <form name="boardAdd" method="post" class="form-horizontal" action="/updateInfoAction.do?number=<%=member.getNumber()%>">
+    <c:set var="number" value="<%=member.getNumber() %>"/>
+        <form name="boardAdd" method="post" class="form-horizontal" action="<c:url value="/updateInfoAction.do?number=${number}"/>">
             <div class="form-group row">
                 <label class="col-sm-2 input-name">이름</label>
                 <div class="col-sm-3">

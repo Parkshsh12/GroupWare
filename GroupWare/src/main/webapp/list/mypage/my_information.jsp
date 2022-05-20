@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
+	System.out.println("1234");
 	MemberDTO member = (MemberDTO)request.getAttribute("member");
 	String msg = request.getParameter("msg");
 %>
@@ -33,7 +34,8 @@
 	<%
 		if(msg.equals("1")){
 	%>
-	<form action="/my_informationChk.do?number=<%=member.getNumber() %>" method="post" name="submitform">
+	<c:set var="number" value="<%=member.getNumber() %>"/>
+	<form action="<c:url value="/my_informationChk.do?number=${number}"/>" method="post" name="submitform">
 		<label>비밀번호 :  </label><input type="password" id="password" autofocus>
 		<input type="hidden" id="password2" value="<%=member.getPw()%>">
 		<input type="button" value="확인" class="btn btn-primary" onclick="PasswordCheck()" autofocus>
