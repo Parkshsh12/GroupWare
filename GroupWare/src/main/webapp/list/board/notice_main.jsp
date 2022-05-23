@@ -27,9 +27,6 @@
 		text = "";
 	}
 %>
-<%=
-pageNum
-%>
 	<jsp:include page="../../main_topbar/main.jsp"/>
 	<jsp:include page="../../main_topbar/topbar.jsp"/>
 	<jsp:include page="../../main_topbar/contents.jsp"/>

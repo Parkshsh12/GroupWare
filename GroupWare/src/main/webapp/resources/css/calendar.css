@@ -3,7 +3,7 @@
 .calendar table {
 	border: 1px solid #dee2e6;
 	border-top: 3px solid #22499d;
-	width: 800px;
+	width: 120vh;
 }
 
 .calendar_title {
@@ -17,22 +17,24 @@
 	border: 1px solid #dee2e6
 }
 
-.calendar {
-	width: 800px;
-}
 
 .calendar td {
 	text-align: left;
 	border: 1px solid #dee2e6;
-	height: 100px;
+	height: 10vh;
+	min-width: 7vh;
 }
 
 .calendar .title {
 	display: flex;
 	justify-content: space-between;
-	margin-bottom: 20px;
+	margin: 1vh 14vh;
 }
 
 .calendar .daumdal a:first-child {
 	margin-right: 20px;
+}
+
+.iljung > a{
+	    margin-left: 14vh;
 }

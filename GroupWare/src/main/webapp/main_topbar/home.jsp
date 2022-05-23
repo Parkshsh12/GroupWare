@@ -142,6 +142,7 @@
 							<%
 								for (int j = 1; j <= endDay; j++) {
 									week++;
+									System.out.println(week);
 									if (week % 7 == 2) {
 							%>
 						</tr>

@@ -16,6 +16,8 @@ import com.oreilly.servlet.MultipartRequest;
 
 import mvc.model.BoardDAO;
 import mvc.model.BoardDTO;
+import mvc.model.CalendarDAO;
+import mvc.model.CalendarDTO;
 import mvc.model.MemberDAO;
 import mvc.model.MemberDTO;
 import mvc.model.NoticeDAO;
@@ -40,6 +42,7 @@ public class MvcController extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 
 		if (command.equals("/home.do")) {
+			requestInfoView(request);
 			requestBoardList(request);
 			requestNoticeList(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./home.jsp?id=홈화면");
@@ -175,14 +178,25 @@ public class MvcController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("/board_main.do");
 			rd.forward(request, response);
 		}
+		//shpark start
 		//캘린더
-		else if (command.equals("/schedule_all.do")) {
+		else if (command.equals("/scheduleAllAction.do")) {
+			requestInfoView(request);
+			RequestDispatcher rd = request.getRequestDispatcher("/schedule_all.do");
+			rd.forward(request, response);
+		} else if (command.equals("/schedule_all.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/schedule/schedule_all.jsp?id=전체 일정");
 			rd.forward(request, response);
+		} else if (command.equals("/scheduleDepAction.do")) {
+			requestInfoView(request);
+			RequestDispatcher rd = request.getRequestDispatcher("/schedule_dep.do");
+			rd.forward(request, response);
 		} else if (command.equals("/schedule_dep.do")) {
+			requestCalendarView(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/schedule/schedule_dep.jsp?id=부서 일정");
 			rd.forward(request, response);
 		}
+		//shpark end
 		//주소록
 		else if (command.equals("/contact.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/contact/contact.jsp?id=주소록");
@@ -474,6 +488,15 @@ public class MvcController extends HttpServlet {
 		String phone = request.getParameter("phone1") + "-" + request.getParameter("phone2")  + "-" + request.getParameter("phone3");
 		dto.setPhone(phone);
 		dao.updateInfo(dto);
+	}
+	
+	public void requestCalendarView(HttpServletRequest request) {
+		CalendarDAO dao = CalendarDAO.getInstance();
+		MemberDTO member = (MemberDTO)request.getAttribute("member");
+		String department = member.getDepartment();
+		ArrayList<CalendarDTO> calendarList = new ArrayList<CalendarDTO>();
+		calendarList = dao.getCalendarContent(department);
+		request.setAttribute("calendarList", calendarList);
 	}
 	//sh board end
 }

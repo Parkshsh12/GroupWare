@@ -15,7 +15,6 @@
         .ab{
         	position:relative;
         	display:flex;
-        	margin-bottom: 50px;
         }
         .abc{
         	position: absolute;

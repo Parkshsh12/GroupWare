@@ -56,13 +56,13 @@
 						<%
 							if(search_item != null && text != null){
 						%>
-							<a href="./board_main.do?pageNum=${i}&search_item=<%=search_item%>&text=<%=text%>"/>
+							<a href="./board_main.do?pageNum=${i}&search_item=<%=search_item%>&text=<%=text%>">
 								<%
 						}
 							else{
 								
 								%>
-								<a href="./board_main.do?pageNum=${i}"/>
+								<a href="./board_main.do?pageNum=${i}">
 								<%
 							}
 								%>
@@ -74,6 +74,7 @@
 										<font color='4C5317'> [${i}]</font>
 									</c:otherwise>
 								</c:choose>
+							</a>
 							</a>
 						</c:forEach>
 		</div>

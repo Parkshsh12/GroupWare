@@ -2,7 +2,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
-	System.out.println("1234");
 	MemberDTO member = (MemberDTO)request.getAttribute("member");
 	String msg = request.getParameter("msg");
 %>

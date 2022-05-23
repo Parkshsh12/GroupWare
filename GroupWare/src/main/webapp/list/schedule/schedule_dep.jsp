@@ -1,94 +1,165 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="mvc.model.CalendarDTO"%>
+<%@page import="java.util.Calendar"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	String number = (String)session.getAttribute("number");
+	ArrayList<CalendarDTO> calendarList = (ArrayList)request.getAttribute("calendarList");
+	Calendar cal = Calendar.getInstance();
+	
+	int nowYear = cal.get(Calendar.YEAR);
+	int nowMonth = cal.get(Calendar.MONTH) + 1;
+	
+	String fyear = request.getParameter("year");
+	String fmonth = request.getParameter("month");
+	
+	int year = nowYear;
+	int month = nowMonth;
+	
+	if (fyear != null) {
+		year = Integer.parseInt(fyear);
+	}
+	if (fmonth != null) {
+		month = Integer.parseInt(fmonth);
+	}
+	cal.set(year, month - 1, 1);
+	
+	year = cal.get(Calendar.YEAR);
+	month = cal.get(Calendar.MONTH) + 1;
+	
+	int endDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+	int week = cal.get(Calendar.DAY_OF_WEEK);
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="<c:url value="/resources/css/calendar.css?v=3"/>">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link href='<c:url value="/resources/css/calendar_main.css"/>' rel='stylesheet' />
-<link href='<c:url value="/resources/css/schedule_dep.css"/>' rel='stylesheet' />
-<script src='<c:url value="/resources/js/calendar_main.js"/>'></script>
-
 </head>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
 
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialDate: '2022-05-12',
-      editable: true,
-      selectable: true,
-      businessHours: true,
-      dayMaxEvents: true, // allow "more" link when too many events
-      events: [
-        {
-          title: 'All Day Event',
-          start: '2020-09-01'
-        },
-        {
-          title: 'Long Event',
-          start: '2020-09-07',
-          end: '2020-09-10'
-        },
-        {
-          groupId: 999,
-          title: 'Repeating Event',
-          start: '2020-09-09T16:00:00'
-        },
-        {
-          groupId: 999,
-          title: 'Repeating Event',
-          start: '2020-09-16T16:00:00'
-        },
-        {
-          title: 'Conference',
-          start: '2020-09-11',
-          end: '2020-09-13'
-        },
-        {
-          title: 'Meeting',
-          start: '2020-09-12T10:30:00',
-          end: '2020-09-12T12:30:00'
-        },
-        {
-          title: 'Lunch',
-          start: '2020-09-12T12:00:00'
-        },
-        {
-          title: 'Meeting',
-          start: '2020-09-12T14:30:00'
-        },
-        {
-          title: 'Happy Hour',
-          start: '2020-09-12T17:30:00'
-        },
-        {
-          title: 'Dinner',
-          start: '2020-09-12T20:00:00'
-        },
-        {
-          title: 'Birthday Party',
-          start: '2020-09-13T07:00:00'
-        },
-        {
-          title: 'Click for Google',
-          url: 'http://google.com/',
-          start: '2020-09-28'
-        }
-      ]
-    });
-
-    calendar.render();
-  });
-
-</script>
 <body>
 	<jsp:include page="../../main_topbar/main.jsp"/>
 	<jsp:include page="../../main_topbar/topbar.jsp"/>
 	<jsp:include page="../../main_topbar/contents.jsp"/>
-	<a href="#" class="btn btn-primary submit">일정등록</a>
-	<div id='calendar'></div>
+	<div class="calendar-box">
+			<div class="calendar" align="center">
+				<h2><%=year%>년&nbsp;<%=month%>월
+				</h2>
+				<div class="title">
+					<div class="iljung">
+						<a class="btn btn-primary" href="#">일정추가</a>
+					</div>
+					<div class="daumdal">
+						<a class="btn btn-primary"
+							href="scheduleDepAction.do?year=<%=year%>&amp;month=<%=month - 1%>&number=<%=number%>">이전달</a>
+						<a class="btn btn-primary"
+							href="scheduleDepAction.do?year=<%=year%>&amp;month=<%=month + 1%>&number=<%=number%>">다음달</a>
+					</div>
+				</div>
+				<div class="table">
+					<table border="1">
+						<tr class="calendar_title">
+							<th style="color: red">일</th>
+							<th>월</th>
+							<th>화</th>
+							<th>수</th>
+							<th>목</th>
+							<th>금</th>
+							<th style="color: blue">토</th>
+						</tr>
+						<tr>
+							<%
+								for (int i = 0; i < week - 1; i++) {
+							%>
+							<td height="20">&nbsp;</td>
+							<%
+								}
+							%>
+							<%
+								for (int j = 1; j <= endDay; j++) {
+									week++;
+									if (week % 7 == 2) {
+							%>
+						</tr>
+						<tr>
+							<%
+								}
+							%>
+							<%
+								if (week % 7 == 2) {
+							%>
+							<td style="color: red">
+							<%=j%>
+							<%
+								for(int k = 0; k < calendarList.size(); k++){
+								CalendarDTO calendar = calendarList.get(k);
+								String date = calendar.getStart_date();
+								String day = date.substring(8, date.length());
+								String c_month = date.substring(5, 7);
+								int day3 = Integer.parseInt(day);
+								int c_month3 = Integer.parseInt(c_month);
+								if(month == c_month3 && j == day3){
+							%>
+									<span>fs</span>
+							<%
+								}
+							}
+							%>
+							</td>
+							<%
+								} else if (week % 7 == 1) {
+							%>
+							<td style="color: blue">
+							<%=j%>
+							<%
+							for(int k = 0; k < calendarList.size(); k++){
+								CalendarDTO calendar = calendarList.get(k);
+								String date = calendar.getStart_date();
+								String day = date.substring(8, date.length());
+								String c_month = date.substring(5, 7);
+								int day3 = Integer.parseInt(day);
+								int c_month3 = Integer.parseInt(c_month);
+								if(month == c_month3 && j == day3){
+									%>
+									<span>fs</span>
+									<%
+								}
+							}
+							%>
+							</td>
+							<%
+								} else {
+							%>
+							<td style="color: black">
+							<%=j%>
+							<%
+							for(int k = 0; k < calendarList.size(); k++){
+								CalendarDTO calendar = calendarList.get(k);
+								String date = calendar.getStart_date();
+								String day = date.substring(8, date.length());
+								String c_month = date.substring(5, 7);
+								int day3 = Integer.parseInt(day);
+								int c_month3 = Integer.parseInt(c_month);
+								if(month == c_month3 && j == day3){
+									%>
+									<span>sdfsdfs</span>
+									<%
+								}
+							}
+							%>
+							</td>
+							<%
+								}
+							}
+							%>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
 </body>
 </html>
