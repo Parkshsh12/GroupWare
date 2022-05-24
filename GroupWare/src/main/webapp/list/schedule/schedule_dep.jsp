@@ -116,7 +116,7 @@
 									%>
 										<div><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]
 											<ul class="inner_sch">
-												<li><b><%=calendar.getC_title() %></b></li>
+												<li class="sub_title"><b><%=calendar.getC_title() %></b></li>
 												<li><span class="ca_title">일정기간</span> <span><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%></span></li>
 												<li><span class="ca_title">작성자</span><span><%=calendar.getName() %></span></li>
 												<li><span class="ca_title">일정내용</span><span><%=calendar.getC_title() %></span></li>
