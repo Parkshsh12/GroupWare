@@ -19,10 +19,11 @@
 
 
 .calendar td {
+	position:relative;
 	text-align: left;
 	border: 1px solid #dee2e6;
 	height: 10vh;
-	min-width: 7vh;
+	min-width: 17vh;
 }
 
 .calendar .title {
@@ -37,4 +38,57 @@
 
 .iljung > a{
 	    margin-left: 14vh;
+}
+.calendar td > .circle{
+	display: inline-block;
+    position: absolute;
+    top: 1.7vh;
+    width: 10px;
+    height: 10px;
+    background-color: #6c757d;
+    border-radius: 50%;
+    margin-left: 0.5vh;
+    transition: all 0.3s;
+}
+.calendar td > .circle:hover{
+    min-width: max-content;
+    height: max-content;
+    padding: 1vh;
+    z-index: 1;
+    left: 25px;
+    border-radius: 15px;
+    box-shadow: 1px 2px 5px 0px black;
+    opacity: 0.7;
+    background-color: #3C4b64;
+}
+.calendar td > .circle div:hover{
+	text-decoration: underline;
+}
+.calendar td > .circle div{
+	display: none;
+    font-size: 12px;
+    font-family: revert;
+    color: white;
+    cursor: pointer;
+	margin: 4px 0;
+}
+.calendar td > .circle:hover > div {
+    display: block;
+}
+.calendar .inner_sch{
+	min-width: max-content;
+    height: max-content;
+    background-color: beige;
+    text-decoration: none;
+    display: none;
+    position: absolute;
+    padding: 30px;
+    font-size: 20px;
+    color: black;
+    border-radius: 15px;
+    box-shadow: 1px 1px 5px 1px;
+    font-family: emoji;
+}
+.calendar td > .circle div:hover > ul{
+	display:block;
 }

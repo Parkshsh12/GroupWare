@@ -36,7 +36,7 @@ a {
 
 .update_info textarea {
 	width: 665px;
-	height: 500px;
+	height: 400px;
 	font-size: 16px;
 	padding: 10px;
 	border: 2px solid rgb(232, 233, 242);
@@ -58,4 +58,7 @@ a {
 
 .update_info .input-date:last-child {
 	margin-left: 20px;
+}
+.btn {
+	margin: 0 5px;
 }

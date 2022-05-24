@@ -109,24 +109,3 @@
 		</div>
 </body>
 </html>
-for(int k = 0; k < calendarList.size(); k++){
-										CalendarDTO calendar = calendarList.get(k);
-										String date = calendar.getStart_date();
-										String day = date.substring(8, date.length());
-										String c_month = date.substring(5, 7);
-										int day3 = 0;
-										int c_month3 = 0;
-										System.out.println(day);
-										System.out.println(c_month);
-										if(j < 10){
-											String day2 = day.substring(1);
-											day3 = Integer.parseInt(day2);
-										}
-										if(month < 10){
-											String c_month2 = c_month.substring(1);
-											c_month3 = Integer.parseInt(c_month2);
-										}
-										if(month == c_month3 && j == day3){
-
-										}
-									}

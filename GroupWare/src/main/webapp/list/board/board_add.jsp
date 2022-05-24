@@ -4,7 +4,6 @@
 <%
 	String number = (String)session.getAttribute("number");
 	String name = (String) request.getAttribute("name");
-	System.out.println(name);
 %>
 <!DOCTYPE html>
 <html>

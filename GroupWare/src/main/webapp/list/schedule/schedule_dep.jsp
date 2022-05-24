@@ -51,7 +51,8 @@
 				</h2>
 				<div class="title">
 					<div class="iljung">
-						<a class="btn btn-primary" href="#">일정추가</a>
+					<c:set var="number" value="<%=number %>"/>
+						<a class="btn btn-primary" href="<c:url value="/scheduleDepAdd.do?number=${number}"/>">일정추가</a>
 					</div>
 					<div class="daumdal">
 						<a class="btn btn-primary"
@@ -95,20 +96,38 @@
 							<td style="color: red">
 							<%=j%>
 							<%
+							int i = 1;
 								for(int k = 0; k < calendarList.size(); k++){
-								CalendarDTO calendar = calendarList.get(k);
-								String date = calendar.getStart_date();
-								String day = date.substring(8, date.length());
-								String c_month = date.substring(5, 7);
-								int day3 = Integer.parseInt(day);
-								int c_month3 = Integer.parseInt(c_month);
-								if(month == c_month3 && j == day3){
-							%>
-									<span>fs</span>
-							<%
+									
+									CalendarDTO calendar = calendarList.get(k);
+									String date = calendar.getStart_date();
+									String day = date.substring(8, date.length());
+									String c_month = date.substring(5, 7);
+									int day3 = Integer.parseInt(day);
+									int c_month3 = Integer.parseInt(c_month);
+									if(month == c_month3 && j == day3){
+										if(i==1){
+											%>
+								<div class="circle">
+
+										<%
+										i++;
+										}
+									%>
+										<div><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]
+											<ul class="inner_sch">
+												<li><b><%=calendar.getC_title() %></b></li>
+												<li><span class="ca_title">일정기간</span> <span><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%></span></li>
+												<li><span class="ca_title">작성자</span><span><%=calendar.getName() %></span></li>
+												<li><span class="ca_title">일정내용</span><span><%=calendar.getC_title() %></span></li>
+											</ul>
+										</div>
+									<%
 								}
 							}
 							%>
+
+								</div>
 							</td>
 							<%
 								} else if (week % 7 == 1) {
@@ -116,6 +135,7 @@
 							<td style="color: blue">
 							<%=j%>
 							<%
+							int i = 1;
 							for(int k = 0; k < calendarList.size(); k++){
 								CalendarDTO calendar = calendarList.get(k);
 								String date = calendar.getStart_date();
@@ -124,12 +144,21 @@
 								int day3 = Integer.parseInt(day);
 								int c_month3 = Integer.parseInt(c_month);
 								if(month == c_month3 && j == day3){
+									if(i==1){
 									%>
-									<span>fs</span>
+								<div class="circle">
+
+										<%
+										i++;
+										}
+									%>
+										<div><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]</div>
 									<%
 								}
 							}
 							%>
+
+								</div>
 							</td>
 							<%
 								} else {
@@ -137,6 +166,7 @@
 							<td style="color: black">
 							<%=j%>
 							<%
+							int i = 1;
 							for(int k = 0; k < calendarList.size(); k++){
 								CalendarDTO calendar = calendarList.get(k);
 								String date = calendar.getStart_date();
@@ -145,12 +175,21 @@
 								int day3 = Integer.parseInt(day);
 								int c_month3 = Integer.parseInt(c_month);
 								if(month == c_month3 && j == day3){
+									if(i==1){
 									%>
-									<span>sdfsdfs</span>
+								<div class="circle">
+
+										<%
+										i++;
+										}
+									%>
+										<div><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]</div>
 									<%
 								}
 							}
 							%>
+
+								</div>
 							</td>
 							<%
 								}

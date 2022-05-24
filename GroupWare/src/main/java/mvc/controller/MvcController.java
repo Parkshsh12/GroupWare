@@ -180,6 +180,7 @@ public class MvcController extends HttpServlet {
 		}
 		//shpark start
 		//캘린더
+		// 전체 일정
 		else if (command.equals("/scheduleAllAction.do")) {
 			requestInfoView(request);
 			RequestDispatcher rd = request.getRequestDispatcher("/schedule_all.do");
@@ -187,6 +188,7 @@ public class MvcController extends HttpServlet {
 		} else if (command.equals("/schedule_all.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/schedule/schedule_all.jsp?id=전체 일정");
 			rd.forward(request, response);
+		// 부서 일정
 		} else if (command.equals("/scheduleDepAction.do")) {
 			requestInfoView(request);
 			RequestDispatcher rd = request.getRequestDispatcher("/schedule_dep.do");
@@ -195,8 +197,18 @@ public class MvcController extends HttpServlet {
 			requestCalendarView(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/schedule/schedule_dep.jsp?id=부서 일정");
 			rd.forward(request, response);
+		} else if (command.equals("/scheduleDepAdd.do")) {
+			requestInfoView(request);
+			RequestDispatcher rd = request.getRequestDispatcher("./list/schedule/depshedule_add.jsp?id=일정 추가");
+			rd.forward(request, response);
+		}  else if (command.equals("/scheduleAddDepAction.do")) {
+			requestInfoView(request);
+			requestAddDepSchedule(request);
+			RequestDispatcher rd = request.getRequestDispatcher("/schedule_dep.do");
+			rd.forward(request, response);
 		}
 		//shpark end
+		
 		//주소록
 		else if (command.equals("/contact.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/contact/contact.jsp?id=주소록");
@@ -417,12 +429,6 @@ public class MvcController extends HttpServlet {
 		
 		dto.setHit(0);
 		dto.setB_date(board_date);
-		System.out.println(dto.getName());
-		System.out.println(dto.getNumber());
-		System.out.println(dto.getContent());
-		System.out.println(dto.getTitle());
-		System.out.println(dto.getHit());
-		System.out.println(dto.getB_date());
 		dao.insertBoard(dto);
 	}
 	public void requestLoginName(HttpServletRequest request) {
@@ -476,6 +482,7 @@ public class MvcController extends HttpServlet {
 		MemberDTO dto = new MemberDTO();
 		dto = dao.getMemberById(number);
 		request.setAttribute("member", dto);
+		request.setAttribute("number", number);
 	}
 	
 	public void requestInfoUpdate(HttpServletRequest request) {
@@ -497,6 +504,20 @@ public class MvcController extends HttpServlet {
 		ArrayList<CalendarDTO> calendarList = new ArrayList<CalendarDTO>();
 		calendarList = dao.getCalendarContent(department);
 		request.setAttribute("calendarList", calendarList);
+	}
+	public void requestAddDepSchedule(HttpServletRequest request) {
+		CalendarDTO dto = new CalendarDTO();
+		CalendarDAO dao = CalendarDAO.getInstance();
+		
+		dto.setNumber(request.getParameter("number"));
+		dto.setName(request.getParameter("name"));
+		dto.setC_content(request.getParameter("c_content"));
+		dto.setC_title(request.getParameter("c_title"));
+		dto.setDepartment(request.getParameter("department"));
+		dto.setStart_date(request.getParameter("start_date"));
+		dto.setEnd_date(request.getParameter("end_date"));
+		
+		dao.insertDepSchedule(dto);
 	}
 	//sh board end
 }

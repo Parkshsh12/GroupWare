@@ -66,4 +66,37 @@ public class CalendarDAO {
 		}
 		return null;
 	}
+	public void insertDepSchedule(CalendarDTO dto) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		String sql = "insert into calendar(number,name,c_title,c_content,start_date,end_date,department) values(?,?,?,?,?,?,?)";
+		
+		try {
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, dto.getNumber());
+			pstmt.setString(2, dto.getName());
+			pstmt.setString(3, dto.getC_title());
+			pstmt.setString(4, dto.getC_content());
+			pstmt.setString(5, dto.getStart_date());
+			pstmt.setString(6, dto.getEnd_date());
+			pstmt.setString(7, dto.getDepartment());
+			pstmt.executeUpdate();
+		} catch(Exception ex) {
+			System.out.println("insertDepSchedule()" + ex);
+		} finally {
+			try {
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			} catch(Exception ex) {
+				throw new RuntimeException(ex.getMessage());
+			}
+		}
+	}
 }
