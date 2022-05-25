@@ -1,16 +1,16 @@
 @charset "UTF-8";
 
-.calendar table {
+.calendar_home table {
 	border: 1px solid #dee2e6;
 	border-top: 3px solid #22499d;
-	width: 120vh;
+	width: 80vh;
 }
 
-.calendar_title {
+.calendar_home_title {
 	background-color: #f8fafc;
 }
 
-.calendar th {
+.calendar_home th {
 	font-size: 18px;
 	vertical-align: middle !important;
 	text-align: center;
@@ -18,28 +18,25 @@
 }
 
 
-.calendar td {
+.calendar_home td {
 	position:relative;
 	text-align: left;
 	border: 1px solid #dee2e6;
 	height: 10vh;
-	min-width: 17vh;
 }
-
-.calendar .title {
+.calendar_home .daumdal{
 	display: flex;
-	justify-content: space-between;
-	margin: 1vh 14vh;
+    justify-content: space-between;
+    margin: 1vh 0.5vh;
 }
-
-.calendar .daumdal a:first-child {
+.calendar_home .daumdal a:first-child {
 	margin-right: 20px;
 }
 
-.iljung > a{
+.calendar_home .iljung > a{
 	    margin-left: 14vh;
 }
-.calendar td > .circle{
+.calendar_home td > .circle{
 	display: inline-block;
     position: absolute;
     top: 1.7vh;
@@ -50,7 +47,7 @@
     border-radius: 50%;
     transition: all 0.3s;
 }
-.calendar td > .circle:hover{
+.calendar_home td > .circle:hover{
     min-width: max-content;
     height: max-content;
     padding: 1vh;
@@ -60,7 +57,7 @@
     opacity: 0.7;
     background-color: #3C4b64;
 }
-.calendar td > .circle > a{
+.calendar_home td > .circle > a{
 	display: none;
     font-size: 12px;
     font-family: revert;
@@ -69,10 +66,10 @@
 	margin: 4px 0;
 	transition: all 0.3s;
 }
-.calendar td > .circle > a:hover{
+.calendar_home td > .circle > a:hover{
 	text-decoration: underline;
 	color: red;
 }
-.calendar td > .circle:hover > a {
+.calendar_home td > .circle:hover > a {
     display: block;
 }

@@ -32,25 +32,25 @@
                 <td class="table_num">4</td>
                 <td>2022/05</td>
                 <td>2022-05-10</td>
-                <td>급여 <button type="button" id="modal_opne_btn1" class="btn btn-default btn-sm">보기</button></td>
+                <td>급여 <button type="button" id="modal_opne_btn" class="btn btn-default btn-sm">보기</button></td>
             </tr>
             <tr>
                 <td class="table_num">3</td>
                 <td>2022/05</td>
                 <td>2022-05-10</td>
-                <td>급여 <button type="button" id="modal_btn" class="btn btn-default btn-sm">보기</button></td>
+                <td>급여 <button type="button" id="modal_opne_btn" class="btn btn-default btn-sm">보기</button></td>
             </tr>
             <tr>
                 <td class="table_num">2</td>
                 <td>2022/05</td>
                 <td>2022-05-10</td>
-                <td>급여 <button type="button" id="modal_btn" class="btn btn-default btn-sm">보기</button></td>
+                <td>급여 <button type="button" id="modal_opne_btn" class="btn btn-default btn-sm">보기</button></td>
             </tr>
             <tr>
                 <td class="table_num">1</td>
                 <td>2022/05</td>
                 <td>2022-05-10</td>
-                <td>급여 <button type="button" id="modal_btn" class="btn btn-default btn-sm">보기</button></td>
+                <td>급여 <button type="button" id="modal_opne_btn" class="btn btn-default btn-sm">보기</button></td>
             </tr>
             <tr>
                 <td class="table_num">1</td>

@@ -73,7 +73,6 @@ public class MemberDAO {
 			conn = DBConnection.getConnection();
 			if(type.equals("SearchPw"))
 			{
-				System.out.println("鍮꾨�踰덊샇 李얘린�엫");
 				sql = "select pw from emplyee where name = ? and number = ? and email = ?";
 			}
 			else {

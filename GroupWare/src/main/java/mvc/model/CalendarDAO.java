@@ -36,6 +36,7 @@ public class CalendarDAO {
 			
 			while(rs.next()) {
 				CalendarDTO dto = new CalendarDTO();
+				dto.setSeq(rs.getInt("seq"));
 				dto.setNumber(rs.getString("number"));
 				dto.setName(rs.getString("name"));
 				dto.setC_title(rs.getString("c_title"));
@@ -98,5 +99,116 @@ public class CalendarDAO {
 				throw new RuntimeException(ex.getMessage());
 			}
 		}
+	}
+	public CalendarDTO getCalendarSeq(int seq) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		CalendarDTO dto = null;
+		String sql = "select * from calendar where seq = ?";
+		
+		try {
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, seq);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				dto = new CalendarDTO();
+				dto.setC_content(rs.getString("c_content"));
+				dto.setC_title(rs.getString("c_title"));
+				dto.setDepartment(rs.getString("department"));
+				dto.setEnd_date(rs.getString("end_date"));
+				dto.setStart_date(rs.getString("start_date"));
+				dto.setName(rs.getString("name"));
+				dto.setNumber(rs.getString("number"));
+				dto.setSeq(rs.getInt("seq"));
+			}
+			return dto;
+		} catch(Exception ex) {
+			System.out.println("getCalendarSeq()" + ex);
+		} finally {
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			} catch(Exception ex) {
+				throw new RuntimeException(ex.getMessage());
+			}
+		}
+		return null;
+	}
+	public void deleteSchedule(int seq) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		String sql = "delete from calendar where seq = ?";
+		
+		try {
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, seq);
+			pstmt.executeUpdate();
+		} catch(Exception ex) {
+			System.out.println("deleteSchedule()" + ex);
+		} finally {
+			try {
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			} catch(Exception ex) {
+				throw new RuntimeException(ex.getMessage());
+			}
+		}
+	}
+	public ArrayList<CalendarDTO> getAllCalendar(){
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		CalendarDTO dto = null;
+		ArrayList<CalendarDTO> calendarList = new ArrayList<CalendarDTO>();
+		String sql = "select * from calendar";
+		
+		try {
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				dto = new CalendarDTO();
+				dto.setSeq(rs.getInt("seq"));
+				dto.setNumber(rs.getString("number"));
+				dto.setName(rs.getString("name"));
+				dto.setC_title(rs.getString("c_title"));
+				dto.setC_content(rs.getString("c_content"));
+				dto.setDepartment(rs.getString("department"));
+				dto.setStart_date(rs.getString("start_date"));
+				dto.setEnd_date(rs.getString("end_date"));
+				calendarList.add(dto);
+			}
+			return calendarList;
+		} catch(Exception ex) {
+			System.out.println("getAllCalendar()" + ex);
+		} finally {
+			try {
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			} catch(Exception ex) {
+				throw new RuntimeException(ex.getMessage());
+			}
+		}
+		return null;
 	}
 }

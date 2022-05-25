@@ -37,7 +37,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="<c:url value="/resources/css/calendar.css?v=3"/>">
+<link rel="stylesheet" href="<c:url value="/resources/css/calendar.css?v=5"/>">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 
@@ -45,6 +45,7 @@
 	<jsp:include page="../../main_topbar/main.jsp"/>
 	<jsp:include page="../../main_topbar/topbar.jsp"/>
 	<jsp:include page="../../main_topbar/contents.jsp"/>
+	
 	<div class="calendar-box">
 			<div class="calendar" align="center">
 				<h2><%=year%>년&nbsp;<%=month%>월
@@ -98,7 +99,6 @@
 							<%
 							int i = 1;
 								for(int k = 0; k < calendarList.size(); k++){
-									
 									CalendarDTO calendar = calendarList.get(k);
 									String date = calendar.getStart_date();
 									String day = date.substring(8, date.length());
@@ -109,24 +109,16 @@
 										if(i==1){
 											%>
 								<div class="circle">
-
+								<c:set var="seq" value="<%=calendar.getSeq() %>"/>
 										<%
 										i++;
 										}
 									%>
-										<div><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]
-											<ul class="inner_sch">
-												<li class="sub_title"><b><%=calendar.getC_title() %></b></li>
-												<li><span class="ca_title">일정기간</span> <span><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%></span></li>
-												<li><span class="ca_title">작성자</span><span><%=calendar.getName() %></span></li>
-												<li><span class="ca_title">일정내용</span><span><%=calendar.getC_title() %></span></li>
-											</ul>
-										</div>
+										<a href="<c:url value="/scheduleDetail.do?seq=${seq}"/>"><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]</a>
 									<%
 								}
 							}
 							%>
-
 								</div>
 							</td>
 							<%
@@ -147,12 +139,12 @@
 									if(i==1){
 									%>
 								<div class="circle">
-
+								<c:set var="seq" value="<%=calendar.getSeq() %>"/>
 										<%
 										i++;
 										}
 									%>
-										<div><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]</div>
+										<a href="<c:url value="/scheduleDetail.do?seq=${seq}"/>"><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]</a>
 									<%
 								}
 							}
@@ -178,12 +170,12 @@
 									if(i==1){
 									%>
 								<div class="circle">
-
+								<c:set var="seq" value="<%=calendar.getSeq() %>"/>
 										<%
 										i++;
 										}
 									%>
-										<div><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]</div>
+										<a href="<c:url value="/scheduleDetail.do?seq=${seq}"/>"><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]</a>
 									<%
 								}
 							}
