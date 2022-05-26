@@ -60,7 +60,8 @@ $(document).ready(function() {
                 	<li class="menu_item"><a href="<c:url value="/board_main.do"/>">자유게시판</a></li>
             	</ul>
             </li>
-            <li class="menu_list"><a href="#">캘린더</a><c:set var="number" value="<%=number %>"/>
+            <li class="menu_list"><a href="#">캘린더</a>
+            <c:set var="number" value="<%=number %>"/>
             	<ul>
                 	<li class="menu_item"><a href="<c:url value="/scheduleAllAction.do"/>">전체 일정</a></li>
                 	<li class="menu_item"><a href="<c:url value="/scheduleDepAction.do?number=${number}"/>">부서 일정</a></li>
@@ -74,7 +75,7 @@ $(document).ready(function() {
             </li>
             <li class="menu_list"><a href="#">마이페이지</a>
             	<ul class="menu_drop drop6">
-                	<li class="menu_item"><a href="<c:url value="/manager_pay.do"/>">급여 관리</a></li>
+                	<li class="menu_item"><a href="<c:url value="/manager_pay.do?number=${number}"/>">급여 관리</a></li>
                 	<li class="menu_item"><a class="link" href="<c:url value="/attendance_user.do"/>">근태 조회</a></li>
                 	<li class="menu_item"><a href="<c:url value="/my_information.do?number=${number}"/>">내 정보 관리</a></li>
             	</ul>

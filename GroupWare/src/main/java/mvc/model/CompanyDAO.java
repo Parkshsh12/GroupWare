@@ -30,13 +30,10 @@ public class CompanyDAO {
 
 		if (search_item == null && text == null) {
 			sql = "select * from business_company order by seq asc";
-			System.out.println("이거실행");
 		} else {
 			sql = "select * from business_company where " + search_item + " like '%" + text + "%' order by seq asc";
-			System.out.println("다른거 실행");
 		}
-		System.out.println(search_item);
-		System.out.println(text);
+
 		ArrayList<CompanyDTO> list = new ArrayList<CompanyDTO>();
 
 		try {

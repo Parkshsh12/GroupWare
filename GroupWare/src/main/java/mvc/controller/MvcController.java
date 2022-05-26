@@ -23,11 +23,14 @@ import mvc.model.NoticeDAO;
 import mvc.model.NoticeDTO;
 import mvc.model.PStableDAO;
 import mvc.model.PStableDTO;
+import mvc.model.PaymentDAO;
+import mvc.model.PaymentDTO;
 
 public class MvcController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	int listCount = 5;
+	private static final int paymentCount = 5;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -278,10 +281,11 @@ public class MvcController extends HttpServlet {
 		else if (command.equals("/contact.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/contact/contact.jsp?id=주소록");
 			rd.forward(request, response);
-			// 마이페이지
+		// 마이페이지
 		} else if (command.equals("/attendance_user.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/attendance_user.jsp?id=근태 조회");
 			rd.forward(request, response);
+		// 내정보 관리
 		} else if (command.equals("/my_information.do")) {
 			requestInfoView(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/my_information.jsp?id=내 정보 관리&msg=1");
@@ -290,7 +294,10 @@ public class MvcController extends HttpServlet {
 			requestInfoView(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/my_information.jsp?id=내 정보 관리&msg=0");
 			rd.forward(request, response);
+		// 급여 관리
+			
 		} else if (command.equals("/manager_pay.do")) {
+			requestPayList(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/manager_pay.jsp?id=급여 관리");
 			rd.forward(request, response);
 		} else if (command.equals("/update_information.do")) {
@@ -719,6 +726,33 @@ public class MvcController extends HttpServlet {
 		ArrayList<CalendarDTO> calendarList = new ArrayList<CalendarDTO>();
 		calendarList = dao.getAllCalendar();
 		request.setAttribute("calendarAllList", calendarList);
+	}
+	
+	public void requestPayList(HttpServletRequest request) {
+		int pageNum = 1;
+		int limit = paymentCount;
+		PaymentDAO dao = PaymentDAO.getInstance();
+		ArrayList<PaymentDTO> paymentList = new ArrayList<PaymentDTO>();
+		String number = request.getParameter("number");
+		
+		if (request.getParameter("pageNum") != null) {
+			pageNum = Integer.parseInt(request.getParameter("pageNum"));
+		}
+		int total_record = dao.getAllpaymentCount(number);
+		paymentList = dao.getPaymentList(pageNum, limit, number);
+		
+		int total_page;
+		if(total_record % limit == 0) {
+			total_page = total_record / limit;
+		} else {
+			total_page = total_record / limit;
+			total_page = total_page + 1;
+		}
+
+		request.setAttribute("paymentList", paymentList);
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("total_page", total_page);
+		
 	}
 	// sh board end
 }

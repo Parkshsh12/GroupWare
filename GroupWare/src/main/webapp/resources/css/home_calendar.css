@@ -3,7 +3,7 @@
 .calendar_home table {
 	border: 1px solid #dee2e6;
 	border-top: 3px solid #22499d;
-	width: 80vh;
+	width: 840px;
 }
 
 .calendar_home_title {
@@ -27,7 +27,7 @@
 .calendar_home .daumdal{
 	display: flex;
     justify-content: space-between;
-    margin: 1vh 0.5vh;
+    margin: 1vh 2vh;
 }
 .calendar_home .daumdal a:first-child {
 	margin-right: 20px;
@@ -45,7 +45,7 @@
     height: 14px;
     background-color: #6c757d;
     border-radius: 50%;
-    transition: all 0.3s;
+    transition: all 0.1s;
 }
 .calendar_home td > .circle:hover{
     min-width: max-content;

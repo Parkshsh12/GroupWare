@@ -40,7 +40,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="<c:url value="/resources/css/home_calendar.css?v=5"/>">
+<link rel="stylesheet" href="<c:url value="/resources/css/home_calendar.css?v=7"/>">
 <link rel="stylesheet" href="<c:url value="/resources/css/home_2.css"/>">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <style>

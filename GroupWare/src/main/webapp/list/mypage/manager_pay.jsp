@@ -1,6 +1,20 @@
+<%@page import="mvc.model.PaymentDTO"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	ArrayList<PaymentDTO> paymentList = (ArrayList)request.getAttribute("paymentList");
+	int pageNum = ((Integer)request.getAttribute("pageNum")).intValue();
+	int total_page = ((Integer)request.getAttribute("total_page")).intValue();
+	String number = (String)session.getAttribute("number");
+	int count = 0;
+	if(pageNum == 1){
+		count = 1;
+	} else{
+		count = ((pageNum - 1 ) * 5)+1;
+	}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,79 +36,39 @@
                 <th>지급일자</th>
                 <th>급여구분</th>
             </tr>
+            <%
+            	for(int i = 0; i<paymentList.size(); i++){
+            		PaymentDTO payment = paymentList.get(i);
+            %>
             <tr>
-                <td class="table_num">5</td>
-                <td>2022/05</td>
-                <td>2022-05-10</td>
+                <td class="table_num"><%=count+i %></td>
+                <td><%=payment.getImputed_date() %></td>
+                <td><%=payment.getPayment_date() %></td>
                 <td>급여 <button type="button"  id="modal_opne_btn" class="btn btn-default btn-sm">보기</button></td>
             </tr>
-            <tr>
-                <td class="table_num">4</td>
-                <td>2022/05</td>
-                <td>2022-05-10</td>
-                <td>급여 <button type="button" id="modal_btn" class="btn btn-default btn-sm">보기</button></td>
-            </tr>
-            <tr>
-                <td class="table_num">3</td>
-                <td>2022/05</td>
-                <td>2022-05-10</td>
-                <td>급여 <button type="button" id="modal_btn" class="btn btn-default btn-sm">보기</button></td>
-            </tr>
-            <tr>
-                <td class="table_num">2</td>
-                <td>2022/05</td>
-                <td>2022-05-10</td>
-                <td>급여 <button type="button" id="modal_btn" class="btn btn-default btn-sm">보기</button></td>
-            </tr>
-            <tr>
-                <td class="table_num">1</td>
-                <td>2022/05</td>
-                <td>2022-05-10</td>
-                <td>급여 <button type="button" id="modal_btn" class="btn btn-default btn-sm">보기</button></td>
-            </tr>
-            <tr>
-                <td class="table_num">1</td>
-                <td>2022/05</td>
-                <td>2022-05-10</td>
-                <td>급여 <button type="button" id="modal_btn" class="btn btn-default btn-sm">보기</button></td>
-            </tr>
-            <tr>
-                <td class="table_num">1</td>
-                <td>2022/05</td>
-                <td>2022-05-10</td>
-                <td>급여 <button type="button" id="modal_btn" class="btn btn-default btn-sm">보기</button></td>
-            </tr>
-            <tr>
-                <td class="table_num">1</td>
-                <td>2022/05</td>
-                <td>2022-05-10</td>
-                <td>급여 <button type="button" id="modal_btn" class="btn btn-default btn-sm">보기</button></td>
-            </tr>
-            <tr>
-                <td class="table_num">1</td>
-                <td>2022/05</td>
-                <td>2022-05-10</td>
-                <td>급여 <button type="button" id="modal_btn" class="btn btn-default btn-sm">보기</button></td>
-            </tr>
-            <tr>
-                <td class="table_num">1</td>
-                <td>2022/05</td>
-                <td>2022-05-10</td>
-                <td>급여 <button type="button" id="modal_btn" class="btn btn-default btn-sm">보기</button></td>
-            </tr>
-         
+            <%
+            	}
+            %>
         </table>
         <div align="center">
-            <b>
-                <a href="#">[1]</a>
-                <a href="#">[2]</a>
-                <a href="#">[3]</a>
-            </b>
+        	<c:set var="pageNum" value="<%=pageNum %>"/>
+        	<c:set var="number" value="<%=number %>"/>
+        	<c:forEach var="i" begin="1" end="<%=total_page %>">
+            	<a href="./manager_pay.do?pageNum=${i}&number=${number}">
+            	<c:choose>
+            		<c:when test="${pageNum==i}">
+            			<b>[${i}]</b>            		
+            		</c:when>
+            		<c:otherwise>
+            			<font color='4C5317'>[${i}]</font>
+            		</c:otherwise>
+            	</c:choose>
+            	</a>
+            </c:forEach>
         </div>
     </div>
     <div class="modal" id="modal">
     	<div class="container modal_content">
-    	
 	        <h2 class="title">5월 급여 명세서
 	        	<button type="button" id="modal_close_btn"><i class="fa-solid fa-square-xmark"></i></button>
 	        </h2>
