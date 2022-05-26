@@ -1,13 +1,11 @@
+<%@page import="mvc.model.CalendarDTO"%>
 <%@page import="mvc.model.BoardDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
-	String sessionNumber = (String)session.getAttribute("number");
-	String pageNum = request.getParameter("pageNum");
-	BoardDTO board = (BoardDTO)request.getAttribute("board");
-	System.out.println(sessionNumber);
-	System.out.println(board.getNumber());
+	CalendarDTO calendar = (CalendarDTO)request.getAttribute("schedule");
+	String number = (String)session.getAttribute("number");
 %>
 <!DOCTYPE html>
 <html>
@@ -24,26 +22,28 @@
 	<jsp:include page="../../main_topbar/contents.jsp"/>
 	<div class="board_boardNum">
 		<div class="title_container">
-			<h1><%=board.getTitle() %></h1>
+			<h1><%=calendar.getC_title()%></h1>
 			<div class="title_items">
 				<div class="title_item">
-					<span class="title">작성자</span> <span><%=board.getName() %></span>
+					<span class="title">작성자</span> <span><%=calendar.getName() %></span>
+					<span class="title">부서</span> <span><%=calendar.getDepartment() %></span>
 				</div>
 				<div class="title_item">
-					<span class="title">작성일자</span> <span><%=(board.getB_date()).substring(0,19) %></span>
+					<span class="title">일정 기간</span> <span><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date() %></span>
 				</div>
 			</div>
 			<hr>
 			<div>
-				<span><%=board.getContent() %></span>
+				<span><%=calendar.getC_content() %></span>
 			</div>
 		</div>
 		<div class="btn">
-			<a href="/board_main.do?pageNum=<%=pageNum %>" class="btn btn-primary">되돌아가기</a>
+			<a href="<c:url value="/home.do?"/>" class="btn btn-primary">되돌아가기</a>
 			<%
-				if(sessionNumber.equals(board.getNumber())){
+				if(number.equals(calendar.getNumber())){
 			%> 
-			<a href="/board_updateAction.do?num=<%=board.getSeq() %>&pageNum=<%=pageNum %>" class="admin btn btn-primary">수정</a>
+			<c:set var="seq" value="<%=calendar.getSeq() %>"/>
+			<a href="<c:url value="/scheduleDelete.do?number=${number}&seq=${seq}"/>" class="admin btn btn-primary" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
 			<%
 				}
 			%>

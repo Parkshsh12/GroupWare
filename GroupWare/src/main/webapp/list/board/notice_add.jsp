@@ -41,8 +41,6 @@
 			<div class="button">
 				<input type="submit" class="btn btn-primary" value="등록 ">
 				<a class="btn btn-primary" href="/notice_main.do?pageNum=<%=pageNum%>&search_item=<%=search_item%>&text=<%=text%>&number=<%=number%>&name=<%=name%>">취소</a>
-				<input
-					type="reset" class="btn btn-primary" value="취소 ">
 			</div>
 		</form>
 	</div>

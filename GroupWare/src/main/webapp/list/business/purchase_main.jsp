@@ -1,3 +1,5 @@
+<%@page import="mvc.model.PStableDTO"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -11,6 +13,10 @@
 <link rel="stylesheet" href="<c:url value="/resources/css/purchase_main.css"/>">
 </head>
 <body>
+<%
+	ArrayList list = (ArrayList) request.getAttribute("list");
+	int j = list.size();
+%>
 	<jsp:include page="../../main_topbar/main.jsp"/>
 	<jsp:include page="../../main_topbar/topbar.jsp"/>
 	<jsp:include page="../../main_topbar/contents.jsp"/>
@@ -34,7 +40,7 @@
                 </table>
             </form>
             <div class="business_add">
-                <a href="#" class="businessAdd btn btn-primary">등록</a>
+                <a href="/psadd.do?division=p" class="businessAdd btn btn-primary">등록</a>
             </div>
         </div>
         <hr>
@@ -43,74 +49,33 @@
                 <th>순서</th>
                 <th>업체명</th>
                 <th>분류</th>
-                <th>일자</th>
                 <th>품명</th>
                 <th>수량</th>
                 <th>단위</th>
                 <th>가격</th>
-                <th>사유</th>
+                <th>비고</th>
+                <th>일자</th>
                 <th>변경</th>
             </tr>
+            <%
+            	for(int i = 0; i < list.size(); i++){
+            		PStableDTO dto = (PStableDTO) list.get(i);
+            %>
             <tr>
-                <td>1</td>
-                <td>에이비</td>
-                <td>경비</td>
-                <td>2022-04-01</td>
-                <td>2단 냉장고</td>
-                <td>1</td>
-                <td>EA</td>
-                <td>380000</td>
-                <td>사무실 냉장고 설치건</td>
+                <td><%=j-- %></td>
+                <td><%=dto.getCompany() %></td>
+                <td><%=dto.getCategory() %></td>
+                <td><%=dto.getName() %></td>
+                <td><%=dto.getQty() %></td>
+                <td><%=dto.getUnit() %></td>
+                <td><%=dto.getPrice() %></td>
+                <td><%=dto.getBecause() %></td>
+                <td><%=dto.getDate() %></td>
                 <td><a href="#">수정</a></td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>에이비</td>
-                <td>경비</td>
-                <td>2022-04-01</td>
-                <td>2단 냉장고</td>
-                <td>1</td>
-                <td>EA</td>
-                <td>380000</td>
-                <td>사무실 냉장고 설치건</td>
-                <td><a href="#">수정</a></td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>에이비</td>
-                <td>경비</td>
-                <td>2022-04-01</td>
-                <td>2단 냉장고</td>
-                <td>1</td>
-                <td>EA</td>
-                <td>380000</td>
-                <td>사무실 냉장고 설치건</td>
-                <td><a href="#">수정</a></td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>에이비</td>
-                <td>경비</td>
-                <td>2022-04-01</td>
-                <td>2단 냉장고</td>
-                <td>1</td>
-                <td>EA</td>
-                <td>380000</td>
-                <td>사무실 냉장고 설치건</td>
-                <td><a href="#">수정</a></td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td>에이비</td>
-                <td>경비</td>
-                <td>2022-04-01</td>
-                <td>2단 냉장고</td>
-                <td>1</td>
-                <td>EA</td>
-                <td>380000</td>
-                <td>사무실 냉장고 설치건</td>
-                <td><a href="#">수정</a></td>
-            </tr>
+            <%
+            	}
+            %>
         </table>
     </div>
 </body>

@@ -10,18 +10,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
-
-import com.oreilly.servlet.MultipartRequest;
 
 import mvc.model.BoardDAO;
 import mvc.model.BoardDTO;
 import mvc.model.CalendarDAO;
 import mvc.model.CalendarDTO;
+import mvc.model.CompanyDAO;
+import mvc.model.CompanyDTO;
 import mvc.model.MemberDAO;
 import mvc.model.MemberDTO;
 import mvc.model.NoticeDAO;
 import mvc.model.NoticeDTO;
+import mvc.model.PStableDAO;
+import mvc.model.PStableDTO;
 
 public class MvcController extends HttpServlet {
 
@@ -49,7 +50,7 @@ public class MvcController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("./home.jsp?id=홈화면");
 			rd.forward(request, response);
 		}
-		//로그인
+		// 로그인
 		else if (command.equals("/logout.do")) {
 			HttpSession session = request.getSession();
 			session.invalidate();
@@ -61,10 +62,10 @@ public class MvcController extends HttpServlet {
 			requestBoardList(request);
 			requestLoginMember(request);
 			HttpSession session = request.getSession(true);
-			String name = (String)request.getAttribute("name");
-			if(name != null) {
-				String number = (String)request.getAttribute("number");
-				String type = (String)request.getAttribute("type");
+			String name = (String) request.getAttribute("name");
+			if (name != null) {
+				String number = (String) request.getAttribute("number");
+				String type = (String) request.getAttribute("type");
 				session.setAttribute("name", name);
 				session.setAttribute("number", number);
 				session.setAttribute("type", type);
@@ -73,13 +74,13 @@ public class MvcController extends HttpServlet {
 			}
 		} else if (command.equals("/searchId.do")) {
 			requestSearchId(request);
-			
+
 		} else if (command.equals("/id_search.do")) {
-			
+
 			RequestDispatcher rd = request.getRequestDispatcher("./list/management/member_list.jsp?id=임직원 관리");
 			rd.forward(request, response);
 		}
-		//인사관리
+		// 인사관리
 		else if (command.equals("/member_list.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/management/member_list.jsp?id=임직원 관리");
 			rd.forward(request, response);
@@ -102,21 +103,62 @@ public class MvcController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/management/attendance_month.jsp");
 			rd.forward(request, response);
 		}
-		//영업 관리
+		// 영업 관리
 		else if (command.equals("/business_company.do")) {
+			requestCompanyList(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/business/business_company.jsp?id=거래처 조회");
 			rd.forward(request, response);
+		} else if (command.equals("/business_companyAdd.do")) {
+			RequestDispatcher rd = request.getRequestDispatcher("./list/business/business_companyAdd.jsp?id=거래처 등록");
+			rd.forward(request, response);
+		} else if (command.equals("/companyAddAction.do")) {
+			requestCompanyAdd(request);
+			RequestDispatcher rd = request.getRequestDispatcher("/business_company.do");
+			rd.forward(request, response);
+		} else if (command.equals("/companyUpdate.do")) {
+			companyUpdate(request);
+			RequestDispatcher rd = request.getRequestDispatcher("./list/business/business_companyUpdate.jsp?id=거래처 수정");
+			rd.forward(request, response);
 		} else if (command.equals("/business_search.do")) {
+			PStableMain(request);
+			businessSearch(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/business/business_search.jsp?id=월별 매출 조회");
 			rd.forward(request, response);
-		} else if (command.equals("/purchase_main.do")) {
-			RequestDispatcher rd = request.getRequestDispatcher("./list/business/purchase_main.jsp?id=매입 관리");
+		} else if (command.equals("/psmenu_main.do")) {
+			PStableMain(request);
+			String division = (String) request.getAttribute("division");
+			RequestDispatcher rd;
+			if (division.equals("p")) {
+				rd = request.getRequestDispatcher("./list/business/purchase_main.jsp?id=매입 관리");
+			} else {
+				rd = request.getRequestDispatcher("./list/business/sales_main.jsp?id=매출 관리");
+			}
 			rd.forward(request, response);
-		} else if (command.equals("/sales_main.do")) {
-			RequestDispatcher rd = request.getRequestDispatcher("./list/business/sales_main.jsp?id=매출 관리");
+		} else if (command.equals("/company_delete.do")) {
+			companyDelete(request);
+			RequestDispatcher rd = request.getRequestDispatcher("/business_company.do");
+			rd.forward(request, response);
+		} else if (command.equals("/companyUpdateAction.do")) {
+			companyUpdateAction(request);
+			RequestDispatcher rd = request.getRequestDispatcher("/business_company.do");
+			rd.forward(request, response);
+		} else if (command.equals("/psadd.do")) {
+			String division = request.getParameter("division");
+			RequestDispatcher rd;
+			if (division.equals("p")) {
+				rd = request.getRequestDispatcher("/list/business/ps_add.jsp?id=매입 등록&division=p");
+			} else {
+				rd = request.getRequestDispatcher("/list/business/ps_add.jsp?id=매출 등록&division=s");
+			}
+			rd.forward(request, response);
+		} else if (command.equals("/ps_addAction.do")) {
+			setPsAdd(request);
+			String division = (String) request.getAttribute("division");
+			System.out.println("이거출력하자" + division);
+			RequestDispatcher rd = request.getRequestDispatcher("/psmenu_main.do?division=" + division);
 			rd.forward(request, response);
 		}
-		//공지 게시판
+		// 공지 게시판
 		else if (command.equals("/notice_main.do")) {
 			requestNoticeList(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/board/notice_main.jsp?id=공지사항");
@@ -124,13 +166,13 @@ public class MvcController extends HttpServlet {
 		} else if (command.equals("/notice_add.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/board/notice_add.jsp?id=공지사항 등록");
 			rd.forward(request, response);
-		} else if (command.equals("/notice_add_submit.do")){
+		} else if (command.equals("/notice_add_submit.do")) {
 			requestNoticeAdd(request);
 			requestNoticeList(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/board/notice_main.jsp?id=공지사항");
 			rd.forward(request, response);
 		} else if (command.equals("/noticeView.do")) {
-			requestNoticeView(request);			
+			requestNoticeView(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/board/notice_noticeNum.jsp?id=공지사항");
 			rd.forward(request, response);
 		} else if (command.equals("/notice_update.do")) {
@@ -155,43 +197,49 @@ public class MvcController extends HttpServlet {
 			requestBoardList(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/board/board_main.jsp?id=자유게시판");
 			rd.forward(request, response);
-		} else if(command.equals("/board_add.do")) {
+		} else if (command.equals("/board_add.do")) {
 			requestLoginName(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/board/board_add.jsp?id=자유게시판 등록");
 			rd.forward(request, response);
-		} else if(command.equals("/boardAddAction.do")) {
+		} else if (command.equals("/boardAddAction.do")) {
 			requestBoardWrite(request);
 			RequestDispatcher rd = request.getRequestDispatcher("/board_main.do");
 			rd.forward(request, response);
-		} else if(command.equals("/BoardViewAction.do")) {
+		} else if (command.equals("/BoardViewAction.do")) {
 			requestBoardView(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/board/board_boardNum.jsp?id=자유게시판");
 			rd.forward(request, response);
-		} else if(command.equals("/board_updateAction.do")) {
+		} else if (command.equals("/board_updateAction.do")) {
 			requestBoardView(request);
 			RequestDispatcher rd = request.getRequestDispatcher("/./list/board/board_update.jsp?id=자유게시판 수정");
 			rd.forward(request, response);
-		} else if(command.equals("/board_update.do")) {
+		} else if (command.equals("/board_update.do")) {
 			requestBoardUpdate(request);
 			RequestDispatcher rd = request.getRequestDispatcher("/BoardViewAction.do");
 			rd.forward(request, response);
-		} else if(command.equals("/board_delete.do")) {
+		} else if (command.equals("/board_delete.do")) {
 			requestBoardDelete(request);
 			RequestDispatcher rd = request.getRequestDispatcher("/board_main.do");
 			rd.forward(request, response);
 		}
-		//shpark start
-		//캘린더
-		// 전체 일정
+		// 캘린더
 		else if (command.equals("/scheduleAllAction.do")) {
-			requestInfoView(request);
-			RequestDispatcher rd = request.getRequestDispatcher("/schedule_all.do");
-			rd.forward(request, response);
-		} else if (command.equals("/schedule_all.do")) {
+			requestAllCalendar(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/schedule/schedule_all.jsp?id=전체 일정");
 			rd.forward(request, response);
-			
-		// 부서 일정
+		} else if (command.equals("/scheduleAllDetail.do")) {
+			requestCalendarDetail(request);
+			RequestDispatcher rd = request.getRequestDispatcher("./list/schedule/schedule_all_detail.jsp?id=상세 일정");
+			rd.forward(request, response);
+		} else if (command.equals("/scheduleAllAdd.do")) {
+			requestInfoView(request);
+			RequestDispatcher rd = request.getRequestDispatcher("./list/schedule/allschedule_add.jsp?id=일정 추가");
+			rd.forward(request, response);
+		} else if (command.equals("/scheduleAddAllAction.do")) {
+			requestAddSchedule(request);
+			RequestDispatcher rd = request.getRequestDispatcher("/scheduleAllAction.do");
+			rd.forward(request, response);
+			// 遺��꽌 �씪�젙
 		} else if (command.equals("/scheduleDepAction.do")) {
 			requestInfoView(request);
 			RequestDispatcher rd = request.getRequestDispatcher("/schedule_dep.do");
@@ -204,9 +252,9 @@ public class MvcController extends HttpServlet {
 			requestInfoView(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/schedule/depshedule_add.jsp?id=일정 추가");
 			rd.forward(request, response);
-		}  else if (command.equals("/scheduleAddDepAction.do")) {
+		} else if (command.equals("/scheduleAddDepAction.do")) {
 			requestInfoView(request);
-			requestAddDepSchedule(request);
+			requestAddSchedule(request);
 			RequestDispatcher rd = request.getRequestDispatcher("/schedule_dep.do");
 			rd.forward(request, response);
 		} else if (command.equals("/scheduleDetail.do")) {
@@ -221,19 +269,19 @@ public class MvcController extends HttpServlet {
 			requestDeleteSchedule(request);
 			RequestDispatcher rd = request.getRequestDispatcher("/schedule_dep.do");
 			rd.forward(request, response);
+		} else if (command.equals("/scheduleHomeDetail.do")) {
+			requestCalendarDetail(request);
+			RequestDispatcher rd = request.getRequestDispatcher("./list/schedule/schedule_home_detail.jsp?id=상세 일정");
+			rd.forward(request, response);
 		}
-		//shpark end
-		
-		//주소록
+		// 주소록
 		else if (command.equals("/contact.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/contact/contact.jsp?id=주소록");
 			rd.forward(request, response);
-		}
-		//마이페이지
-		else if (command.equals("/attendance_user.do")) {
+			// 마이페이지
+		} else if (command.equals("/attendance_user.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/attendance_user.jsp?id=근태 조회");
 			rd.forward(request, response);
-		//shpark start
 		} else if (command.equals("/my_information.do")) {
 			requestInfoView(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/my_information.jsp?id=내 정보 관리&msg=1");
@@ -247,48 +295,160 @@ public class MvcController extends HttpServlet {
 			rd.forward(request, response);
 		} else if (command.equals("/update_information.do")) {
 			requestInfoView(request);
-			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/update_information.jsp?id=내정보 수정");
+			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/update_information.jsp?id=내 정보 수정");
 			rd.forward(request, response);
 		} else if (command.equals("/updateInfoAction.do")) {
 			requestInfoUpdate(request);
 			RequestDispatcher rd = request.getRequestDispatcher("/my_informationChk.do");
 			rd.forward(request, response);
-		} 
-		/* 로그인 영역*/
-		
+		}
+		/* 로그인 영역 */
+
 		/* 로그인 */
 
 	}
 
-	/* 공지사항 list 가져오기 */
-	public void requestNoticeList(HttpServletRequest request) {
-		
-		NoticeDAO dao = NoticeDAO.getInstance();
-		ArrayList<NoticeDTO> noticelist = new ArrayList<NoticeDTO>();
-		
-		int pageNum = 1;
-		int limit = listCount;
-		
-		if(request.getParameter("pageNum") != null) {
-			pageNum = Integer.parseInt(request.getParameter("pageNum"));
-		}
-		
+	/* 영업관리 영역 */
+	public void requestCompanyList(HttpServletRequest request) {
+		CompanyDAO dao = CompanyDAO.getInstance();
+		ArrayList<CompanyDTO> companylist = new ArrayList<CompanyDTO>();
+
 		String search_item = request.getParameter("search_item");
 		String text = request.getParameter("text");
-		
+
+		companylist = dao.getAllCompanyList(search_item, text);
+
+		request.setAttribute("companylist", companylist);
+	}
+
+	public void requestCompanyAdd(HttpServletRequest request) {
+		CompanyDTO company = new CompanyDTO();
+		CompanyDAO dao = CompanyDAO.getInstance();
+
+		String p_companyNum = request.getParameter("p_companyNum1") + "-" + request.getParameter("p_companyNum2") + "-"
+				+ request.getParameter("p_companyNum3");
+		String p_personNum = request.getParameter("p_personNum1") + "-" + request.getParameter("p_personNum2") + "-"
+				+ request.getParameter("p_personNum3");
+
+		company.setP_company(request.getParameter("p_company"));
+		company.setP_industry(request.getParameter("p_industry"));
+		company.setP_address(request.getParameter("p_address"));
+		company.setP_companyNum(p_companyNum);
+		company.setP_person(request.getParameter("p_person"));
+		company.setP_personNum(p_personNum);
+
+		dao.CompanyAdd(company);
+	}
+
+	public void companyUpdate(HttpServletRequest request) {
+		CompanyDAO dao = CompanyDAO.getInstance();
+		CompanyDTO dto = new CompanyDTO();
+
+		dto = dao.getCompany(request.getParameter("seq"));
+
+		request.setAttribute("p_company", dto.getP_company());
+		request.setAttribute("p_industry", dto.getP_industry());
+		request.setAttribute("p_address", dto.getP_address());
+		request.setAttribute("p_person", dto.getP_person());
+		request.setAttribute("p_companyNum", dto.getP_companyNum());
+		request.setAttribute("p_personNum", dto.getP_personNum());
+		request.setAttribute("seq", dto.getSeq());
+	}
+
+	public void companyDelete(HttpServletRequest request) {
+		CompanyDAO dao = CompanyDAO.getInstance();
+		int seq = Integer.parseInt(request.getParameter("seq"));
+		dao.deleteCompany(seq);
+		System.out.println("딜리트되냐");
+	}
+
+	public void companyUpdateAction(HttpServletRequest request) {
+		CompanyDAO dao = CompanyDAO.getInstance();
+		CompanyDTO dto = new CompanyDTO();
+		int seq = Integer.parseInt(request.getParameter("seq"));
+
+		String p_companyNum = request.getParameter("p_companyNum1") + "-" + request.getParameter("p_companyNum2") + "-"
+				+ request.getParameter("p_companyNum3");
+		String p_personNum = request.getParameter("p_personNum1") + "-" + request.getParameter("p_personNum2") + "-"
+				+ request.getParameter("p_personNum3");
+
+		dto.setP_industry(request.getParameter("p_industry"));
+		dto.setP_address(request.getParameter("p_address"));
+		dto.setP_person(request.getParameter("p_person"));
+		dto.setP_companyNum(p_companyNum);
+		dto.setP_personNum(p_personNum);
+		dto.setSeq(Integer.parseInt(request.getParameter("seq")));
+
+		dao.companyUpdateAction(dto);
+	}
+
+	public void PStableMain(HttpServletRequest request) {
+		String division = request.getParameter("division");
+		PStableDAO dao = PStableDAO.getInstance();
+		ArrayList<PStableDTO> list = new ArrayList<PStableDTO>();
+
+		list = dao.getPStableList(list, division);
+
+		request.setAttribute("list", list);
+		request.setAttribute("division", division);
+	}
+
+	public void businessSearch(HttpServletRequest request) {
+		PStableDAO dao = PStableDAO.getInstance();
+		ArrayList list = (ArrayList) request.getAttribute("list");
+		ArrayList Array = null;
+		Array = dao.getBusinessList(list);
+
+		request.setAttribute("Array", Array);
+	}
+
+	public void setPsAdd(HttpServletRequest request) {
+		PStableDAO dao = PStableDAO.getInstance();
+		PStableDTO dto = new PStableDTO();
+
+		dto.setDivision(request.getParameter("division"));
+		dto.setCompany(request.getParameter("company"));
+		dto.setDate(request.getParameter("date"));
+		dto.setCategory(request.getParameter("category"));
+		dto.setQty(Integer.parseInt(request.getParameter("qty")));
+		dto.setUnit(request.getParameter("unit"));
+		dto.setPrice(Integer.parseInt(request.getParameter("price")));
+		dto.setBecause(request.getParameter("because"));
+		dto.setName(request.getParameter("name"));
+
+		dao.setPStable(dto);
+
+		request.setAttribute("division", dto.getDivision());
+	}
+
+	/* 공지사항 list 가져오기 */
+	public void requestNoticeList(HttpServletRequest request) {
+
+		NoticeDAO dao = NoticeDAO.getInstance();
+		ArrayList<NoticeDTO> noticelist = new ArrayList<NoticeDTO>();
+
+		int pageNum = 1;
+		int limit = listCount;
+
+		if (request.getParameter("pageNum") != null) {
+			pageNum = Integer.parseInt(request.getParameter("pageNum"));
+		}
+
+		String search_item = request.getParameter("search_item");
+		String text = request.getParameter("text");
+
 		int total_record = dao.getAllNoticeListCount(search_item, text);
 		noticelist = dao.getAllNoticeList(pageNum, limit, search_item, text);
-		
+
 		int total_page;
-		
-		if (total_record % limit == 0){     
-	     	total_page =total_record/limit;
+
+		if (total_record % limit == 0) {
+			total_page = total_record / limit;
+		} else {
+			total_page = total_record / limit;
+			total_page++;
 		}
-		else{
-		   total_page =total_record/limit;
-		   total_page++;
-		}
-		
+
 		request.setAttribute("pageNum", pageNum);
 		request.setAttribute("total_page", total_page);
 		request.setAttribute("total_record", total_record);
@@ -297,29 +457,27 @@ public class MvcController extends HttpServlet {
 		request.setAttribute("text", text);
 	}
 
-	
 	public void requestNoticeView(HttpServletRequest request) {
 		NoticeDAO dao = NoticeDAO.getInstance();
-		
+
 		int seq = Integer.parseInt(request.getParameter("seq"));
 		request.setAttribute("seq", seq);
 		seq = ((Integer) request.getAttribute("seq")).intValue();
-		
-		
+
 		int pageNum = Integer.parseInt(request.getParameter("pageNum"));
 		NoticeDTO notice = dao.getNoticeNum(seq, pageNum);
-		
+
 		request.setAttribute("pageNum", pageNum);
 		request.setAttribute("noticeView", notice);
 		request.setAttribute("select_item", request.getParameter("select_item"));
 		request.setAttribute("text", request.getParameter("text"));
-		
+
 	}
-	
+
 	public void requestNoticeAdd(HttpServletRequest request) {
 		NoticeDAO dao = NoticeDAO.getInstance();
 		NoticeDTO notice = new NoticeDTO();
-		
+
 		notice.setName(request.getParameter("name"));
 		notice.setNumber(request.getParameter("number"));
 		notice.setTitle(request.getParameter("title"));
@@ -328,45 +486,45 @@ public class MvcController extends HttpServlet {
 		dao.setNoticeAdd(notice);
 
 		int seq = noticeTotalList();
-		
+
 		request.setAttribute("pageNum", 1);
 		request.setAttribute("seq", seq);
 	}
-	
-	public int noticeTotalList() {		
+
+	public int noticeTotalList() {
 		NoticeDAO dao = NoticeDAO.getInstance();
 		return dao.getNoticeNext();
 	}
-	
+
 	public void requestSetUpdate(HttpServletRequest request) {
 		NoticeDAO dao = NoticeDAO.getInstance();
 		int seq = (Integer.parseInt(request.getParameter("seq")));
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
-		
+
 		request.setAttribute("seq", seq);
 		dao.updateNoticeSubmit(seq, title, content);
 	}
-	
+
 	public void noticeDelete(HttpServletRequest request) {
 		NoticeDAO dao = NoticeDAO.getInstance();
 		int seq = Integer.parseInt(request.getParameter("seq"));
-		
+
 		dao.setNoticeDelete(seq);
 	}
-	
+
 	/* mskim end */
-	
-	/* 로그인 function*/
+
+	/* 로그인 function */
 	public void requestLoginMember(HttpServletRequest request) {
 		MemberDAO dao = MemberDAO.getInstance();
-		
+
 		String[] result = dao.loginMember(request.getParameter("number"), request.getParameter("pw"));
 		request.setAttribute("number", result[0]);
 		request.setAttribute("name", result[1]);
 		request.setAttribute("type", result[2]);
 	}
-	
+
 	/* 아이디 찾기-2 */
 	public void requestSearchId(HttpServletRequest request) {
 		MemberDAO dao = MemberDAO.getInstance();
@@ -375,13 +533,13 @@ public class MvcController extends HttpServlet {
 		String email = request.getParameter("email");
 		String type = "SearchPw";
 		String pw = dao.SearchIdPw(number, name, email, type);
-		
+
 	}
-	
+
 	/* 직원추가 */
-	public void requestMember_update(HttpServletRequest request){
+	public void requestMember_update(HttpServletRequest request) {
 		MemberDAO dao = MemberDAO.getInstance();
-		
+
 		String number = request.getParameter("number");
 		String name = request.getParameter("name");
 		String address = request.getParameter("address");
@@ -389,39 +547,37 @@ public class MvcController extends HttpServlet {
 		String position = request.getParameter("position");
 		String department = request.getParameter("department");
 		String email = request.getParameter("email");
-		int join_date = (int)request.getAttribute("join_date");
+		int join_date = (int) request.getAttribute("join_date");
 	}
-	
-	//sh board start
-	
+
+	// sh board start
+
 	public void requestBoardList(HttpServletRequest request) {
 		BoardDAO dao = BoardDAO.getInstance();
 		ArrayList<BoardDTO> boardList = new ArrayList<BoardDTO>();
-		
+
 		int pageNum = 1;
-		int limit=listCount;
-		
-		if(request.getParameter("pageNum") != null) {
+		int limit = listCount;
+
+		if (request.getParameter("pageNum") != null) {
 			pageNum = Integer.parseInt(request.getParameter("pageNum"));
 		}
 
-		
 		String search_item = request.getParameter("search_item");
 		String text = request.getParameter("text");
-		
-		int total_record=dao.getallBoardListCount(search_item, text);
+
+		int total_record = dao.getallBoardListCount(search_item, text);
 		boardList = dao.getallBoardList(pageNum, limit, search_item, text);
-		
+
 		int total_page;
-		
-		if(total_record % limit == 0) {
-			total_page = total_record/limit;
-		}
-		else {
-			total_page = total_record/limit;
+
+		if (total_record % limit == 0) {
+			total_page = total_record / limit;
+		} else {
+			total_page = total_record / limit;
 			total_page = total_page + 1;
 		}
-		
+
 		request.setAttribute("pageNum", pageNum);
 		request.setAttribute("total_page", total_page);
 		request.setAttribute("boardList", boardList);
@@ -429,67 +585,70 @@ public class MvcController extends HttpServlet {
 		request.setAttribute("search_item", search_item);
 		request.setAttribute("text", text);
 	}
-	
+
 	public void requestBoardWrite(HttpServletRequest request) {
 		BoardDAO dao = BoardDAO.getInstance();
 		BoardDTO dto = new BoardDTO();
-		
+
 		dto.setName(request.getParameter("name"));
 		dto.setNumber(request.getParameter("number"));
 		dto.setContent(request.getParameter("content"));
 		dto.setTitle(request.getParameter("subject"));
-		
+
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String board_date = formatter.format(new java.util.Date());
-		
+
 		dto.setHit(0);
 		dto.setB_date(board_date);
 		dao.insertBoard(dto);
 	}
+
 	public void requestLoginName(HttpServletRequest request) {
 		String number = request.getParameter("number");
 		BoardDAO dao = BoardDAO.getInstance();
-		
+
 		String name = dao.getLoginNameByNumber(number);
-		
+
 		request.setAttribute("name", name);
 	}
+
 	public void requestBoardView(HttpServletRequest request) {
 		BoardDAO dao = BoardDAO.getInstance();
 		int num = Integer.parseInt(request.getParameter("num"));
 		int pageNum = Integer.parseInt(request.getParameter("pageNum"));
-		
+
 		BoardDTO board = new BoardDTO();
 		board = dao.getBoardByNum(num);
 
-		request.setAttribute("num",	num);
+		request.setAttribute("num", num);
 		request.setAttribute("board", board);
-		request.setAttribute("pageNum",	pageNum);
-		
+		request.setAttribute("pageNum", pageNum);
+
 	}
+
 	public void requestBoardUpdate(HttpServletRequest request) {
 		BoardDAO dao = BoardDAO.getInstance();
 		BoardDTO dto = new BoardDTO();
 		int num = Integer.parseInt(request.getParameter("num"));
-		
+
 		dto.setSeq(num);
 		dto.setTitle(request.getParameter("subject"));
 		dto.setName(request.getParameter("name"));
 		dto.setContent(request.getParameter("content"));
-		
+
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String board_date = formatter.format(new java.util.Date());
 		dto.setB_date(board_date);
 		dto.setHit(0);
 		dao.updateBoard(dto);
 	}
-	
+
 	public void requestBoardDelete(HttpServletRequest request) {
 		int num = Integer.parseInt(request.getParameter("num"));
 		BoardDAO dao = BoardDAO.getInstance();
 		dao.deleteBoard(num);
 	}
-	
+
 	public void requestInfoView(HttpServletRequest request) {
 		MemberDAO dao = MemberDAO.getInstance();
 		String number = request.getParameter("number");
@@ -498,7 +657,7 @@ public class MvcController extends HttpServlet {
 		request.setAttribute("member", dto);
 		request.setAttribute("number", number);
 	}
-	
+
 	public void requestInfoUpdate(HttpServletRequest request) {
 		MemberDAO dao = MemberDAO.getInstance();
 		MemberDTO dto = new MemberDTO();
@@ -506,23 +665,25 @@ public class MvcController extends HttpServlet {
 		dto.setPw(request.getParameter("password"));
 		dto.setAddress(request.getParameter("address"));
 		dto.setEmail(request.getParameter("email"));
-		String phone = request.getParameter("phone1") + "-" + request.getParameter("phone2")  + "-" + request.getParameter("phone3");
+		String phone = request.getParameter("phone1") + "-" + request.getParameter("phone2") + "-"
+				+ request.getParameter("phone3");
 		dto.setPhone(phone);
 		dao.updateInfo(dto);
 	}
-	
+
 	public void requestCalendarView(HttpServletRequest request) {
 		CalendarDAO dao = CalendarDAO.getInstance();
-		MemberDTO member = (MemberDTO)request.getAttribute("member");
+		MemberDTO member = (MemberDTO) request.getAttribute("member");
 		String department = member.getDepartment();
 		ArrayList<CalendarDTO> calendarList = new ArrayList<CalendarDTO>();
 		calendarList = dao.getCalendarContent(department);
 		request.setAttribute("calendarList", calendarList);
 	}
-	public void requestAddDepSchedule(HttpServletRequest request) {
+
+	public void requestAddSchedule(HttpServletRequest request) {
 		CalendarDTO dto = new CalendarDTO();
 		CalendarDAO dao = CalendarDAO.getInstance();
-		
+
 		dto.setNumber(request.getParameter("number"));
 		dto.setName(request.getParameter("name"));
 		dto.setC_content(request.getParameter("c_content"));
@@ -530,9 +691,10 @@ public class MvcController extends HttpServlet {
 		dto.setDepartment(request.getParameter("department"));
 		dto.setStart_date(request.getParameter("start_date"));
 		dto.setEnd_date(request.getParameter("end_date"));
-		
+
 		dao.insertDepSchedule(dto);
 	}
+
 	public void requestCalendarDetail(HttpServletRequest request) {
 		int seq = Integer.parseInt(request.getParameter("seq"));
 		CalendarDAO dao = CalendarDAO.getInstance();
@@ -540,6 +702,7 @@ public class MvcController extends HttpServlet {
 		dto = dao.getCalendarSeq(seq);
 		request.setAttribute("schedule", dto);
 	}
+
 	public void requestDeleteSchedule(HttpServletRequest request) {
 		CalendarDAO dao = CalendarDAO.getInstance();
 		MemberDAO dao2 = MemberDAO.getInstance();
@@ -550,11 +713,12 @@ public class MvcController extends HttpServlet {
 		request.setAttribute("member", dto);
 		dao.deleteSchedule(seq);
 	}
+
 	public void requestAllCalendar(HttpServletRequest request) {
 		CalendarDAO dao = CalendarDAO.getInstance();
 		ArrayList<CalendarDTO> calendarList = new ArrayList<CalendarDTO>();
 		calendarList = dao.getAllCalendar();
 		request.setAttribute("calendarAllList", calendarList);
 	}
-	//sh board end
+	// sh board end
 }

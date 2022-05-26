@@ -34,7 +34,7 @@
 	            </div>
 	            <div class="login_etc">
 	                 <div class="forgot_id">
-	                    <a href="id_search.jsp">사번 찾기 > </a>
+	                    <a href="/id_search.do">사번 찾기 > </a>
 	                </div>
 	                <div class="forgot_pw">
 	                    <a href="pw_search.jsp">비밀번호 찾기 > </a>

@@ -1,8 +1,12 @@
+<%@page import="mvc.model.CalendarDTO"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Calendar"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
+	String number = (String)session.getAttribute("number");
+	ArrayList<CalendarDTO> calendarList = (ArrayList)request.getAttribute("calendarAllList");
 	Calendar cal = Calendar.getInstance();
 	
 	int nowYear = cal.get(Calendar.YEAR);
@@ -47,13 +51,14 @@
 				</h2>
 				<div class="title">
 					<div class="iljung">
-						<a class="btn btn-primary" href="#">일정추가</a>
+					<c:set var="number" value="<%=number %>"/>
+						<a class="btn btn-primary" href="<c:url value="/scheduleAllAdd.do?number=${number}"/>">일정추가</a>
 					</div>
 					<div class="daumdal">
 						<a class="btn btn-primary"
-							href="schedule_all.do?year=<%=year%>&amp;month=<%=month - 1%>">이전달</a>
+							href="scheduleAllAction.do?year=<%=year%>&amp;month=<%=month - 1%>">이전달</a>
 						<a class="btn btn-primary"
-							href="schedule_all.do?year=<%=year%>&amp;month=<%=month + 1%>">다음달</a>
+							href="scheduleAllAction.do?year=<%=year%>&amp;month=<%=month + 1%>">다음달</a>
 					</div>
 				</div>
 				<div class="table">
@@ -78,7 +83,6 @@
 							<%
 								for (int j = 1; j <= endDay; j++) {
 									week++;
-									System.out.println(week);
 									if (week % 7 == 2) {
 							%>
 						</tr>
@@ -89,15 +93,93 @@
 							<%
 								if (week % 7 == 2) {
 							%>
-							<td style="color: red"><%=j%></td>
+							<td style="color: red">
+							<%=j%>
+							<%
+							int i = 1;
+								for(int k = 0; k < calendarList.size(); k++){
+									CalendarDTO calendar = calendarList.get(k);
+									String date = calendar.getStart_date();
+									String day = date.substring(8, date.length());
+									String c_month = date.substring(5, 7);
+									int day3 = Integer.parseInt(day);
+									int c_month3 = Integer.parseInt(c_month);
+									if(month == c_month3 && j == day3){
+										if(i==1){
+											%>
+								<div class="circle">
+								<c:set var="seq" value="<%=calendar.getSeq() %>"/>
+										<%
+										i++;
+										}
+									%>
+										<a href="<c:url value="/scheduleAllDetail.do?seq=${seq}"/>"><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]</a>
+									<%
+								}
+							}
+							%>
+								</div>
+							</td>
 							<%
 								} else if (week % 7 == 1) {
 							%>
-							<td style="color: blue"><%=j%></td>
+							<td style="color: blue">
+							<%=j%>
+							<%
+							int i = 1;
+								for(int k = 0; k < calendarList.size(); k++){
+									CalendarDTO calendar = calendarList.get(k);
+									String date = calendar.getStart_date();
+									String day = date.substring(8, date.length());
+									String c_month = date.substring(5, 7);
+									int day3 = Integer.parseInt(day);
+									int c_month3 = Integer.parseInt(c_month);
+									if(month == c_month3 && j == day3){
+										if(i==1){
+											%>
+								<div class="circle">
+								<c:set var="seq" value="<%=calendar.getSeq() %>"/>
+										<%
+										i++;
+										}
+									%>
+										<a href="<c:url value="/scheduleAllDetail.do?seq=${seq}"/>"><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]</a>
+									<%
+								}
+							}
+							%>
+								</div>
+							</td>
 							<%
 								} else {
 							%>
-							<td style="color: black"><%=j%></td>
+							<td style="color: black">
+							<%=j%>
+							<%
+							int i = 1;
+								for(int k = 0; k < calendarList.size(); k++){
+									CalendarDTO calendar = calendarList.get(k);
+									String date = calendar.getStart_date();
+									String day = date.substring(8, date.length());
+									String c_month = date.substring(5, 7);
+									int day3 = Integer.parseInt(day);
+									int c_month3 = Integer.parseInt(c_month);
+									if(month == c_month3 && j == day3){
+										if(i==1){
+											%>
+								<div class="circle">
+								<c:set var="seq" value="<%=calendar.getSeq() %>"/>
+										<%
+										i++;
+										}
+									%>
+										<a href="<c:url value="/scheduleAllDetail.do?seq=${seq}"/>"><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]</a>
+									<%
+								}
+							}
+							%>
+								</div>
+							</td>
 							<%
 								}
 							}

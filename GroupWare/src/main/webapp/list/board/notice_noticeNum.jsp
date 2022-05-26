@@ -34,7 +34,7 @@
 					<span class="title">작성자</span> <span><%=notice.getName() %></span>
 				</div>
 				<div class="title_item">
-					<span class="title">작성일자</span> <span><%=notice.getB_date() %></span>
+					<span class="title">작성일자</span> <span><%=(notice.getB_date()).substring(0,19) %></span>
 					<span class="title">조회수</span> <span><%=notice.getHit() %></span>
 				</div>
 			</div>
@@ -44,7 +44,7 @@
 			</div>
 		</div>
 		<div class="btn">
-			<a href="/notice_main.do?pageNum=<%=pageNum%>&search_item=<%=search_item%>&text=<%=text%>" class="btn btn-primary">되돌아가기</a> 
+			<a href="/notice_main.do?pageNum=<%=pageNum%>" class="btn btn-primary">되돌아가기</a> 
 			<%
 				if(number.equals(notice.getNumber())){	
 			%>

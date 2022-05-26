@@ -1,4 +1,5 @@
 <%@page import="mvc.model.CalendarDTO"%>
+<%@page import="mvc.model.NoticeDTO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="mvc.model.BoardDTO"%>
 <%@page import="java.util.Calendar"%>
@@ -8,6 +9,7 @@
 <%
 	ArrayList<CalendarDTO> calendarList = (ArrayList)request.getAttribute("calendarAllList");
 	ArrayList<BoardDTO> list = (ArrayList)request.getAttribute("boardList");
+	ArrayList<NoticeDTO> noticelist = (ArrayList)request.getAttribute("noticelist");
 	Calendar cal = Calendar.getInstance();
 	
 	int nowYear = cal.get(Calendar.YEAR);
@@ -54,34 +56,23 @@
 		<div class="table-box">
 			<div class="title1">
 				<h3>공지사항</h3>
-				<a href="#" class="btn btn-primary btn-sm">더 보기</a>
+				<a href="/notice_main.do" class="btn btn-primary btn-sm">더 보기</a>
 			</div>
 			<table class="table1">
 				<tr class="table_header">
 					<th>제목</th>
 					<th>작성일</th>
 				</tr>
+				<% for(int i = 0; i < 5; i++){ 
+					NoticeDTO notice = noticelist.get(i);					
+				%>
 				<tr>
-					<td><a href="#">안녕하세요 여러분</a></td>
-					<td>2022-05-10</td>
+					<td><a href="./noticeView.do?seq=<%=notice.getSeq()%>&pageNum=1"><%=notice.getTitle()%></a></td>
+					<td><%=notice.getB_date()%></td>
 				</tr>
-				<tr>
-					<td><a href="#">안녕하세요 여러분</a></td>
-					<td>2022-05-10</td>
-				</tr>
-				<tr>
-					<td><a href="#">안녕하세요 여러분</a></td>
-					<td>2022-05-10</td>
-				</tr>
-				<tr>
-					<td><a href="#">안녕하세요 여러분</a></td>
-					<td>2022-05-10</td>
-				</tr>
-				<tr>
-					<td><a href="#">안녕하세요 여러분</a></td>
-					<td>2022-05-10</td>
-				</tr>
-
+				<%
+				}
+				%>
 			</table>
 			<div class="title2">
 				<h3>자유게시판</h3>
@@ -92,14 +83,13 @@
 					<th>제목</th>
 					<th>작성일</th>
 				</tr>
-				<%
+ 				<%
 					for(int i = 0; i < 5; i++){
 						BoardDTO board = list.get(i);
-						String date = board.getB_date().substring(0, 19);
 				%>
 				<tr>
 					<td><a href="./BoardViewAction.do?num=<%=board.getSeq()%>&pageNum=1"><%=board.getTitle() %></a></td>
-					<td><%=date %></td>
+					<td><%=board.getB_date() %></td>
 				</tr>
 				<%
 					}				
@@ -172,7 +162,7 @@
 										i++;
 										}
 									%>
-										<a href="<c:url value="/scheduleDetail.do?seq=${seq}"/>"><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]</a>
+										<a href="<c:url value="/scheduleHomeDetail.do?seq=${seq}"/>"><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]</a>
 									<%
 								}
 							}
@@ -203,7 +193,7 @@
 										i++;
 										}
 									%>
-										<a href="<c:url value="/scheduleDetail.do?seq=${seq}"/>"><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]</a>
+										<a href="<c:url value="/scheduleHomeDetail.do?seq=${seq}"/>"><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]</a>
 									<%
 								}
 							}
@@ -234,7 +224,7 @@
 										i++;
 										}
 									%>
-										<a href="<c:url value="/scheduleDetail.do?seq=${seq}"/>"><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]</a>
+										<a href="<c:url value="/scheduleHomeDetail.do?seq=${seq}"/>"><%=calendar.getStart_date()%> ~ <%=calendar.getEnd_date()%><br><%=calendar.getC_title()%> [<%=calendar.getName() %>]</a>
 									<%
 								}
 							}

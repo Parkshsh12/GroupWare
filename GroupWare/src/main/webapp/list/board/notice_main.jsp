@@ -47,7 +47,7 @@
 				<td><%=notice.getSeq() %></td>
 				<td><a href="./noticeView.do?seq=<%=notice.getSeq()%>&pageNum=<%=pageNum%>&search_item=<%=search_item%>&text=<%=text%>"><%=notice.getTitle()%></a></td>
 				<td><%=notice.getName() %></td>
-				<td><%=notice.getB_date() %></td>
+				<td><%=(notice.getB_date()).substring(0,19) %></td>
 				<td><%=notice.getHit() %></td>
 			</tr>
 			<%
@@ -56,15 +56,22 @@
 		</table>
 
 		<div align="center">
-			<b>
 			<%
 			for(int i = 1; i <= total_page; i++){
+				if(pageNum == i ){
+					
 			%>
-			<a href="/notice_main.do?pageNum=<%=i%>&search_item=<%=search_item%>&text=<%=text%>">[<%=i%>]</a>
+			<a href="/notice_main.do?pageNum=<%=i%>&search_item=<%=search_item%>&text=<%=text%>"><b>[<%=i%>]</b></a>
 			<%
+				}
+				else{
+					%>
+					<a href="/notice_main.do?pageNum=<%=i%>&search_item=<%=search_item%>&text=<%=text%>"><font color='#4C5317'>[<%=i%>]</font></a>
+					<%
+							
+				}
 			}
 			%>
-			</b>
 		</div>
 		<div align="right">
 			<a href="./notice_add.do?pageNum=<%=pageNum%>&search_item=<%=search_item%>&text=<%=text%>&number=<%=number%>&name=<%=name%>" class="boardAdd btn btn-primary">글쓰기</a>

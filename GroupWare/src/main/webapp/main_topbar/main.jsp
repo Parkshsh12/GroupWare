@@ -31,7 +31,7 @@ $(document).ready(function() {
                 <b style="color:#247ffb"><%= name %></b>님<p>환영합니다.
             </div>
             <div class="logout">
-            	<a href="<c:url value="/logout.do"/>" class="btn btn-primary">로그아웃</a>
+            	<a href="/logout.do" class="btn btn-primary">로그아웃</a>
             </div>
             </div>
             <%
@@ -48,10 +48,10 @@ $(document).ready(function() {
             </li>
             <li class="menu_list"><a href="#">영업 관리</a>
            		<ul>
-               		<li class="menu_item"><a href="<c:url value="/business_search.do"/>">월별 매출 조회</a></li>
+               		<li class="menu_item"><a href="<c:url value="/business_search.do?division=a"/>">월별 매출 조회</a></li>
                		<li class="menu_item"><a href="<c:url value="/business_company.do"/>">거래처 조회</a></li>
-               		<li class="menu_item"><a href="<c:url value="/purchase_main.do"/>">매입 관리</a></li>
-               		<li class="menu_item"><a href="<c:url value="/sales_main.do"/>">매출 관리</a></li>
+               		<li class="menu_item"><a href="<c:url value="/psmenu_main.do?division=p"/>">매입 관리</a></li>
+               		<li class="menu_item"><a href="<c:url value="/psmenu_main.do?division=s"/>">매출 관리</a></li>
             	</ul>
             </li>
             <li class="menu_list"><a href="#">게시판</a>

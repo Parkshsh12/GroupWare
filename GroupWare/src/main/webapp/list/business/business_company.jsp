@@ -1,3 +1,5 @@
+<%@page import="mvc.model.CompanyDTO"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -8,30 +10,36 @@
 <title>Insert title here</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="<c:url value="/resources/css/business_company.css"/>">
+<link rel="stylesheet" href="<c:url value="/resources/css/business_company.css?ver=5"/>">
 </head>
 <body>
+<%
+	ArrayList<CompanyDTO> list = (ArrayList<CompanyDTO>) request.getAttribute("companylist");
+	String search_item = (String) request.getAttribute("search_item");
+	String texet = (String) request.getAttribute("text");
+%>
 	<jsp:include page="../../main_topbar/main.jsp"/>
 	<jsp:include page="../../main_topbar/topbar.jsp"/>
 	<jsp:include page="../../main_topbar/contents.jsp"/>
 	<div class="container">
 		<div align="center" class="business_search">
-			<form method="post">
+			<form action="/business_company.do" method="post">
 				<table>
 					<tr>
-						<td><select class="search_select">
-								<option value="subject">제목</option>
-								<option value="content">본문 내용</option>
-								<option value="name">글쓴이</option>
+						<td><select class="search_select" name="search_item">
+								<option value="p_company">업체명</option>
+								<option value="p_address">주소</option>
+								<option value="p_person">담당자</option>
 						</select></td>
-						<td class="search"><input class="search_content" type="text"
-							name="text" /> <input type="submit" class="search_btn"
-							value="검색" /></td>
+						<td class="search">
+							<input class="search_content" type="text" name="text" />
+							<input type="submit" class="search_btn"	value="검색" />
+						</td>
 					</tr>
 				</table>
 			</form>
 			<div class="business_add">
-				<a href="#" class="businessAdd btn btn-primary">등록</a>
+				<a href="/business_companyAdd.do" class="businessAdd btn btn-primary">등록</a>
 			</div>
 		</div>
 		<hr>
@@ -46,56 +54,23 @@
 				<th>담당자 연락처</th>
 				<th>변경</th>
 			</tr>
+			<%
+				for(int i = 0; i < list.size(); i++){
+					CompanyDTO company = list.get(i);
+			%>
 			<tr>
-				<td>1</td>
-				<td><a href="#">에이비</a></td>
-				<td>전기 전자</td>
-				<td>창원시 의창구 도리도리길 10-6</td>
-				<td>055-123-4567</td>
-				<td>김도리</td>
-				<td>010-1111-2222</td>
-				<td><a href="#">수정</a></td>
+				<td><%=company.getSeq()%></td>
+				<td><%=company.getP_company() %></td>
+				<td><%=company.getP_industry() %></td>
+				<td><%=company.getP_address() %></td>
+				<td><%=company.getP_companyNum() %></td>
+				<td><%=company.getP_person() %></td>
+				<td><%=company.getP_personNum() %></td>
+				<td><a href="/companyUpdate.do?seq=<%=company.getSeq()%>">수정</a></td>
 			</tr>
-			<tr>
-				<td>2</td>
-				<td><a href="#">씨디</a></td>
-				<td>철강</td>
-				<td>마산 합포구 어리버리길 20-6</td>
-				<td>055-234-5678</td>
-				<td>김어리</td>
-				<td>010-1234-5678</td>
-				<td><a href="#">수정</a></td>
-			</tr>
-			<tr>
-				<td>3</td>
-				<td><a href="#">이에프</a></td>
-				<td>전자</td>
-				<td>마산 회원기 어벙이길 11-4</td>
-				<td>055-111-3344</td>
-				<td>박어벙</td>
-				<td>010-2345-6789</td>
-				<td><a href="#">수정</a></td>
-			</tr>
-			<tr>
-				<td>4</td>
-				<td><a href="#">지에이치</a></td>
-				<td>판매</td>
-				<td>서울 특별시 두리단길 312-4</td>
-				<td>02-123-7890</td>
-				<td>최두리</td>
-				<td>010-2222-3333</td>
-				<td><a href="#">수정</a></td>
-			</tr>
-			<tr>
-				<td>5</td>
-				<td><a href="#">아이제이</a></td>
-				<td>통신</td>
-				<td>대구 동동길 2층 201호</td>
-				<td>051-222-1122</td>
-				<td>문동동</td>
-				<td>010-4444-5555</td>
-				<td><a href="#">수정</a></td>
-			</tr>
+			<%
+				}
+			%>
 		</table>
 	</div>
 </body>

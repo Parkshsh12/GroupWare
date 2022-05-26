@@ -4,6 +4,7 @@
 <%
 	String number = (String)session.getAttribute("number");
 	String name = (String) request.getAttribute("name");
+	System.out.println(name);
 %>
 <!DOCTYPE html>
 <html>
@@ -26,7 +27,7 @@
 			</div>
 			<div class="form-item">
 				<label class="form-item">이름</label> <input class="title"
-					name="name" type="text" value="<%=name%>" readonly="readonly">
+					name="name" type="text" value="<%=name%>">
 			</div>
 			<div class="form-item">
 				<label class="form-item">내용</label>

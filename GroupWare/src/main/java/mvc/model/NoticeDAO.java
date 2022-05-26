@@ -3,6 +3,7 @@ package mvc.model;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.management.RuntimeErrorException;
@@ -213,8 +214,9 @@ public class NoticeDAO {
 		
 		String sql;
 		
-		java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
-		String date = formatter.format(new java.util.Date()); 
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String date = formatter.format(new java.util.Date());
+		
 		notice.setB_date(date);
 		
 		sql = "insert into notice (number, name, title, content, b_date) values (?, ?, ?, ?, ?)";
