@@ -5,6 +5,8 @@ public class PaymentDTO {
 	private String number;
 	private String imputed_date;
 	private String payment_date;
+	private int position_pay;
+	private int margin_pay;
 	public int getPaynumber() {
 		return paynumber;
 	}
@@ -28,6 +30,18 @@ public class PaymentDTO {
 	}
 	public void setPayment_date(String payment_date) {
 		this.payment_date = payment_date;
+	}
+	public int getPosition_pay() {
+		return position_pay;
+	}
+	public void setPosition_pay(int position_pay) {
+		this.position_pay = position_pay;
+	}
+	public int getMargin_pay() {
+		return margin_pay;
+	}
+	public void setMargin_pay(int margin_pay) {
+		this.margin_pay = margin_pay;
 	}
 	
 	

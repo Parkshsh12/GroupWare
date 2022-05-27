@@ -297,6 +297,7 @@ public class MvcController extends HttpServlet {
 		// 급여 관리
 			
 		} else if (command.equals("/manager_pay.do")) {
+			requestInfoView(request);
 			requestPayList(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/manager_pay.jsp?id=급여 관리");
 			rd.forward(request, response);

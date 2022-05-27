@@ -76,7 +76,7 @@ public class MemberDAO {
 				sql = "select pw from emplyee where name = ? and number = ? and email = ?";
 			}
 			else {
-				// �븘�씠�뵒 李얘린	
+				// 占쎈툡占쎌뵠占쎈탵 筌≪뼐由�	
 			}
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, name);
@@ -112,6 +112,7 @@ public class MemberDAO {
 				member.setPhone(rs.getString("phone"));
 				member.setEmail(rs.getString("email"));
 				member.setJoin_date(rs.getString("join_date"));
+				member.setHourlywage(rs.getInt("hourlywage"));
 			}
 			return member;
 		} catch(Exception ex) {

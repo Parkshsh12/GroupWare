@@ -83,7 +83,7 @@ a {
 	text-align: center;
 }
 
-.modal #modal_close_btn {
+div[class*="modal"] button[id*="modal_close_btn"] {
 	border: none;
 	background-color: transparent;
 	position: absolute;

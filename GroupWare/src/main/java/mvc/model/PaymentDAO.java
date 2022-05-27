@@ -16,7 +16,55 @@ public class PaymentDAO {
 		}
 		return instance;
 	}
-	public int getAllpaymentCount(String number) {
+	public int[] getSalary(int normal_pay) {
+		int[] salary = new int[9];
+		int normal = normal_pay*174;
+	  	int holiday = normal_pay*35;
+	  	int income_tax = 0;
+	  	int national_Pension = (int)((normal + holiday) * 0.045);
+	 	int health_Insurance = (int)((normal + holiday) * 0.03495);
+	 	int employment_Insurance = (int)((normal + holiday) * 0.0025);
+	 	int sanje = (int)((normal + holiday) * 0.0007);
+	  	if((normal + holiday)*12 <= 12000000){
+	  		income_tax = (int)((normal + holiday)*0.06);
+	  	}
+	  	else if((normal + holiday)*12 > 12000000 && (normal + holiday)*12 <= 46000000){
+	  		int x = 1080000/12;
+	  		income_tax = (int)((normal + holiday)*0.15 - x);
+	  	}
+	  	else if((normal + holiday)*12 > 46000000 && (normal + holiday)*12 <= 88000000){
+	  		int x = 5220000/12;
+	  		income_tax = (int)((normal + holiday)*0.24 - x);
+	  	}
+	  	else if((normal + holiday)*12 > 88000000 && (normal + holiday)*12 <= 150000000){
+	  		int x = 14900000/12;
+	  		income_tax = (int)((normal + holiday)*0.35 - x);
+	  	}
+	  	else if((normal + holiday)*12 > 150000000 && (normal + holiday)*12 <= 300000000){
+	  		int x = 19400000/12;
+	  		income_tax = (int)((normal + holiday)*0.38 - x);
+	  	}
+	  	else if((normal + holiday)*12 > 300000000 && (normal + holiday)*12 <= 500000000){
+	  		int x = 25400000/12;
+	  		income_tax = (int)((normal + holiday)*0.40 - x);
+	  	}
+	  	else if((normal + holiday)*12 > 500000000){
+	  		int x = 35400000/12;
+	  		income_tax = (int)((normal + holiday)*0.42 - x);
+	  	}
+	  	salary[0] = normal;
+	  	salary[1] = holiday;
+	  	salary[2] = national_Pension;
+	  	salary[3] = health_Insurance;
+	  	salary[4] = employment_Insurance;
+	  	salary[5] = sanje;
+	  	salary[6] = income_tax;
+	  	salary[7] = normal + holiday;
+	  	salary[8] =	national_Pension + health_Insurance + employment_Insurance + income_tax + sanje;
+	  	
+	  	return salary;
+	}
+		public int getAllpaymentCount(String number) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -73,6 +121,8 @@ public class PaymentDAO {
 				dto.setNumber(rs.getString("number"));
 				dto.setImputed_date(rs.getString("imputed_date"));
 				dto.setPayment_date(rs.getString("payment_date"));
+				dto.setPosition_pay(rs.getInt("position_pay"));
+				dto.setMargin_pay(rs.getInt("margin_pay"));
 				paymentList.add(dto);
 				
 				if(index < (start + limit) && index <= total_record) {
@@ -81,7 +131,6 @@ public class PaymentDAO {
 					break;
 				}
 			}
-			System.out.println("된다9");
 			return paymentList;
 		} catch(Exception ex) {
 			System.out.println("getAllCompanyList 예외 : " + ex);
