@@ -18,8 +18,8 @@ public class PaymentDAO {
 	}
 	public int[] getSalary(int normal_pay) {
 		int[] salary = new int[9];
-		int normal = normal_pay*174;
-	  	int holiday = normal_pay*35;
+		int normal = normal_pay * 174;
+	  	int holiday = normal_pay * 35;
 	  	int income_tax = 0;
 	  	int national_Pension = (int)((normal + holiday) * 0.045);
 	 	int health_Insurance = (int)((normal + holiday) * 0.03495);

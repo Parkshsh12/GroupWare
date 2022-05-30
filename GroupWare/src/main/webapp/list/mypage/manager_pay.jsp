@@ -126,15 +126,15 @@
 					        </table>
 					    </div>
 				    </div>
-				<script>
-				    document.getElementById("modal_opne_btn<%=count+i %>").onclick = function() {
-				        document.getElementById("modal<%=count+i %>").style.display="block";
-				    }
-				   
-				    document.getElementById("modal_close_btn<%=count+i %>").onclick = function() {
-				        document.getElementById("modal<%=count+i %>").style.display="none";
-				    }   
-				</script>
+					<script>
+					    document.getElementById("modal_opne_btn<%=count+i %>").onclick = function() {
+					        document.getElementById("modal<%=count+i %>").style.display="block";
+					    }
+					   
+					    document.getElementById("modal_close_btn<%=count+i %>").onclick = function() {
+					        document.getElementById("modal<%=count+i %>").style.display="none";
+					    }   
+					</script>
                 </td>
                 
             </tr>
