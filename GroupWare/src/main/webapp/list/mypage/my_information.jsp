@@ -10,7 +10,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="<c:url value="/resources/css/my_information.css"/>">
+<link rel="stylesheet" href="<c:url value="/resources/css/my_information.css?v=4"/>">
 <title>Insert title here</title>
 </head>
 <script type="text/javascript">
@@ -34,8 +34,8 @@
 		if(msg.equals("1")){
 	%>
 	<c:set var="number" value="<%=member.getNumber() %>"/>
-	<form action="<c:url value="/my_informationChk.do?number=${number}"/>" method="post" name="submitform">
-		<label>비밀번호 :  </label><input type="password" id="password" autofocus>
+	<form class="form-group" action="<c:url value="/my_informationChk.do?number=${number}"/>" method="post" name="submitform">
+		<label class="col-sm-1 securite_name" >비밀번호 :  </label><input class="col-sm-1 securite_input" type="password" id="password" autofocus>
 		<input type="hidden" id="password2" value="<%=member.getPw()%>">
 		<input type="button" value="확인" class="btn btn-primary" onclick="PasswordCheck()" autofocus>
 	</form>

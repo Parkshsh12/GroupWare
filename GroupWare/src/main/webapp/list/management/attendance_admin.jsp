@@ -20,7 +20,8 @@
                     <tr>
                         <td>
                             <select class="search_select">
-                                <option value="subject">근무일자</option>
+                                <option value="number">사원번호</option>
+                                <option value="name">이름</option>
                             </select>
                         </td>
                         <td class="search">

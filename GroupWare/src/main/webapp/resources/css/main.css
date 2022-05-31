@@ -89,3 +89,9 @@ a:hover {
 .menu_list a:hover, .home_menu:hover {
 	background-color: #303c50;
 }
+.menu_inout{
+	display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+   

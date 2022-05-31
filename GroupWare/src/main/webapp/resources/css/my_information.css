@@ -56,3 +56,21 @@ a {
 	width: 100px;
 	text-align: center;
 }
+
+.securite_name{
+	font-size: 20px;
+	font-weight: 700;
+    vertical-align: middle;
+    margin: 0;
+}
+
+.securite_input{
+    width: 665px;
+    height: 38px;
+    font-size: 16px;
+    padding: 0 10px;
+    border: 2px solid rgb(232, 233, 242);
+    border-radius: 10px;
+    margin-right: 2vh;
+    vertical-align: middle;
+}

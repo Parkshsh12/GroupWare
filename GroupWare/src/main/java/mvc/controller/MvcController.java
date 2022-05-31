@@ -3,6 +3,7 @@ package mvc.controller;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,6 +16,8 @@ import mvc.model.BoardDAO;
 import mvc.model.BoardDTO;
 import mvc.model.CalendarDAO;
 import mvc.model.CalendarDTO;
+import mvc.model.CommuteDAO;
+import mvc.model.CommuteDTO;
 import mvc.model.CompanyDAO;
 import mvc.model.CompanyDTO;
 import mvc.model.MemberDAO;
@@ -50,6 +53,7 @@ public class MvcController extends HttpServlet {
 			requestInfoView(request);
 			requestBoardList(request);
 			requestNoticeList(request);
+			requestGetWhetherCommute(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./home.jsp?id=홈화면");
 			rd.forward(request, response);
 		}
@@ -60,19 +64,17 @@ public class MvcController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("./home_login.jsp");
 			rd.forward(request, response);
 		} else if (command.equals("/LoginAction.do")) {
-			requestAllCalendar(request);
-			requestNoticeList(request);
-			requestBoardList(request);
 			requestLoginMember(request);
 			HttpSession session = request.getSession(true);
 			String name = (String) request.getAttribute("name");
 			if (name != null) {
 				String number = (String) request.getAttribute("number");
 				String type = (String) request.getAttribute("type");
+				
 				session.setAttribute("name", name);
 				session.setAttribute("number", number);
 				session.setAttribute("type", type);
-				RequestDispatcher rd = request.getRequestDispatcher("/home.jsp?msg=1");
+				RequestDispatcher rd = request.getRequestDispatcher("/home.do");
 				rd.forward(request, response);
 			}
 		} else if (command.equals("/searchId.do")) {
@@ -96,16 +98,26 @@ public class MvcController extends HttpServlet {
 		} else if (command.equals("/member_update.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/management/member_update.jsp");
 			rd.forward(request, response);
-		} else if (command.equals("/attendance_admin.do")) {
-			RequestDispatcher rd = request.getRequestDispatcher("./list/management/attendance_admin.jsp?id=근태 관리");
-			rd.forward(request, response);
-		} else if (command.equals("/attendance_admin.do")) {
-			RequestDispatcher rd = request.getRequestDispatcher("./list/management/attendance_admin.jsp");
-			rd.forward(request, response);
 		} else if (command.equals("/attendance_month.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/management/attendance_month.jsp");
 			rd.forward(request, response);
 		}
+		
+		//출퇴근
+		else if (command.equals("/start_time.do")) {
+			requestGoToWork(request);
+			RequestDispatcher rd = request.getRequestDispatcher("/home.do");
+			rd.forward(request, response);
+		} else if (command.equals("/end_time.do")) {
+			RequestDispatcher rd = request.getRequestDispatcher("/home.do");
+			rd.forward(request, response);
+		}
+		
+		else if (command.equals("/attendance_admin.do")) {
+			RequestDispatcher rd = request.getRequestDispatcher("./list/management/attendance_admin.jsp?id=근태 관리");
+			rd.forward(request, response);
+		}
+		
 		// 영업 관리
 		else if (command.equals("/business_company.do")) {
 			requestCompanyList(request);
@@ -557,9 +569,7 @@ public class MvcController extends HttpServlet {
 		String email = request.getParameter("email");
 		int join_date = (int) request.getAttribute("join_date");
 	}
-
-	// sh board start
-
+	// board start
 	public void requestBoardList(HttpServletRequest request) {
 		BoardDAO dao = BoardDAO.getInstance();
 		ArrayList<BoardDTO> boardList = new ArrayList<BoardDTO>();
@@ -656,7 +666,8 @@ public class MvcController extends HttpServlet {
 		BoardDAO dao = BoardDAO.getInstance();
 		dao.deleteBoard(num);
 	}
-
+	// board end
+	// 내정보 관리
 	public void requestInfoView(HttpServletRequest request) {
 		MemberDAO dao = MemberDAO.getInstance();
 		String number = request.getParameter("number");
@@ -665,7 +676,7 @@ public class MvcController extends HttpServlet {
 		request.setAttribute("member", dto);
 		request.setAttribute("number", number);
 	}
-
+	// 내 정보 수정
 	public void requestInfoUpdate(HttpServletRequest request) {
 		MemberDAO dao = MemberDAO.getInstance();
 		MemberDTO dto = new MemberDTO();
@@ -678,7 +689,7 @@ public class MvcController extends HttpServlet {
 		dto.setPhone(phone);
 		dao.updateInfo(dto);
 	}
-
+	// Calendar start
 	public void requestCalendarView(HttpServletRequest request) {
 		CalendarDAO dao = CalendarDAO.getInstance();
 		MemberDTO member = (MemberDTO) request.getAttribute("member");
@@ -728,7 +739,8 @@ public class MvcController extends HttpServlet {
 		calendarList = dao.getAllCalendar();
 		request.setAttribute("calendarAllList", calendarList);
 	}
-	
+	// Calendar end
+	// 급여 관리
 	public void requestPayList(HttpServletRequest request) {
 		int pageNum = 1;
 		int limit = paymentCount;
@@ -755,5 +767,29 @@ public class MvcController extends HttpServlet {
 		request.setAttribute("total_page", total_page);
 		
 	}
-	// sh board end
+	// sh start
+	public void requestGoToWork(HttpServletRequest request) {
+		String number = request.getParameter("number");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String start_time = formatter.format(new Date());
+		CommuteDAO dao = CommuteDAO.getInstance();
+		CommuteDTO dto = new CommuteDTO();
+		dto.setNumber(number);
+		dto.setStart_time(start_time);
+		dao.goToWork(dto);
+		System.out.println(dto.getCommute_log());
+		request.setAttribute("number", number);
+		request.setAttribute("start_time", start_time);
+	}
+	
+	public void requestGetWhetherCommute(HttpServletRequest request) {
+		CommuteDAO dao = CommuteDAO.getInstance();
+		ArrayList list = new ArrayList();
+		String number = (String)request.getAttribute("number");
+		String start_time = (String)request.getAttribute("start_time");
+		list = (ArrayList) dao.getWhetherCommute(number, start_time);
+		request.setAttribute("start_time", list.get(0));
+		request.setAttribute("whetherCommute", list.get(1));
+	}
+	// sh end
 }

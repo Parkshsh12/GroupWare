@@ -64,11 +64,13 @@
 					<th>작성일</th>
 				</tr>
 				<% for(int i = 0; i < 5; i++){ 
-					NoticeDTO notice = noticelist.get(i);					
+					NoticeDTO notice = noticelist.get(i);
+					String date = notice.getB_date().substring(0, 19);
+					
 				%>
 				<tr>
 					<td><a href="./noticeView.do?seq=<%=notice.getSeq()%>&pageNum=1"><%=notice.getTitle()%></a></td>
-					<td><%=notice.getB_date()%></td>
+					<td><%=date%></td>
 				</tr>
 				<%
 				}
@@ -86,10 +88,11 @@
  				<%
 					for(int i = 0; i < 5; i++){
 						BoardDTO board = list.get(i);
+						String date = board.getB_date().substring(0, 19);
 				%>
 				<tr>
 					<td><a href="./BoardViewAction.do?num=<%=board.getSeq()%>&pageNum=1"><%=board.getTitle() %></a></td>
-					<td><%=board.getB_date() %></td>
+					<td><%=date %></td>
 				</tr>
 				<%
 					}				

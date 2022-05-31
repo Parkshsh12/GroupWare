@@ -8,10 +8,7 @@ import java.util.ArrayList;
 import database.DBConnection;
 
 public class CalendarDAO {
-	private CalendarDAO() {
-		
-	}
-	
+
 	private static CalendarDAO instance;
 	
 	public static CalendarDAO getInstance() {

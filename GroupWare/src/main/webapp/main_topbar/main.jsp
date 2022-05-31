@@ -1,7 +1,8 @@
+<%@page import="mvc.model.CommuteDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<link rel="stylesheet" href="<c:url value="/resources/css/main.css"/>">
+<link rel="stylesheet" href="<c:url value="/resources/css/main.css?v=1"/>">
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
 <script>
@@ -15,13 +16,25 @@ $(document).ready(function() {
 });
 </script>
 <%
+	boolean whetherCommute = (boolean)request.getAttribute("whetherCommute");
+	String start_time = (String)request.getAttribute("start_time");
 	String number = (String)session.getAttribute("number");
 	String name = (String) session.getAttribute("name");
 %>
     <nav class="menu">
         <div class="menu_login">
-            <div>
+            <div style="margin-left: 12px;">
                 <img src="./resources/images/logo.png" alt="" width="100px">
+                <div class="menu_inout">
+                <%
+                	if(whetherCommute){
+                %>
+	                <a href="/start_time.do?number=<%=number %>" class="btn btn-primary btn-sm">출근</a>
+	            	<a href="/end_time.do" class="btn btn-primary btn-sm">퇴근</a> 
+	           <%
+                	}
+	           %>
+                </div>
             </div>
             <%
             	if(((String)session.getAttribute("name")) != null){
@@ -31,7 +44,8 @@ $(document).ready(function() {
                 <b style="color:#247ffb"><%= name %></b>님<p>환영합니다.
             </div>
             <div class="logout">
-            	<a href="/logout.do" class="btn btn-primary">로그아웃</a>
+            	
+            	<a href="/logout.do" class="btn btn-primary btn-sm">로그아웃</a>
             </div>
             </div>
             <%
