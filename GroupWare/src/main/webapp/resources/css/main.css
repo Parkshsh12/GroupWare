@@ -90,8 +90,8 @@ a:hover {
 	background-color: #303c50;
 }
 .menu_inout{
-	display: flex;
-    justify-content: space-between;
     margin-top: 5px;
 }
-   
+.menu_inout .btn{
+	width: 100%
+}

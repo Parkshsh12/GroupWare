@@ -53,7 +53,8 @@ public class MvcController extends HttpServlet {
 			requestInfoView(request);
 			requestBoardList(request);
 			requestNoticeList(request);
-			requestGetWhetherCommute(request);
+			requestGetCommuteLog(request);
+			requestGetEndTime(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./home.jsp?id=홈화면");
 			rd.forward(request, response);
 		}
@@ -65,16 +66,25 @@ public class MvcController extends HttpServlet {
 			rd.forward(request, response);
 		} else if (command.equals("/LoginAction.do")) {
 			requestLoginMember(request);
+			requestAllCalendar(request);
+			requestBoardList(request);
+			requestNoticeList(request);
+			requestGetCommuteLog(request);
 			HttpSession session = request.getSession(true);
 			String name = (String) request.getAttribute("name");
 			if (name != null) {
+				String commute_Log = (String) request.getAttribute("commute_Log");
+				System.out.println(commute_Log);
+				if(commute_Log != null) {
+					session.setAttribute("commute_Log", commute_Log);
+					System.out.println("start_time");
+				}
 				String number = (String) request.getAttribute("number");
 				String type = (String) request.getAttribute("type");
-				
 				session.setAttribute("name", name);
 				session.setAttribute("number", number);
 				session.setAttribute("type", type);
-				RequestDispatcher rd = request.getRequestDispatcher("/home.do");
+				RequestDispatcher rd = request.getRequestDispatcher("./home.jsp");
 				rd.forward(request, response);
 			}
 		} else if (command.equals("/searchId.do")) {
@@ -83,6 +93,22 @@ public class MvcController extends HttpServlet {
 		} else if (command.equals("/id_search.do")) {
 
 			RequestDispatcher rd = request.getRequestDispatcher("./list/management/member_list.jsp?id=임직원 관리");
+			rd.forward(request, response);
+		}
+		//출퇴근
+		else if (command.equals("/start_time.do")) {
+			requestGoToWork(request);
+			RequestDispatcher rd = request.getRequestDispatcher("/home.do");
+			rd.forward(request, response);
+		} else if (command.equals("/end_time.do")) {
+			requestLeaveWork(request);
+			HttpSession session = request.getSession();
+			session.removeAttribute("commute_Log");
+			RequestDispatcher rd = request.getRequestDispatcher("/home.do");
+			rd.forward(request, response);
+		}
+		else if (command.equals("/attendance_admin.do")) {
+			RequestDispatcher rd = request.getRequestDispatcher("./list/management/attendance_admin.jsp?id=근태 관리");
 			rd.forward(request, response);
 		}
 		// 인사관리
@@ -103,20 +129,6 @@ public class MvcController extends HttpServlet {
 			rd.forward(request, response);
 		}
 		
-		//출퇴근
-		else if (command.equals("/start_time.do")) {
-			requestGoToWork(request);
-			RequestDispatcher rd = request.getRequestDispatcher("/home.do");
-			rd.forward(request, response);
-		} else if (command.equals("/end_time.do")) {
-			RequestDispatcher rd = request.getRequestDispatcher("/home.do");
-			rd.forward(request, response);
-		}
-		
-		else if (command.equals("/attendance_admin.do")) {
-			RequestDispatcher rd = request.getRequestDispatcher("./list/management/attendance_admin.jsp?id=근태 관리");
-			rd.forward(request, response);
-		}
 		
 		// 영업 관리
 		else if (command.equals("/business_company.do")) {
@@ -538,7 +550,6 @@ public class MvcController extends HttpServlet {
 	/* 로그인 function */
 	public void requestLoginMember(HttpServletRequest request) {
 		MemberDAO dao = MemberDAO.getInstance();
-
 		String[] result = dao.loginMember(request.getParameter("number"), request.getParameter("pw"));
 		request.setAttribute("number", result[0]);
 		request.setAttribute("name", result[1]);
@@ -782,14 +793,30 @@ public class MvcController extends HttpServlet {
 		request.setAttribute("start_time", start_time);
 	}
 	
-	public void requestGetWhetherCommute(HttpServletRequest request) {
+	public void requestGetCommuteLog(HttpServletRequest request) {
 		CommuteDAO dao = CommuteDAO.getInstance();
-		ArrayList list = new ArrayList();
 		String number = (String)request.getAttribute("number");
-		String start_time = (String)request.getAttribute("start_time");
-		list = (ArrayList) dao.getWhetherCommute(number, start_time);
-		request.setAttribute("start_time", list.get(0));
-		request.setAttribute("whetherCommute", list.get(1));
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String start_date = formatter.format(new Date());
+		String start_time = dao.getStartTime(number, start_date);
+		String commute_Log = dao.getWhetherCommute(number, start_time);
+		request.setAttribute("commute_Log", commute_Log);
+	}
+	
+	public void requestLeaveWork(HttpServletRequest request) {
+		String commute_Log = request.getParameter("commute_Log");
+		CommuteDAO dao= CommuteDAO.getInstance();
+		dao.setLeaveWork(commute_Log);
+	}
+	
+	public void requestGetEndTime(HttpServletRequest request) {
+		CommuteDAO dao = CommuteDAO.getInstance();
+		String number = (String)request.getAttribute("number");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String end_date = formatter.format(new Date());
+		String start_time = dao.getStartTime(number, end_date);
+		String end_time = dao.getEndTime(number, start_time);
+		request.setAttribute("end_time", end_time);
 	}
 	// sh end
 }
