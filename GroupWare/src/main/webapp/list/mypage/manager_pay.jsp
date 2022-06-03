@@ -11,12 +11,13 @@
 	MemberDTO member = (MemberDTO)request.getAttribute("member");
 	int pageNum = ((Integer)request.getAttribute("pageNum")).intValue();
 	int total_page = ((Integer)request.getAttribute("total_page")).intValue();
+	int total_record = ((Integer)request.getAttribute("total_record")).intValue();
 	String number = (String)session.getAttribute("number");
 	int count = 0;
 	if(pageNum == 1){
-		count = 1;
+		count = 0;
 	} else{
-		count = ((pageNum - 1 ) * 5)+1;
+		count = (pageNum - 1 ) * 5;
 	}
 %>
 <!DOCTYPE html>
@@ -45,14 +46,14 @@
             		PaymentDTO payment = paymentList.get(i);
             %>
             <tr>
-                <td class="table_num"><%=count+i %></td>
+                <td class="table_num"><%=(total_record) - count - i%></td>
                 <td><%=payment.getImputed_date() %></td>
                 <td><%=payment.getPayment_date() %></td>
-                <td><button type="button"  id="modal_opne_btn<%=count+i %>" class="btn btn-default btn-sm">보기</button>
-                	 <div class="modal" id="modal<%=count+i %>">
+                <td><button type="button"  id="modal_opne_btn<%=(total_record) - count - i %>" class="btn btn-default btn-sm">보기</button>
+                	 <div class="modal" id="modal<%=(total_record) - count - i %>">
 				    	<div class="container modal_content">
 					        <h2 class="title"><%=payment.getPayment_date().substring(5,7) %>월 급여명세서
-					        	<button type="button" id="modal_close_btn<%=count+i %>"><i class="fa-solid fa-square-xmark"></i></button>
+					        	<button type="button" id="modal_close_btn<%=(total_record) - count - i %>"><i class="fa-solid fa-square-xmark"></i></button>
 					        </h2>
 					        <table class="table">
 					            <tr class="table_header">
@@ -127,12 +128,12 @@
 					    </div>
 				    </div>
 					<script>
-					    document.getElementById("modal_opne_btn<%=count+i %>").onclick = function() {
-					        document.getElementById("modal<%=count+i %>").style.display="block";
+					    document.getElementById("modal_opne_btn<%=(total_record) - count - i %>").onclick = function() {
+					        document.getElementById("modal<%=(total_record) - count - i %>").style.display="block";
 					    }
 					   
-					    document.getElementById("modal_close_btn<%=count+i %>").onclick = function() {
-					        document.getElementById("modal<%=count+i %>").style.display="none";
+					    document.getElementById("modal_close_btn<%=(total_record) - count - i %>").onclick = function() {
+					        document.getElementById("modal<%=(total_record) - count - i %>").style.display="none";
 					    }   
 					</script>
                 </td>

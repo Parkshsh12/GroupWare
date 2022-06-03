@@ -1,3 +1,5 @@
+<%@page import="mvc.model.MemberDTO"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -10,6 +12,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link rel="stylesheet" href="<c:url value="/resources/css/contact.css"/>">
 </head>
+<%
+	ArrayList memberList = (ArrayList)request.getAttribute("memberList");
+	int pageNum = ((Integer)request.getAttribute("pageNum")).intValue();
+	int total_page = ((Integer)request.getAttribute("total_page")).intValue();
+	int total_record = ((Integer)request.getAttribute("total_record")).intValue();
+	int count = 0;
+	if(pageNum == 1){
+		count = 0;
+	} else{
+		count = (pageNum - 1 ) * 5;
+	}
+%>
 <body>
 	<jsp:include page="../../main_topbar/main.jsp"/>
 	<jsp:include page="../../main_topbar/topbar.jsp"/>
@@ -24,62 +38,48 @@
 				<th>연락처</th>
 				<th>입사일</th>
 			</tr>
+			<%
+				for(int i = 0; i < memberList.size(); i++){
+					MemberDTO member = (MemberDTO)memberList.get(i);
+			%>
 			<tr>
-				<td>1</td>
-				<td>영업팀</td>
-				<td>부장</td>
-				<td>감동란</td>
-				<td>010-1122-3344</td>
-				<td>2020-04-01</td>
+				<td><%=total_record - count - i %></td>
+				<td><%=member.getDepartment() %></td>
+				<td><%=member.getPosition() %></td>
+				<td><%=member.getName() %></td>
+				<td><%=member.getPhone() %></td>
+				<td><%=member.getJoin_date() %></td>
 			</tr>
-			<tr>
-				<td>2</td>
-				<td>영업팀</td>
-				<td>부장</td>
-				<td>감동란</td>
-				<td>010-1122-3344</td>
-				<td>2020-04-01</td>
-			</tr>
-			<tr>
-				<td>3</td>
-				<td>영업팀</td>
-				<td>부장</td>
-				<td>감동란</td>
-				<td>010-1122-3344</td>
-				<td>2020-04-01</td>
-			</tr>
-			<tr>
-				<td>4</td>
-				<td>영업팀</td>
-				<td>부장</td>
-				<td>감동란</td>
-				<td>010-1122-3344</td>
-				<td>2020-04-01</td>
-			</tr>
-			<tr>
-				<td>5</td>
-				<td>영업팀</td>
-				<td>부장</td>
-				<td>감동란</td>
-				<td>010-1122-3344</td>
-				<td>2020-04-01</td>
-			</tr>
+			<%
+				}
+			%>
 		</table>
-
+	
 		<div align="center">
-			<b> <a href="#">[1]</a> <a href="#">[2]</a> <a href="#">[3]</a>
-			</b>
+        	<c:set var="pageNum" value="<%=pageNum %>"/>
+        	<c:forEach var="i" begin="1" end="<%=total_page %>">
+            	<a href="./contact.do?pageNum=${i}&number=${number}">
+            	<c:choose>
+            		<c:when test="${pageNum==i}">
+            			<b>[${i}]</b>            		
+            		</c:when>
+            		<c:otherwise>
+            			<font color='4C5317'>[${i}]</font>
+            		</c:otherwise>
+            	</c:choose>
+            	</a>
+            </c:forEach>
 		</div>
 
 		<div align="center" class="board_search">
-			<form method="post">
+			<form method="post" action="/contact.do">
 				<table>
 					<tr>
-						<td><select class="search_select">
-								<option value="subject">이름</option>
-								<option value="subject">부서</option>
-								<option value="content">직급</option>
-								<option value="name">연락처</option>
+						<td><select class="search_select" name="search_item">
+								<option value="name">이름</option>
+								<option value="department">부서</option>
+								<option value="position">직급</option>
+								<option value="phone">연락처</option>
 						</select></td>
 						<td class="search"><input class="search_content" type="text"
 							name="text" /> <input type="submit" class="search_btn"

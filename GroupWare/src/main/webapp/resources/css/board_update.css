@@ -50,7 +50,9 @@ textarea {
 .board_add .button input {
 	margin: 0 5px;
 }
-
+.board_add .btn{
+	margin: 0 5px;
+}
 .board_add .form-item {
 	margin-top: 10px;
 }

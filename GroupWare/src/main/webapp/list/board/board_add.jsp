@@ -4,7 +4,6 @@
 <%
 	String number = (String)session.getAttribute("number");
 	String name = (String) request.getAttribute("name");
-	System.out.println(name);
 %>
 <!DOCTYPE html>
 <html>
@@ -35,8 +34,8 @@
 					required></textarea>
 			</div>
 			<div class="button">
-				<input type="submit" class="btn btn-primary" value="등록 "> <input
-					type="reset" class="btn btn-primary" value="취소 ">
+				<input type="submit" class="btn btn-primary" value="등록 "> 
+				<a href="/board_main.do" class="btn btn-primary">취소</a>
 			</div>
 		</form>
 	</div>

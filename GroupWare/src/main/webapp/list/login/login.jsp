@@ -8,8 +8,11 @@
 <title>로그인</title>
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 	<script src="https://kit.fontawesome.com/53a8c415f1.js" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="<c:url value="/resources/css/login.css"/>">
+	<link rel="stylesheet" href="<c:url value="/resources/css/login.css?v=1"/>">
 </head>
+<script type="text/javascript">
+	
+</script>
 <body>
     <div class="wrapp">
         <div class="login">
@@ -18,9 +21,9 @@
             <%
 				String error = request.getParameter("error");
 				if (error != null) {
-					out.println("<h4>");
-					out.println("아이디와 비밀번호를 확인해 주세요");
-					out.println("</h4>");
+			%>
+					<h3 class="error">아이디와 비밀번호를 확인해주세요.</h3>
+			<%
 				}
 			%>
 			<form class="form-signin" action="./LoginAction.do" method="post">

@@ -16,7 +16,7 @@
 <title>Insert title here</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="<c:url value="/resources/css/board_update.css"/>">
+<link rel="stylesheet" href="<c:url value="/resources/css/board_update.css?v=1"/>">
 </head>
 <body>
 	<jsp:include page="../../main_topbar/main.jsp"/>
@@ -39,8 +39,8 @@
 			</div>
 			<div class="button">
 				<input type="submit" class="btn btn-primary" value="수정 " onclick="return confirm('수정하시겠습니까?');"> <a
-					href="/board_delete.do?num=<%=board.getSeq()%>&pageNum=<%=pageNum %>" onclick="return confirm('삭제하시겠습니까?');" class="btn btn-primary">삭제</a> <input type="reset"
-					class="btn btn-primary" value="취소 ">
+					href="/board_delete.do?num=<%=board.getSeq()%>&pageNum=<%=pageNum %>" onclick="return confirm('삭제하시겠습니까?');" class="btn btn-primary">삭제</a> 
+					<a href="/BoardViewAction.do?num=<%=board.getSeq() %>&pageNum=<%=pageNum %>" class="admin btn btn-primary">취소</a>
 			</div>
 		</form>
 	</div>

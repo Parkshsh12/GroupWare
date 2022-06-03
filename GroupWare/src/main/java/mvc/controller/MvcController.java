@@ -69,15 +69,17 @@ public class MvcController extends HttpServlet {
 			requestCommuteChk(request);
 			HttpSession session = request.getSession(true);
 			String name = (String) request.getAttribute("name");
-
 			if (name != null) {
 				String number = (String) request.getAttribute("number");
 				String type = (String) request.getAttribute("type");
 				session.setAttribute("name", name);
 				session.setAttribute("number", number);
 				session.setAttribute("type", type);
-				
 				RequestDispatcher rd = request.getRequestDispatcher("/home.do");
+				rd.forward(request, response);
+			}
+			else {
+				RequestDispatcher rd = request.getRequestDispatcher("./home_login.jsp?error=1");
 				rd.forward(request, response);
 			}
 		} else if (command.equals("/searchId.do")) {
@@ -318,6 +320,7 @@ public class MvcController extends HttpServlet {
 		}
 		// 주소록
 		else if (command.equals("/contact.do")) {
+			requestGetMember(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/contact/contact.jsp?id=주소록");
 			rd.forward(request, response);
 		// 마이페이지
@@ -857,7 +860,7 @@ public class MvcController extends HttpServlet {
 		request.setAttribute("paymentList", paymentList);
 		request.setAttribute("pageNum", pageNum);
 		request.setAttribute("total_page", total_page);
-		
+		request.setAttribute("total_record", total_record);
 	}
 	//sh 급여 끝
 	
@@ -865,9 +868,7 @@ public class MvcController extends HttpServlet {
 		HttpSession session = request.getSession();
 		String number = (String)session.getAttribute("number");
 		CommuteDAO dao = CommuteDAO.getInstance();
-		
 		boolean chk = dao.chkCommute(number);
-		
 		if(chk == false) {
 			dao.newStartCommute(number);
 		} else {
@@ -889,11 +890,35 @@ public class MvcController extends HttpServlet {
 	public void requestCommuteChk(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String number = (String)session.getAttribute("number");
-		
 		CommuteDAO dao = CommuteDAO.getInstance();
 		boolean chk = dao.CommuteChk(number);
-		
 		session.setAttribute("chk", chk);
+	}
+	public void requestGetMember(HttpServletRequest request) {
+		int pageNum = 1;
+		int limit = listCount;
+		MemberDAO dao = MemberDAO.getInstance();
+		ArrayList<MemberDTO> memberList = new ArrayList<MemberDTO>();
+		if (request.getParameter("pageNum") != null) {
+			pageNum = Integer.parseInt(request.getParameter("pageNum"));
+		}
+		String search_item = request.getParameter("search_item");
+		String text = request.getParameter("text");
 		
+		int total_record = dao.getAllMemberCount(search_item, text);
+		memberList = dao.getMember(pageNum, limit, search_item, text);
+		
+		int total_page;
+		if(total_record % limit == 0) {
+			total_page = total_record / limit;
+		} else {
+			total_page = total_record / limit;
+			total_page = total_page + 1;
+		}
+
+		request.setAttribute("memberList", memberList);
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("total_page", total_page);
+		request.setAttribute("total_record", total_record);
 	}
 }

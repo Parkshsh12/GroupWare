@@ -1,6 +1,7 @@
 package mvc.model;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 import database.DBConnection;
 
@@ -43,8 +44,8 @@ public class MemberDAO {
 				System.out.println("login[0] : " + array[0]);
 				System.out.println("login[1] : " + array[1]);
 				System.out.println("login[2] : " + array[2]);
-				return array;
 			}
+			return array;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -162,5 +163,101 @@ public class MemberDAO {
 				throw new RuntimeException(ex.getMessage());
 			}
 		}
+	}
+	public ArrayList<MemberDTO> getMember(int pageNum, int limit, String search_item, String text){
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		MemberDTO dto = null;
+		ArrayList<MemberDTO> list = new ArrayList<MemberDTO>();
+		int total_record = getAllMemberCount(search_item, text);
+		int start = (pageNum - 1) * limit;
+		int index = start + 1;
+		String sql = null;
+		if(search_item == null && text == null) {
+			sql = "select * from employee order by join_date";			
+		} else {
+			sql = "select * from employee where " + search_item + " like '%" + text + "%' order by join_date";
+		}
+		
+		try {
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.absolute(index)) {
+				dto = new MemberDTO();
+				dto.setName(rs.getString("name"));
+				dto.setNumber(rs.getString("number"));
+				dto.setAddress(rs.getString("address"));
+				dto.setPhone(rs.getString("phone"));
+				dto.setPosition(rs.getString("position"));
+				dto.setDepartment(rs.getString("department"));
+				dto.setEmail(rs.getString("email"));
+				dto.setJoin_date(rs.getString("join_date"));
+				System.out.println(dto.getName());
+				list.add(dto);
+				
+				if(index < (start + limit) && index <= total_record) {
+					index++;
+				}
+				else {
+					break;
+				}
+			}
+			return list;
+		} catch(Exception ex) {
+			System.out.println("getMember()" + ex);
+		} finally {
+			try {
+				if (pstmt != null) 
+					pstmt.close();				
+				if (conn != null) 
+					conn.close();
+			} catch (Exception ex) {
+				throw new RuntimeException(ex.getMessage());
+			}
+		}
+		return null;
+	}
+	
+	public int getAllMemberCount(String search_item, String text) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int x = 0;
+		String sql = null;
+		
+		if((search_item==null) && (text==null)) {
+			sql = "select count(*) from employee";
+		} else {
+			sql = "select count(*) from employee where " + search_item + " like '%" + text + "%'";
+		}
+		
+		try {
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				x = rs.getInt(1);
+			} 
+		} catch(Exception ex) {
+			System.out.println("getAllMemberCount()" + ex);
+		} finally {
+			try {
+				if(rs != null) {
+					rs.close();
+				}
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			} catch(Exception ex) {
+				throw new RuntimeException(ex.getMessage());
+			}
+		}
+		return x;
 	}
 }

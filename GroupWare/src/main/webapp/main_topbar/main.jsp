@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link rel="stylesheet" href="<c:url value="/resources/css/main.css?ver=1"/>">
+<meta http-equiv="refresh" content="600; url=/logout.do"> 
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
 <script>
@@ -23,7 +24,6 @@
 <%
 	String number = (String) session.getAttribute("number");
 	String name = (String) session.getAttribute("name");
-
 	boolean chk = (boolean) session.getAttribute("chk");
 %>
 <nav class="menu">
