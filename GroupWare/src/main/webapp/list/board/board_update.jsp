@@ -38,8 +38,8 @@
 					required><%=board.getContent() %></textarea>
 			</div>
 			<div class="button">
-				<input type="submit" class="btn btn-primary" value="수정 "> <a
-					href="/board_delete.do?num=<%=board.getSeq()%>&pageNum=<%=pageNum %>" class="btn btn-primary">삭제</a> <input type="reset"
+				<input type="submit" class="btn btn-primary" value="수정 " onclick="return confirm('수정하시겠습니까?');"> <a
+					href="/board_delete.do?num=<%=board.getSeq()%>&pageNum=<%=pageNum %>" onclick="return confirm('삭제하시겠습니까?');" class="btn btn-primary">삭제</a> <input type="reset"
 					class="btn btn-primary" value="취소 ">
 			</div>
 		</form>

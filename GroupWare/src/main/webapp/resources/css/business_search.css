@@ -17,6 +17,7 @@ a {
 	margin: auto;
 }
 
+
 .search_select {
 	height: 39px;
 }
@@ -35,6 +36,7 @@ a {
 
 .board_search {
 	margin-top: 10px;
+	margin-bottom: 50px;
 }
 
 .board_search td {
@@ -45,7 +47,9 @@ a {
 	font-size: 18px;
 	padding: 0 10px;
 }
-
+/* .unit{
+	margin-right: 50px;
+} */
 .select_table th, .search_list th {
 	border: 2px solid #d8dbe0;
 	text-align: center;
@@ -65,7 +69,6 @@ a {
 }
 
 .select_table {
-	margin-top: 50px;
 	display: flex;
 	justify-content: center;
 	margin-bottom: 50px;

@@ -33,7 +33,6 @@ public class CompanyDAO {
 		} else {
 			sql = "select * from business_company where " + search_item + " like '%" + text + "%' order by seq asc";
 		}
-
 		ArrayList<CompanyDTO> list = new ArrayList<CompanyDTO>();
 
 		try {

@@ -48,7 +48,7 @@
     height: 14px;
     background-color: #6c757d;
     border-radius: 50%;
-    transition: all 0.1s;
+    transition: all 0.3s;
 }
 .calendar td > .circle:hover{
     min-width: max-content;

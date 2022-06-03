@@ -40,8 +40,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="<c:url value="/resources/css/home_calendar.css?v=7"/>">
-<link rel="stylesheet" href="<c:url value="/resources/css/home_2.css"/>">
+<link rel="stylesheet" href="<c:url value="/resources/css/home_calendar.css?v=2"/>">
+<link rel="stylesheet" href="<c:url value="/resources/css/home_2.css?v=1"/>">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <style>
 
@@ -64,13 +64,11 @@
 					<th>작성일</th>
 				</tr>
 				<% for(int i = 0; i < 5; i++){ 
-					NoticeDTO notice = noticelist.get(i);
-					String date = notice.getB_date().substring(0, 19);
-					
+					NoticeDTO notice = noticelist.get(i);					
 				%>
 				<tr>
 					<td><a href="./noticeView.do?seq=<%=notice.getSeq()%>&pageNum=1"><%=notice.getTitle()%></a></td>
-					<td><%=date%></td>
+					<td><%=(notice.getB_date()).substring(0,19)%></td>
 				</tr>
 				<%
 				}
@@ -88,11 +86,10 @@
  				<%
 					for(int i = 0; i < 5; i++){
 						BoardDTO board = list.get(i);
-						String date = board.getB_date().substring(0, 19);
 				%>
 				<tr>
 					<td><a href="./BoardViewAction.do?num=<%=board.getSeq()%>&pageNum=1"><%=board.getTitle() %></a></td>
-					<td><%=date %></td>
+					<td><%=(board.getB_date()).substring(0,19)%></td>
 				</tr>
 				<%
 					}				

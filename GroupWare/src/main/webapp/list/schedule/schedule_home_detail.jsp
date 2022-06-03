@@ -14,7 +14,7 @@
 <title>Insert title here</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="<c:url value="/resources/css/board_boardNum.css"/>">
+<link rel="stylesheet" href="<c:url value="/resources/css/board_boardNum.css?v=2"/>">
 </head>
 <body>
 	<jsp:include page="../../main_topbar/main.jsp"/>

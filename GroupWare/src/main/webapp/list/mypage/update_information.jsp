@@ -13,8 +13,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<script type="text/javascript">
-</script>
 <body>
 	<jsp:include page="../../main_topbar/main.jsp"/>
 	<jsp:include page="../../main_topbar/topbar.jsp"/>
@@ -82,7 +80,7 @@
             </div>
             <div class="form-group row button" align="right">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <input type="submit" class="btn btn-primary" value="등록" onclick="test()">
+                    <input type="submit" class="btn btn-primary" value="등록" onclick="return confirm('변경하시겠습니까?');">
                     <c:set var="number" value="<%=member.getNumber() %>"/>
                     <a href="<c:url value="/my_informationChk.do?number=${number}"/>" class="btn btn-primary">취소</a>
                 </div>

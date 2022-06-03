@@ -18,7 +18,7 @@
 	String name = (String) session.getAttribute("name");
 	ArrayList<NoticeDTO> list = (ArrayList<NoticeDTO>) request.getAttribute("noticelist");
 	int total_record = ((Integer) request.getAttribute("total_record")).intValue();
-	int pageNum = ((Integer) request.getAttribute("pageNum")).intValue();
+	int pageNum = (Integer) request.getAttribute("pageNum");
 	int total_page = ((Integer) request.getAttribute("total_page")).intValue();
 	String search_item = request.getParameter("search_item");
 	String text = request.getParameter("text");
@@ -88,10 +88,10 @@
 								<option value="name">글쓴이</option>
 							</select>
 						</td>
-						<td class="search"><input class="search_content" type="text"
-							name="text" /> <input type="submit" class="search_btn"
-							value="검색" /></td>
-
+						<td class="search">
+							<input class="search_content" type="text" name="text" />
+							<input type="submit" class="search_btn" value="검색" />
+						</td>
 					</tr>
 				</table>
 			</form>

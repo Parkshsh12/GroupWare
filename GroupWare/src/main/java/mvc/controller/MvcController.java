@@ -3,7 +3,6 @@ package mvc.controller;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,13 +10,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
 import mvc.model.BoardDAO;
 import mvc.model.BoardDTO;
 import mvc.model.CalendarDAO;
 import mvc.model.CalendarDTO;
 import mvc.model.CommuteDAO;
-import mvc.model.CommuteDTO;
 import mvc.model.CompanyDAO;
 import mvc.model.CompanyDTO;
 import mvc.model.MemberDAO;
@@ -33,7 +32,6 @@ public class MvcController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	int listCount = 5;
-	private static final int paymentCount = 5;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -53,8 +51,7 @@ public class MvcController extends HttpServlet {
 			requestInfoView(request);
 			requestBoardList(request);
 			requestNoticeList(request);
-			requestGetCommuteLog(request);
-			requestGetEndTime(request);
+			requestCommuteChk(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./home.jsp?id=홈화면");
 			rd.forward(request, response);
 		}
@@ -65,26 +62,22 @@ public class MvcController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("./home_login.jsp");
 			rd.forward(request, response);
 		} else if (command.equals("/LoginAction.do")) {
-			requestLoginMember(request);
 			requestAllCalendar(request);
-			requestBoardList(request);
 			requestNoticeList(request);
-			requestGetCommuteLog(request);
+			requestBoardList(request);
+			requestLoginMember(request);
+			requestCommuteChk(request);
 			HttpSession session = request.getSession(true);
 			String name = (String) request.getAttribute("name");
+
 			if (name != null) {
-				String commute_Log = (String) request.getAttribute("commute_Log");
-				System.out.println(commute_Log);
-				if(commute_Log != null) {
-					session.setAttribute("commute_Log", commute_Log);
-					System.out.println("start_time");
-				}
 				String number = (String) request.getAttribute("number");
 				String type = (String) request.getAttribute("type");
 				session.setAttribute("name", name);
 				session.setAttribute("number", number);
 				session.setAttribute("type", type);
-				RequestDispatcher rd = request.getRequestDispatcher("./home.jsp");
+				
+				RequestDispatcher rd = request.getRequestDispatcher("/home.do");
 				rd.forward(request, response);
 			}
 		} else if (command.equals("/searchId.do")) {
@@ -95,22 +88,19 @@ public class MvcController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/management/member_list.jsp?id=임직원 관리");
 			rd.forward(request, response);
 		}
-		//출퇴근
-		else if (command.equals("/start_time.do")) {
-			requestGoToWork(request);
-			RequestDispatcher rd = request.getRequestDispatcher("/home.do");
+		
+		// mskim login
+		
+		else if(command.equals("/start_time.do")) {
+			requestChkCommute(request);
+			RequestDispatcher rd = request.getRequestDispatcher("/home.do?id=홈화면");
 			rd.forward(request, response);
-		} else if (command.equals("/end_time.do")) {
-			requestLeaveWork(request);
-			HttpSession session = request.getSession();
-			session.removeAttribute("commute_Log");
-			RequestDispatcher rd = request.getRequestDispatcher("/home.do");
-			rd.forward(request, response);
-		}
-		else if (command.equals("/attendance_admin.do")) {
-			RequestDispatcher rd = request.getRequestDispatcher("./list/management/attendance_admin.jsp?id=근태 관리");
+		} else if(command.equals("/end_time.do")) {
+			endCommute(request);
+			RequestDispatcher rd = request.getRequestDispatcher("/home.do?id=홈화면");
 			rd.forward(request, response);
 		}
+		
 		// 인사관리
 		else if (command.equals("/member_list.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/management/member_list.jsp?id=임직원 관리");
@@ -121,15 +111,13 @@ public class MvcController extends HttpServlet {
 		} else if (command.equals("/member_update.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/management/member_update.jsp");
 			rd.forward(request, response);
-		} else if (command.equals("/member_update.do")) {
-			RequestDispatcher rd = request.getRequestDispatcher("./list/management/member_update.jsp");
+		} else if (command.equals("/attendance_admin.do")) {
+			RequestDispatcher rd = request.getRequestDispatcher("./list/management/attendance_admin.jsp?id=근태 관리");
 			rd.forward(request, response);
 		} else if (command.equals("/attendance_month.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/management/attendance_month.jsp");
 			rd.forward(request, response);
 		}
-		
-		
 		// 영업 관리
 		else if (command.equals("/business_company.do")) {
 			requestCompanyList(request);
@@ -147,18 +135,25 @@ public class MvcController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/business/business_companyUpdate.jsp?id=거래처 수정");
 			rd.forward(request, response);
 		} else if (command.equals("/business_search.do")) {
+			String division = request.getParameter("division");
 			PStableMain(request);
 			businessSearch(request);
-			RequestDispatcher rd = request.getRequestDispatcher("./list/business/business_search.jsp?id=월별 매출 조회");
+			RequestDispatcher rd;
+			System.out.println(division);
+			if(request.getParameter("division").equals("f")) {
+				rd = request.getRequestDispatcher("./list/business/business_search_file.jsp");
+			}else {
+				rd = request.getRequestDispatcher("./list/business/business_search.jsp?id=월별 매출 조회");
+			}
 			rd.forward(request, response);
 		} else if (command.equals("/psmenu_main.do")) {
 			PStableMain(request);
 			String division = (String) request.getAttribute("division");
 			RequestDispatcher rd;
 			if (division.equals("p")) {
-				rd = request.getRequestDispatcher("./list/business/purchase_main.jsp?id=매입 관리");
+				rd = request.getRequestDispatcher("./list/business/ps_main.jsp?id=매입 관리");
 			} else {
-				rd = request.getRequestDispatcher("./list/business/sales_main.jsp?id=매출 관리");
+				rd = request.getRequestDispatcher("./list/business/ps_main.jsp?id=매출 관리");
 			}
 			rd.forward(request, response);
 		} else if (command.equals("/company_delete.do")) {
@@ -171,6 +166,7 @@ public class MvcController extends HttpServlet {
 			rd.forward(request, response);
 		} else if (command.equals("/psadd.do")) {
 			String division = request.getParameter("division");
+			requestCompanyNameList(request);
 			RequestDispatcher rd;
 			if (division.equals("p")) {
 				rd = request.getRequestDispatcher("/list/business/ps_add.jsp?id=매입 등록&division=p");
@@ -180,9 +176,29 @@ public class MvcController extends HttpServlet {
 			rd.forward(request, response);
 		} else if (command.equals("/ps_addAction.do")) {
 			setPsAdd(request);
+			String pageNum = request.getParameter("pageNum");
 			String division = (String) request.getAttribute("division");
-			System.out.println("이거출력하자" + division);
-			RequestDispatcher rd = request.getRequestDispatcher("/psmenu_main.do?division=" + division);
+			RequestDispatcher rd = request.getRequestDispatcher("/psmenu_main.do?pageNum=" + pageNum + "&division=" + division);
+			rd.forward(request, response);
+		} else if(command.equals("/psUpdate.do")) {
+			psUpdate(request);
+			String division = (String) request.getAttribute("division");
+			RequestDispatcher rd;
+			if(division.equals("p")) {
+				rd = request.getRequestDispatcher("/list/business/ps_update.jsp?id=매입품 수정");				
+			} else {
+				rd = request.getRequestDispatcher("/list/business/ps_update.jsp?id=매출품 수정");
+			}
+			rd.forward(request, response);
+		} else if(command.equals("/psupdateAction.do")) {
+			String division = request.getParameter("division");
+			setpsUpdate(request);
+			RequestDispatcher rd;
+			if (division.equals("p")) {
+				rd = request.getRequestDispatcher("/psmenu_main.do?division=p");
+			} else {
+				rd = request.getRequestDispatcher("/psmenu_main.do?division=s");
+			}
 			rd.forward(request, response);
 		}
 		// 공지 게시판
@@ -266,7 +282,6 @@ public class MvcController extends HttpServlet {
 			requestAddSchedule(request);
 			RequestDispatcher rd = request.getRequestDispatcher("/scheduleAllAction.do");
 			rd.forward(request, response);
-			// 遺��꽌 �씪�젙
 		} else if (command.equals("/scheduleDepAction.do")) {
 			requestInfoView(request);
 			RequestDispatcher rd = request.getRequestDispatcher("/schedule_dep.do");
@@ -309,7 +324,6 @@ public class MvcController extends HttpServlet {
 		} else if (command.equals("/attendance_user.do")) {
 			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/attendance_user.jsp?id=근태 조회");
 			rd.forward(request, response);
-		// 내정보 관리
 		} else if (command.equals("/my_information.do")) {
 			requestInfoView(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/my_information.jsp?id=내 정보 관리&msg=1");
@@ -318,8 +332,6 @@ public class MvcController extends HttpServlet {
 			requestInfoView(request);
 			RequestDispatcher rd = request.getRequestDispatcher("./list/mypage/my_information.jsp?id=내 정보 관리&msg=0");
 			rd.forward(request, response);
-		// 급여 관리
-			
 		} else if (command.equals("/manager_pay.do")) {
 			requestInfoView(request);
 			requestPayList(request);
@@ -418,9 +430,34 @@ public class MvcController extends HttpServlet {
 		String division = request.getParameter("division");
 		PStableDAO dao = PStableDAO.getInstance();
 		ArrayList<PStableDTO> list = new ArrayList<PStableDTO>();
-
-		list = dao.getPStableList(list, division);
-
+		int pageNum = 1;
+		String search_item = "";
+		String text = "";
+		
+		if(request.getParameter("pageNum") != null) {
+			search_item = request.getParameter("search_item");
+			text = request.getParameter("text");
+			pageNum = Integer.parseInt(request.getParameter("pageNum"));
+		}
+		
+		String company = request.getParameter("company");
+		list = dao.getPStableList(list, division, company, search_item, text, pageNum);
+		
+		int total_record = dao.getPStableCount(search_item, text, division);
+		int total_page;
+		
+		if (total_record % 5 == 0) {
+			total_page = total_record / 5;
+		} else {
+			total_page = total_record / 5;
+			total_page++;
+		}
+		
+		request.setAttribute("pageNum", pageNum);
+		request.setAttribute("search_item", search_item);
+		request.setAttribute("text", text);
+		request.setAttribute("total_page", total_page);
+		request.setAttribute("company", company);
 		request.setAttribute("list", list);
 		request.setAttribute("division", division);
 	}
@@ -429,9 +466,18 @@ public class MvcController extends HttpServlet {
 		PStableDAO dao = PStableDAO.getInstance();
 		ArrayList list = (ArrayList) request.getAttribute("list");
 		ArrayList Array = null;
-		Array = dao.getBusinessList(list);
+		String year = request.getParameter("year");
+		Array = dao.getBusinessList(list,year);
 
+		request.setAttribute("year", year);
 		request.setAttribute("Array", Array);
+	}
+	
+	public void requestCompanyNameList(HttpServletRequest request) {
+		PStableDAO dao = PStableDAO.getInstance();
+		String[] list = null;
+		list = dao.getCompanyList(list);
+		request.setAttribute("list", list);
 	}
 
 	public void setPsAdd(HttpServletRequest request) {
@@ -452,6 +498,37 @@ public class MvcController extends HttpServlet {
 
 		request.setAttribute("division", dto.getDivision());
 	}
+	
+	public void psUpdate(HttpServletRequest request) {
+		PStableDAO dao = PStableDAO.getInstance();
+		PStableDTO dto = new PStableDTO();
+		
+		int seq = Integer.parseInt(request.getParameter("seq"));
+		
+		dto = dao.getpsUpdate(dto, seq);
+		request.setAttribute("division", dto.getDivision());
+		request.setAttribute("dto", dto);
+		request.setAttribute("seq", dto.getSeq());
+	}
+	
+	public void setpsUpdate(HttpServletRequest request) {
+		PStableDAO dao = PStableDAO.getInstance();
+		PStableDTO dto = new PStableDTO();
+		int seq = Integer.parseInt(request.getParameter("seq"));
+		
+		dto.setCompany(request.getParameter("company"));
+		dto.setName(request.getParameter("name"));
+		dto.setDate(request.getParameter("date"));
+		dto.setCategory(request.getParameter("category"));
+		dto.setQty(Integer.parseInt(request.getParameter("qty")));
+		dto.setUnit(request.getParameter("unit"));
+		dto.setPrice(Integer.parseInt(request.getParameter("price")));
+		dto.setBecause(request.getParameter("because"));
+		dto.setDivision(request.getParameter("division"));
+		
+		dao.setupdate(dto, seq);
+	}
+	
 
 	/* 공지사항 list 가져오기 */
 	public void requestNoticeList(HttpServletRequest request) {
@@ -550,6 +627,7 @@ public class MvcController extends HttpServlet {
 	/* 로그인 function */
 	public void requestLoginMember(HttpServletRequest request) {
 		MemberDAO dao = MemberDAO.getInstance();
+
 		String[] result = dao.loginMember(request.getParameter("number"), request.getParameter("pw"));
 		request.setAttribute("number", result[0]);
 		request.setAttribute("name", result[1]);
@@ -580,7 +658,9 @@ public class MvcController extends HttpServlet {
 		String email = request.getParameter("email");
 		int join_date = (int) request.getAttribute("join_date");
 	}
-	// board start
+
+	// sh board start
+
 	public void requestBoardList(HttpServletRequest request) {
 		BoardDAO dao = BoardDAO.getInstance();
 		ArrayList<BoardDTO> boardList = new ArrayList<BoardDTO>();
@@ -677,8 +757,7 @@ public class MvcController extends HttpServlet {
 		BoardDAO dao = BoardDAO.getInstance();
 		dao.deleteBoard(num);
 	}
-	// board end
-	// 내정보 관리
+
 	public void requestInfoView(HttpServletRequest request) {
 		MemberDAO dao = MemberDAO.getInstance();
 		String number = request.getParameter("number");
@@ -687,7 +766,7 @@ public class MvcController extends HttpServlet {
 		request.setAttribute("member", dto);
 		request.setAttribute("number", number);
 	}
-	// 내 정보 수정
+
 	public void requestInfoUpdate(HttpServletRequest request) {
 		MemberDAO dao = MemberDAO.getInstance();
 		MemberDTO dto = new MemberDTO();
@@ -700,7 +779,7 @@ public class MvcController extends HttpServlet {
 		dto.setPhone(phone);
 		dao.updateInfo(dto);
 	}
-	// Calendar start
+
 	public void requestCalendarView(HttpServletRequest request) {
 		CalendarDAO dao = CalendarDAO.getInstance();
 		MemberDTO member = (MemberDTO) request.getAttribute("member");
@@ -750,11 +829,13 @@ public class MvcController extends HttpServlet {
 		calendarList = dao.getAllCalendar();
 		request.setAttribute("calendarAllList", calendarList);
 	}
-	// Calendar end
-	// 급여 관리
+	// sh board end
+	
+	//sh 급여관리
+	
 	public void requestPayList(HttpServletRequest request) {
 		int pageNum = 1;
-		int limit = paymentCount;
+		int limit = listCount;
 		PaymentDAO dao = PaymentDAO.getInstance();
 		ArrayList<PaymentDTO> paymentList = new ArrayList<PaymentDTO>();
 		String number = request.getParameter("number");
@@ -778,45 +859,41 @@ public class MvcController extends HttpServlet {
 		request.setAttribute("total_page", total_page);
 		
 	}
-	// sh start
-	public void requestGoToWork(HttpServletRequest request) {
-		String number = request.getParameter("number");
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String start_time = formatter.format(new Date());
+	//sh 급여 끝
+	
+	public void requestChkCommute(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String number = (String)session.getAttribute("number");
 		CommuteDAO dao = CommuteDAO.getInstance();
-		CommuteDTO dto = new CommuteDTO();
-		dto.setNumber(number);
-		dto.setStart_time(start_time);
-		dao.goToWork(dto);
-		System.out.println(dto.getCommute_log());
-		request.setAttribute("number", number);
-		request.setAttribute("start_time", start_time);
+		
+		boolean chk = dao.chkCommute(number);
+		
+		if(chk == false) {
+			dao.newStartCommute(number);
+		} else {
+			dao.updateStartCommute(number);
+		}
+		request.setAttribute("chk", chk);
 	}
 	
-	public void requestGetCommuteLog(HttpServletRequest request) {
+	public void endCommute(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String number = (String)session.getAttribute("number");
 		CommuteDAO dao = CommuteDAO.getInstance();
-		String number = (String)request.getAttribute("number");
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		String start_date = formatter.format(new Date());
-		String start_time = dao.getStartTime(number, start_date);
-		String commute_Log = dao.getWhetherCommute(number, start_time);
-		request.setAttribute("commute_Log", commute_Log);
+		
+		dao.endCommute(number);
+		boolean chk = false;
+		chk = dao.CommuteChk(number);
+		request.setAttribute("chk", chk);
 	}
-	
-	public void requestLeaveWork(HttpServletRequest request) {
-		String commute_Log = request.getParameter("commute_Log");
-		CommuteDAO dao= CommuteDAO.getInstance();
-		dao.setLeaveWork(commute_Log);
-	}
-	
-	public void requestGetEndTime(HttpServletRequest request) {
+	public void requestCommuteChk(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String number = (String)session.getAttribute("number");
+		
 		CommuteDAO dao = CommuteDAO.getInstance();
-		String number = (String)request.getAttribute("number");
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		String end_date = formatter.format(new Date());
-		String start_time = dao.getStartTime(number, end_date);
-		String end_time = dao.getEndTime(number, start_time);
-		request.setAttribute("end_time", end_time);
+		boolean chk = dao.CommuteChk(number);
+		
+		session.setAttribute("chk", chk);
+		
 	}
-	// sh end
 }

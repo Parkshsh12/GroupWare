@@ -1,16 +1,14 @@
 <%@page import="java.util.ArrayList"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="application/vnd.ms-excel; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+	response.setHeader("Content-Type", "application/vnd.ms-xls");
+	response.setHeader("Content-Disposition", "inline; filename=myfile.xls");
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<link rel="stylesheet"
-	href="<c:url value="/resources/css/business_search.css?ver=1"/>">
 </head>
 <body>
 	<%
@@ -26,39 +24,19 @@
 	String company = (String) request.getAttribute("company");
 	String year = (String) request.getAttribute("year");
 	%>
-	<jsp:include page="../../main_topbar/main.jsp" />
-	<jsp:include page="../../main_topbar/topbar.jsp" />
-	<jsp:include page="../../main_topbar/contents.jsp" />
 	<div class="business_container">
 		<form action="/business_search.do?division=a" method="post">
 			<div align="center" class="board_search">
-				<table>
-					<tr>
-						<td>
-							<div class="btn_title">업체명</div>
-						</td>
-						<td class="search"><input class="search_content" type="text"
-							name="company" value="<%=company%>" /> <input type="submit"
-							class="search_btn" value="검색" /></td>
-					</tr>
-				</table>
-				<div align="right">
-					<a href="/business_search.do?division=f&year=2022&company= "
-					class="btn btn-primary">버튼</a>
-				</div>
 			</div>
 			<div class="select_table">
 				<table>
 					<tr class="table_title">
 						<th>기준 년도</th>
-					</tr>
-					<tr>
-						<td><input type="number" name="year" min="2019" max="2022"
-							value="<%=year%>">년</td>
+						<td><%=year%>년</td>
 					</tr>
 				</table>
 
-				<table>
+				<table border=1>
 
 					<tr class="table_title">
 						<th></th>
@@ -76,6 +54,7 @@
 						<th>12월</th>
 						<th>합계</th>
 					</tr>
+					<p>
 					<tr>
 						<td><b>매입</b></td>
 						<%
@@ -105,10 +84,8 @@
 				</table>
 			</div>
 		</form>
-		<hr>
-		<div class="search_list" align="center">
-			<!-- 			<div class="unit" align="end">단위 : 만원</div> -->
-			<table>
+		<div class="search_list">
+			<table border=1>
 				<tr>
 					<th class="list_search_company" rowspan="2">거래처</th>
 					<th colspan="2">1월</th>

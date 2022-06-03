@@ -9,7 +9,7 @@
 <title>Insert title here</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="<c:url value="/resources/css/notice_noticeNum.css"/>">
+<link rel="stylesheet" href="<c:url value="/resources/css/notice_noticeNum.css?v=3"/>">
 </head>
 <body>
 <%
@@ -20,9 +20,7 @@
 	String search_item = request.getParameter("search_item");
 	String text = request.getParameter("text");
 %>
-<%=
-	notice.getSeq()
-%>
+
 	<jsp:include page="../../main_topbar/main.jsp"/>
 	<jsp:include page="../../main_topbar/topbar.jsp"/>
 	<jsp:include page="../../main_topbar/contents.jsp"/>

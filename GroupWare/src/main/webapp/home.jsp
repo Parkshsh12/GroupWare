@@ -8,7 +8,6 @@
 </head>
 <body>
 	<jsp:include page="./main_topbar/main.jsp"/>
-	<jsp:include page="./main_topbar/contents.jsp"/>
 	<jsp:include page="./main_topbar/home.jsp"/>
 </body>
 </html>

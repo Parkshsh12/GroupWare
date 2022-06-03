@@ -4,176 +4,234 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import database.DBConnection;
 
 public class CommuteDAO {
+
 	private static CommuteDAO instance;
-	
+
+	private CommuteDAO() {
+	}
+
 	public static CommuteDAO getInstance() {
-		if(instance == null) {
+		if (instance == null) {
 			instance = new CommuteDAO();
 		}
 		return instance;
 	}
-	
-	public void goToWork(CommuteDTO dto) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		
-		String sql = "insert into commute(number, start_time) values(?, ?)";
-		
-		try {
-			conn = DBConnection.getConnection();
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, dto.getNumber());
-			pstmt.setString(2, dto.getStart_time());
-			pstmt.executeUpdate();
-		} catch(Exception ex) {
-			System.out.println("goToWork()" + ex);
-		} finally {
-			try {
-				if(pstmt != null) {
-					pstmt.close();
-				}
-				if(conn != null) {
-					conn.close();
-				}
-			} catch(Exception ex) {
-				throw new RuntimeException(ex.getMessage());
-			}
-		}
-	}
-	
-	public String getWhetherCommute(String number, String start_date) {
+
+	public boolean chkCommute(String number) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String commute_Log = null;
-		String sql = "select * from commute where number = ? and start_time like '%" + start_date + "%'";
-		
-		try {
-			conn = DBConnection.getConnection();
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, number);
-			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				commute_Log = rs.getString("commute_log");
-			}
-			return commute_Log;
-			
-		} catch(Exception ex) {
-			System.out.println("getWhetherCommute()" + ex);
-		} finally {
-			try {
-				if(rs != null) {
-					rs.close();
-				}
-				if(pstmt != null) {
-					pstmt.close();
-				}
-				if(conn != null) {
-					conn.close();
-				}
-			} catch(Exception ex) {
-				throw new RuntimeException(ex.getMessage());
-			}
-		}
-		return null;
-	}
-	
-	public void setLeaveWork(String commute_Log) {
-		Connection conn = null;
-		PreparedStatement pstmt =null;
+
+		String sql;
+
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String end_time = formatter.format(new Date());
-		String sql = "update commute set end_time = ? where commute_log = ?";
-		
+		String date = formatter.format(new java.util.Date());
+		String commute_log = date.substring(0, 10);
+
 		try {
+			sql = "select number, commute_log from commute where number = '" + number + "' and commute_log = '"
+					+ commute_log + "'";
+
 			conn = DBConnection.getConnection();
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, end_time);
-			pstmt.setString(2, commute_Log);
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				return true;
+			} else {
+				return false;
+			}
+
+		} catch (Exception ex) {
+			System.out.println("chkCommute() 에러 : " + ex);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (Exception ex) {
+				throw new RuntimeException(ex.getMessage());
+			}
+		}
+		return false;
+	}
+
+	public void newStartCommute(String number) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		String sql;
+
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String date = formatter.format(new java.util.Date());
+		String commute_log = date.substring(0, 10);
+
+		try {
+			sql = "insert into commute(number, commute_log, start_time, chk) values ('" + number + "', '" + commute_log
+					+ "', '" + date + "', true)";
+
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(sql);
+
 			pstmt.executeUpdate();
-		} catch(Exception ex) {
-			System.out.println("setLeaveWork()" + ex);
+			
+		} catch (Exception ex) {
+			System.out.println("startCommute() 에러 : " + ex);
 		} finally {
 			try {
-				if(pstmt != null) {
+				if (pstmt != null) {
 					pstmt.close();
 				}
-				if(conn != null) {
+				if (conn != null) {
 					conn.close();
 				}
-			} catch(Exception ex) {
+			} catch (Exception ex) {
 				throw new RuntimeException(ex.getMessage());
 			}
 		}
 	}
-	
-	public String getEndTime(String number, String end_date) {
+
+	public void updateStartCommute(String number) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		String end_time = null;
-		String sql = "select * from commute where number = ? and start_time = ?";
-		
+
+		String sql;
+
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String date = formatter.format(new java.util.Date());
+		String commute_log = date.substring(0, 10);
+
 		try {
+			sql = "update commute set start_time = '" + date + "', chk = true where number='" + number
+					+ "' and commute_log = '" + commute_log + "'";
+
 			conn = DBConnection.getConnection();
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, number);
-			pstmt.setString(2, end_date);
-			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				end_time = rs.getString("end_time");
-			}
-			return end_time;
-			
-		} catch(Exception ex) {
-			System.out.println("getEndTime()" + ex);
+
+			pstmt.executeUpdate();
+
+		} catch (Exception ex) {
+			System.out.println("startCommute() 에러 : " + ex);
 		} finally {
 			try {
-				if(rs != null) {
-					rs.close();
-				}
-				if(pstmt != null) {
+				if (pstmt != null) {
 					pstmt.close();
 				}
-				if(conn != null) {
+				if (conn != null) {
 					conn.close();
 				}
-			} catch(Exception ex) {
+			} catch (Exception ex) {
 				throw new RuntimeException(ex.getMessage());
 			}
 		}
-		return null;
 	}
-	
-	public String getStartTime(String number, String start_date) {
+
+	public void endCommute(String number) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
+
 		String start_time = null;
-		String sql = "select * from commute where number = ? and end_time like '%" + start_date + "%'";
-		
+		String t_time;
+		long sqlt_time = 0;
+
+		String sql;
+
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String date = formatter.format(new java.util.Date());
+		String commute_log = date.substring(0, 10);
+
 		try {
 			conn = DBConnection.getConnection();
+
+			sql = "select start_time, t_time from commute where number = '" + number + "' and commute_log = '"
+					+ commute_log + "'";
+
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, number);
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				start_time = rs.getString("start_time");
+				sqlt_time = rs.getLong("t_time");
+			}
+			Date first = null;
+			Date second = null;
+
+			first = formatter.parse(start_time);
+			second = formatter.parse(date);
+
+			long calDate = (Math.abs(first.getTime() - second.getTime())) + sqlt_time;
+
+			sql = "update commute set t_time = '" + calDate + "', end_time = '" + date + "', chk = false where number='"
+					+ number + "' and commute_log = '" + commute_log + "'";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.executeUpdate();
+
+		} catch (Exception ex) {
+			System.out.println("endCommute() 에러 : " + ex);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (Exception ex) {
+				throw new RuntimeException(ex.getMessage());
+			}
+		}
+
+	}
+
+	public boolean CommuteChk(String number) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		String sql;
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String date = formatter.format(new java.util.Date());
+		String commute_log = date.substring(0,10);
+		boolean chk = false;
+		
+		try {
+			sql = "select chk from commute where number = '" + number + "' and commute_log = '" + commute_log + "'";
+			
+			conn = DBConnection.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
-				start_time = rs.getString("start_time");
+				chk = rs.getBoolean("chk");
 			}
-			return start_time;
 			
+			if(chk == true) {
+				return chk;
+			} else {
+				return chk;
+			}
+					
 		} catch(Exception ex) {
-			System.out.println("getEndTime()" + ex);
+			System.out.println("chkCommute() 에러 : " + ex);
 		} finally {
 			try {
 				if(rs != null) {
@@ -189,6 +247,6 @@ public class CommuteDAO {
 				throw new RuntimeException(ex.getMessage());
 			}
 		}
-		return null;
+		return chk;
 	}
 }

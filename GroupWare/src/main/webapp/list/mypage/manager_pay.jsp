@@ -51,7 +51,7 @@
                 <td><button type="button"  id="modal_opne_btn<%=count+i %>" class="btn btn-default btn-sm">보기</button>
                 	 <div class="modal" id="modal<%=count+i %>">
 				    	<div class="container modal_content">
-					        <h2 class="title">5월 급여 명세서
+					        <h2 class="title"><%=payment.getPayment_date().substring(5,7) %>월 급여명세서
 					        	<button type="button" id="modal_close_btn<%=count+i %>"><i class="fa-solid fa-square-xmark"></i></button>
 					        </h2>
 					        <table class="table">

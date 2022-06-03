@@ -12,16 +12,31 @@
 </head>
 <body>
 <%
-	String ps = request.getParameter("division");
+	String division = request.getParameter("division");
+	String[] list = (String[]) request.getAttribute("list");
+	int pageNum = Integer.parseInt(request.getParameter("pageNum"));
+	String search_item = request.getParameter("search_item");
+	String text = request.getParameter("text");
 %>
 	<jsp:include page="../../main_topbar/main.jsp"/>
 	<jsp:include page="../../main_topbar/topbar.jsp"/>
 	<jsp:include page="../../main_topbar/contents.jsp"/>
 	<div class="update_info">
-		<form action="/ps_addAction.do?division=<%=ps%>" name="boardAdd" method="post" class="form-horizontal">
+		<form action="/ps_addAction.do?division=<%=division%>&search_item=<%=search_item%>&text=<%=text%>&pageNum=<%=pageNum%>" name="boardAdd" method="post" class="form-horizontal">
 			<div class="form-group row">
-				<label class="col-sm-2 input-name">업체명</label> <input
-					class="form-input" type="text" name="company" required placeholder="업체명을 입력하세요.">
+				<label class="col-sm-2 input-name">업체명</label>
+				<select name="company" required>
+				<option value="" selected>--선택--</option>
+				<%
+					for(int i = 0; i < list.length; i++){
+				%>
+				<option><%=list[i]%></option>
+				<%
+					}
+				%>
+				
+				</select>
+				<!-- <input class="form-input" type="text" name="company" required placeholder="업체명을 입력하세요."> -->
 			</div>
 			<div class="form-group row">
 				<label class="col-sm-2 input-name">품명</label>
@@ -50,7 +65,7 @@
 			</div>
 			<div class="button" align="right">
 				<input type="submit" class="btn btn-primary" value="등록"> <a
-					href="/psmenu_main.do?division=<%=ps %>" class="btn btn-primary">취소</a>
+					href="/psmenu_main.do?division=<%=division%>&search_item=<%=search_item%>&text=<%=text%>&pageNum=<%=pageNum%>" class="btn btn-primary">취소</a>
 			</div>
 		</form>
 	</div>

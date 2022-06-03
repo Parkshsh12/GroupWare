@@ -15,46 +15,47 @@ a {
 .board_boardNum {
 	width: 85%;
 	margin: auto;
+	padding-left: 21vh
 }
 
-.span1 {
+.board_boardNum .span1 {
 	border-right: 1px solid black;
 }
 
-.title_items {
+.board_boardNum .title_items {
 	display: flex;
 	justify-content: space-between;
 	margin: 20px 0;
 }
 
-.title_item {
+.board_boardNum .title_item {
 	display: flex;
 	align-items: center;
 	font-size: 18px;
 }
 
-.title_item .title {
+.board_boardNum .title_item .title {
 	font-size: 18px;
 	font-weight: bold;
 }
 
-.title_item span {
+.board_boardNum .title_item span {
 	margin-right: 10px;
 	padding-right: 10px;
 }
 
-.btn {
+.board_boardNum .btn {
 	height: 100%;
 	margin-top: 50px;
 	display: flex;
 	justify-content: end;
 }
 
-.btn a {
+.board_boardNum .btn a {
 	margin: 0 5px;
 }
 
-.btn .admin {
+.board_boardNum .btn .admin {
 	/* display: none; */
 	/* admin, 작성자 일때 */
 	

@@ -45,7 +45,7 @@ public class BoardDAO {
 				x = rs.getInt(1);
 			}
 		} catch(Exception ex) {
-			System.out.println("getAllBoardListCount() �삁�쇅諛쒖깮 : " + ex);
+			System.out.println("getAllBoardListCount() 예외발생 : " + ex);
 		} finally {
 			try {
 				if(rs != null) {
