@@ -28,15 +28,13 @@
 					name="title" type="text" placeholder="제목을 입력하세요." required>
 			</div>
 			<div class="form-items">
+				<label class="form-item col-sm-2">이름</label> <input class="title"
+					name="name" type="text" value="<%=name%>" readonly="readonly">
+			</div>
+			<div class="form-items">
 				<label class="form-item col-sm-2">내용</label>
 				<textarea name="content" cols="50" rows="8" placeholder="내용을 입력하세요."
 					required></textarea>
-			</div>
-			<div class="form-items aaa">
-				<label class="form-item col-sm-2">첨부파일</label>
-				<div>
-					<input class="title form-control" type="file" name="file">
-				</div>
 			</div>
 			<div class="button">
 				<input type="submit" class="btn btn-primary" value="등록 ">

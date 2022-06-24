@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import database.DBConnection;
@@ -91,7 +93,7 @@ public class PStableDAO {
 					sql = "select * from pstable order by company asc";
 					index = 1;
 				} else {
-					sql = "select * from pstable where company='" + company + "' order by company asc";
+					sql = "select * from pstable where company like'%" + company + "%' order by company asc";
 					index = 1;
 				}
 			}
@@ -166,46 +168,34 @@ public class PStableDAO {
 		ArrayList Array = new ArrayList();
 
 		String sql;
-
+		
 		try {
-			sql = "select distinct company from pstable";
-
 			conn = DBConnection.getConnection();
-			pstmt = conn.prepareStatement(sql);
 
-			rs = pstmt.executeQuery();
-
-			int size = 0;
-
-			for (int i = 0; rs.next(); i++) {
-				size++;
+			String[] arraylist = new String[list.size()];
+			
+			for(int i = 0; i < list.size(); i++) {
+				arraylist[i] = ((PStableDTO) list.get(i)).getCompany();
 			}
-
-			rs = pstmt.executeQuery();
-
-			String[] t_companyList = new String[size];
-			int purchase_t[][] = new int[size][12];
-			int sales_t[][] = new int[size][12];
-
+			HashSet<String> hashset = new HashSet<>(Arrays.asList(arraylist));
+			String[] resultArr = hashset.toArray(new String[0]);		
+			
+			int purchase_t[][] = new int[resultArr.length][12];
+			int sales_t[][] = new int[resultArr.length][12];
 			int month_f[] = new int[12];
 			int month_s[] = new int[12];
-
-			for (int i = 0; i < size; i++) {
-				rs.next();
-				t_companyList[i] = rs.getString("company");
-			}
 
 			for (int i = 0; i < list.size(); i++) {
 				PStableDTO dto = (PStableDTO) list.get(i);
 
-				for (int j = 0; j < t_companyList.length; j++) {
+				for (int j = 0; j < resultArr.length; j++) {
 					int date = Integer.parseInt(dto.getDate().substring(5, 7)) - 1;
 
-					if (t_companyList[j].equals(dto.getCompany())) {
+					if (resultArr[j].equals(dto.getCompany())) {
 
 						if (dto.getDivision().equals("p")) {
 							sql = "select qty*price from pstable where division = 'p' and company = '"
-									+ t_companyList[j] + "' and seq = '" + dto.getSeq() + "' and date like '" + year
+									+ resultArr[j] + "' and seq = '" + dto.getSeq() + "' and date like '" + year
 									+ "%'";
 							pstmt = conn.prepareStatement(sql);
 							rs = pstmt.executeQuery();
@@ -217,7 +207,7 @@ public class PStableDAO {
 							}
 						} else {
 							sql = "select qty*price from pstable where division = 's' and company = '"
-									+ t_companyList[j] + "' and seq = '" + dto.getSeq() + "' and date like '" + year
+									+ resultArr[j] + "' and seq = '" + dto.getSeq() + "' and date like '" + year
 									+ "%'";
 							pstmt = conn.prepareStatement(sql);
 							rs = pstmt.executeQuery();
@@ -230,7 +220,7 @@ public class PStableDAO {
 					}
 				}
 			}
-			Array.add(t_companyList);
+			Array.add(resultArr);
 			Array.add(purchase_t);
 			Array.add(sales_t);
 			Array.add(month_f);

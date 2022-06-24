@@ -1,24 +1,24 @@
 package mvc.model;
 
 public class CommuteDTO {
-	private int commute_log;
 	private String number;
+	private String commute_log;
 	private String start_time;
 	private String end_time;
-	private boolean whether_commute;
+	private long t_time;
+	private boolean chk;
 	
-	
-	public int getCommute_log() {
-		return commute_log;
-	}
-	public void setCommute_log(int commute_log) {
-		this.commute_log = commute_log;
-	}
 	public String getNumber() {
 		return number;
 	}
 	public void setNumber(String number) {
 		this.number = number;
+	}
+	public String getCommute_log() {
+		return commute_log;
+	}
+	public void setCommute_log(String commute_log) {
+		this.commute_log = commute_log;
 	}
 	public String getStart_time() {
 		return start_time;
@@ -32,12 +32,19 @@ public class CommuteDTO {
 	public void setEnd_time(String end_time) {
 		this.end_time = end_time;
 	}
-	public boolean isWhether_commute() {
-		return whether_commute;
+	public long getT_time() {
+		return t_time;
 	}
-	public void setWhether_commute(boolean whether_commute) {
-		this.whether_commute = whether_commute;
+	public void setT_time(long t_time) {
+		this.t_time = t_time;
 	}
+	public boolean isChk() {
+		return chk;
+	}
+	public void setChk(boolean chk) {
+		this.chk = chk;
+	}
+	
 	
 	
 }

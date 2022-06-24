@@ -8,7 +8,7 @@
 <title>로그인</title>
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 	<script src="https://kit.fontawesome.com/53a8c415f1.js" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="<c:url value="/resources/css/login.css?v=1"/>">
+	<link rel="stylesheet" href="<c:url value="/resources/css/login.css?v=2"/>">
 </head>
 <script type="text/javascript">
 	

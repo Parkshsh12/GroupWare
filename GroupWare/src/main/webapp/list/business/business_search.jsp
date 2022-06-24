@@ -1,4 +1,3 @@
-<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -10,16 +9,15 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link rel="stylesheet"
-	href="<c:url value="/resources/css/business_search.css?ver=1"/>">
+	href="<c:url value="/resources/css/business_search.css?ver=2"/>">
 </head>
 <body>
 	<%
-	ArrayList Array = (ArrayList) request.getAttribute("Array");
-	String[] t_companyList = (String[]) Array.get(0);
-	int[][] purchase_t = (int[][]) Array.get(1);
-	int[][] sales_t = (int[][]) Array.get(2);
-	int[] month_f = (int[]) Array.get(3);
-	int[] month_s = (int[]) Array.get(4);
+	String[] t_companyList = (String[]) request.getAttribute("t_companyList");
+	int[][] purchase_t = (int[][]) request.getAttribute("purchase_t");
+	int[][] sales_t = (int[][]) request.getAttribute("sales_t");
+	int[] month_f = (int[]) request.getAttribute("month_f");
+	int[] month_s = (int[]) request.getAttribute("month_s");
 	int sum_f = 0;
 	int sum_s = 0;
 
@@ -43,8 +41,9 @@
 					</tr>
 				</table>
 				<div align="right">
-					<a href="/business_search.do?division=f&year=2022&company= "
-					class="btn btn-primary">버튼</a>
+					<a onclick="change()"
+						href="/business_search.do?division=f&year=<%=year%>&company=<%=company%>"
+						class="btn btn-primary">버튼</a>
 				</div>
 			</div>
 			<div class="select_table">
@@ -57,9 +56,7 @@
 							value="<%=year%>">년</td>
 					</tr>
 				</table>
-
 				<table>
-
 					<tr class="table_title">
 						<th></th>
 						<th>1월</th>
@@ -100,76 +97,76 @@
 						%>
 						<td><b><%=sum_s%></b></td>
 					</tr>
-
-
 				</table>
 			</div>
 		</form>
 		<hr>
 		<div class="search_list" align="center">
 			<!-- 			<div class="unit" align="end">단위 : 만원</div> -->
-			<table>
-				<tr>
-					<th class="list_search_company" rowspan="2">거래처</th>
-					<th colspan="2">1월</th>
-					<th colspan="2">2월</th>
-					<th colspan="2">3월</th>
-					<th colspan="2">4월</th>
-					<th colspan="2">5월</th>
-					<th colspan="2">6월</th>
-					<th colspan="2">7월</th>
-					<th colspan="2">8월</th>
-					<th colspan="2">9월</th>
-					<th colspan="2">10월</th>
-					<th colspan="2">11월</th>
-					<th colspan="2">12월</th>
-				</tr>
-				<tr class="list_search_title">
-					<th>매입</th>
-					<th>매출</th>
-					<th>매입</th>
-					<th>매출</th>
-					<th>매입</th>
-					<th>매출</th>
-					<th>매입</th>
-					<th>매출</th>
-					<th>매입</th>
-					<th>매출</th>
-					<th>매입</th>
-					<th>매출</th>
-					<th>매입</th>
-					<th>매출</th>
-					<th>매입</th>
-					<th>매출</th>
-					<th>매입</th>
-					<th>매출</th>
-					<th>매입</th>
-					<th>매출</th>
-					<th>매입</th>
-					<th>매출</th>
-					<th>매입</th>
-					<th>매출</th>
-				</tr>
-				<%
-				for (int i = 0; i < t_companyList.length; i++) {
-				%>
-				<tr align="center">
-					<td><%=t_companyList[i]%></td>
+			<div class="scrl">
+				<table>
+					<tr>
+						<th class="list_search_company" rowspan="2">거래처</th>
+						<th colspan="2">1월</th>
+						<th colspan="2">2월</th>
+						<th colspan="2">3월</th>
+						<th colspan="2">4월</th>
+						<th colspan="2">5월</th>
+						<th colspan="2">6월</th>
+						<th colspan="2">7월</th>
+						<th colspan="2">8월</th>
+						<th colspan="2">9월</th>
+						<th colspan="2">10월</th>
+						<th colspan="2">11월</th>
+						<th colspan="2">12월</th>
+					</tr>
+					<tr class="list_search_title">
+						<th>매입</th>
+						<th>매출</th>
+						<th>매입</th>
+						<th>매출</th>
+						<th>매입</th>
+						<th>매출</th>
+						<th>매입</th>
+						<th>매출</th>
+						<th>매입</th>
+						<th>매출</th>
+						<th>매입</th>
+						<th>매출</th>
+						<th>매입</th>
+						<th>매출</th>
+						<th>매입</th>
+						<th>매출</th>
+						<th>매입</th>
+						<th>매출</th>
+						<th>매입</th>
+						<th>매출</th>
+						<th>매입</th>
+						<th>매출</th>
+						<th>매입</th>
+						<th>매출</th>
+					</tr>
 					<%
-					for (int j = 0; j < purchase_t[0].length; j++) {
+					for (int i = 0; i < t_companyList.length; i++) {
 					%>
-					<td><%=purchase_t[i][j]%></td>
-					<td><%=sales_t[i][j]%></td>
+					<tr align="center">
+						<td><%=t_companyList[i]%></td>
+						<%
+						for (int j = 0; j < purchase_t[0].length; j++) {
+						%>
+						<td><%=purchase_t[i][j]%></td>
+						<td><%=sales_t[i][j]%></td>
 
+						<%
+						}
+						%>
+					</tr>
 					<%
 					}
 					%>
-				</tr>
-				<%
-				}
-				%>
 
-			</table>
+				</table>
+			</div>
 		</div>
 	</div>
 </body>

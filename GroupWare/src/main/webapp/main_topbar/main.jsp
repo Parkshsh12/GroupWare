@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <link rel="stylesheet" href="<c:url value="/resources/css/main.css?ver=1"/>">
-<meta http-equiv="refresh" content="600; url=/logout.do"> 
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
 <script>
@@ -24,6 +23,7 @@
 <%
 	String number = (String) session.getAttribute("number");
 	String name = (String) session.getAttribute("name");
+
 	boolean chk = (boolean) session.getAttribute("chk");
 %>
 <nav class="menu">
@@ -35,12 +35,12 @@
 				if (chk == true) {
 				%>
 				<a href="/end_time.do"
-					class="btn btn-primary btn-sm">퇴&nbsp;근</a>
+					class="btn btn-primary btn-sm" onclick="return confirm('퇴근 하시겠습니까?');">퇴&nbsp;근</a>
 				<%
 				} else {
 				%>
 				<a href="/start_time.do"
-					class="btn btn-primary btn-sm">출&nbsp;근</a>
+					class="btn btn-primary btn-sm" onclick="return confirm('출근 하시겠습니까?');">출&nbsp;근</a>
 				<%
 				}
 				%>
@@ -71,7 +71,10 @@
 					href="<c:url value="/member_list.do"/>">임직원 관리</a></li>
 				<li class="menu_item"><a
 					href="<c:url value="/attendance_admin.do"/>">근태 관리</a></li>
-			</ul></li>
+				<li class="menu_item"><a
+					href="<c:url value="/commute_list.do"/>">출퇴근 관리</a></li>
+			</ul>
+		</li>
 		<li class="menu_list"><a href="#">영업 관리</a>
 			<ul>
 				<li class="menu_item"><a

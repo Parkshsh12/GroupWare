@@ -19,9 +19,6 @@
 	String text = request.getParameter("text");
 	int seq = Integer.parseInt(request.getParameter("seq"));
 %>
-<%=
-	pageNum
-%>
 	<jsp:include page="../../main_topbar/main.jsp"/>
 	<jsp:include page="../../main_topbar/topbar.jsp"/>
 	<jsp:include page="../../main_topbar/contents.jsp"/>
@@ -38,8 +35,8 @@
 			</div>
 			<div class="button">
 				<input type="submit" class="btn btn-primary" value="수정"> <a
-					href="/notice_delete.do?seq=<%=seq%>" class="btn btn-primary">삭제</a> <input type="reset"
-					class="btn btn-primary" value="취소 ">
+					href="/notice_delete.do?seq=<%=seq%>" class="btn btn-primary">삭제</a>
+					<input type="reset" class="btn btn-primary" value="취소 ">
 			</div>
 		</form>
 	</div>

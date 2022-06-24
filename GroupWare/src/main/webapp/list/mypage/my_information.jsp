@@ -89,7 +89,7 @@
             <div class="form-group row">
                 <div class="col-sm-offset-2 col-sm-10" align="right">
                 <c:set var="number" value="<%=member.getNumber() %>"/>
-                    <a href="<c:url value="/update_information.do?number=${number}"/>" class="btn btn-primary" onclick="return confirm('수정하시겠습니까?');">수정</a>
+                    <a href="<c:url value="/update_information.do?number=${number}"/>" class="btn btn-primary">수정</a>
                 </div>
             </div>
            

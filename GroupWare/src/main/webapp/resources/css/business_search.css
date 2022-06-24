@@ -16,7 +16,10 @@ a {
 	width: 85%;
 	margin: auto;
 }
-
+.business_container .scrl{
+	overflow-y: scroll;
+	height: 35vh;
+}
 
 .search_select {
 	height: 39px;

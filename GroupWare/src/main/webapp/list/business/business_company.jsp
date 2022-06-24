@@ -10,7 +10,7 @@
 <title>Insert title here</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="/resources/css/business_company.css?ver=3">
+<link rel="stylesheet" href="/resources/css/business_company.css?ver=1">
 </head>
 <body>
 <%
@@ -43,35 +43,37 @@
 			</div>
 		</div>
 		<hr>
-		<table class="table">
-			<tr class="table_header">
-				<th>순서</th>
-				<th>업체명</th>
-				<th>업종명</th>
-				<th>주소</th>
-				<th>전화번호</th>
-				<th>담당자</th>
-				<th>담당자 연락처</th>
-				<th>변경</th>
-			</tr>
-			<%
-				for(int i = 0; i < list.size(); i++){
-					CompanyDTO company = list.get(i);
-			%>
-			<tr>
-				<td><%=company.getSeq()%></td>
-				<td><%=company.getP_company() %></td>
-				<td><%=company.getP_industry() %></td>
-				<td><%=company.getP_address() %></td>
-				<td><%=company.getP_companyNum() %></td>
-				<td><%=company.getP_person() %></td>
-				<td><%=company.getP_personNum() %></td>
-				<td><a href="/companyUpdate.do?seq=<%=company.getSeq()%>">수정</a></td>
-			</tr>
-			<%
-				}
-			%>
-		</table>
+		<div class="scrl">
+			<table class="table">
+				<tr class="table_header">
+					<th>순서</th>
+					<th>업체명</th>
+					<th>업종명</th>
+					<th>주소</th>
+					<th>전화번호</th>
+					<th>담당자</th>
+					<th>담당자 연락처</th>
+					<th>변경</th>
+				</tr>
+				<%
+					for(int i = 0; i < list.size(); i++){
+						CompanyDTO company = list.get(i);
+				%>
+				<tr>
+					<td><%=company.getSeq()%></td>
+					<td><%=company.getP_company() %></td>
+					<td><%=company.getP_industry() %></td>
+					<td><%=company.getP_address() %></td>
+					<td><%=company.getP_companyNum() %></td>
+					<td><%=company.getP_person() %></td>
+					<td><%=company.getP_personNum() %></td>
+					<td><a href="/companyUpdate.do?seq=<%=company.getSeq()%>">수정</a></td>
+				</tr>
+				<%
+					}
+				%>
+			</table>
+		</div>
 	</div>
 </body>
 </html>

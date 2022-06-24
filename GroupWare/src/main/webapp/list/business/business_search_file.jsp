@@ -1,8 +1,7 @@
-<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="application/vnd.ms-excel; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 	response.setHeader("Content-Type", "application/vnd.ms-xls");
-	response.setHeader("Content-Disposition", "inline; filename=myfile.xls");
+	response.setHeader("Content-Disposition", "inline; filename=search_list.xls");
 %>
 <!DOCTYPE html>
 <html>
@@ -11,19 +10,18 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<%
-	ArrayList Array = (ArrayList) request.getAttribute("Array");
-	String[] t_companyList = (String[]) Array.get(0);
-	int[][] purchase_t = (int[][]) Array.get(1);
-	int[][] sales_t = (int[][]) Array.get(2);
-	int[] month_f = (int[]) Array.get(3);
-	int[] month_s = (int[]) Array.get(4);
+<%
+	String[] t_companyList = (String[]) request.getAttribute("t_companyList");
+	int[][] purchase_t = (int[][]) request.getAttribute("purchase_t");
+	int[][] sales_t = (int[][]) request.getAttribute("sales_t");
+	int[] month_f = (int[]) request.getAttribute("month_f");
+	int[] month_s = (int[]) request.getAttribute("month_s");
 	int sum_f = 0;
 	int sum_s = 0;
 
 	String company = (String) request.getAttribute("company");
 	String year = (String) request.getAttribute("year");
-	%>
+%>
 	<div class="business_container">
 		<form action="/business_search.do?division=a" method="post">
 			<div align="center" class="board_search">
@@ -54,7 +52,6 @@
 						<th>12월</th>
 						<th>합계</th>
 					</tr>
-					<p>
 					<tr>
 						<td><b>매입</b></td>
 						<%

@@ -32,7 +32,7 @@
 	<jsp:include page="../../main_topbar/contents.jsp"/>
     <div class="container">
         <div align="center" class="business_search">
-            <form action="/psmenu_main.do?division=<%=division%>" method="post">
+            <form action="/psmenu_main.do?division=<%=division%>&pageNum=<%=pageNum%>" method="post">
                 <table>
                     <tr>
                         <td>
@@ -43,7 +43,7 @@
                             </select>
                         </td>
                         <td class="search">
-                            <input class="search_content" type="text" name="text" />
+                            <input class="search_content" type="text" name="text" value="<%=text%>" />
                             <input type="submit" class="search_btn" value="검색" />
                         </td>
                     </tr>

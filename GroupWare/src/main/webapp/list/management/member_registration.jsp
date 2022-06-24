@@ -14,11 +14,23 @@
 	<jsp:include page="../../main_topbar/topbar.jsp"/>
 	<jsp:include page="../../main_topbar/contents.jsp"/>
 	<div class="member_reg">
-        <form name="memberdReg" method="post" class="form-horizontal">
+        <form name="memberdReg" action="" method="post" class="form-horizontal">
             <div class="form-group row">
-                <label class="col-sm-2 input-name">사번</label>
+                <label class="col-sm-2 input-name">사원번호</label>
                 <div class="col-sm-3">
-                    <input class="form-input" type="id" required placeholder="사번을 입력하세요.">
+                    <input class="form-input" type="id" required placeholder="사원번호를 입력하세요.">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 input-name">이름</label>
+                <div class="col-sm-3">
+                    <input class="form-input" type="text" required placeholder="이름을 입력하세요">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 input-name">주소</label>
+                <div class="col-sm-3">
+                    <input class="form-input" type="text" required placeholder="주소를 입력하세요.">
                 </div>
             </div>
             <div class="form-group row">
@@ -34,9 +46,15 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-sm-2 input-name">주소</label>
+                <label class="col-sm-2 input-name">이메일</label>
                 <div class="col-sm-3">
-                    <input class="form-input" type="text" required placeholder="주소를 입력하세요.">
+                    <input class="form-input" type="email" required placeholder="이메일을 입력하세요.">
+                </div>
+            </div>
+             <div class="form-group row">
+                <label class="col-sm-2 input-name">입사일</label>
+                <div class="col-sm-3">
+                <input class="form-input" type="date" required placeholder="입사일을 입력하세요.">
                 </div>
             </div>
             <div class="form-group row">
@@ -49,7 +67,7 @@
             </div>
             <div class="button" align="right">
             	<input type="submit" class="btn btn-primary" value="등록">
-                <a href="#" class="btn btn-primary">취소</a>
+                <a href="./member_list.do" class="btn btn-primary">취소</a>
             </div>
         </form>
     </div>
